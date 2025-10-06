@@ -1,5 +1,4 @@
 # Docker Compose for DALS Phase 1 Integration - Production Ready
-version: '3.8'
 
 services:
   # DALS Controller Service (Main ISS Module)
@@ -36,7 +35,7 @@ services:
       - dals-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8003/api/system/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -63,11 +62,11 @@ services:
       - "8000:8000"
     environment:
       - ENVIRONMENT=development
-      - ISS_CONTROLLER_URL=http://iss-controller:8003
+      - ISS_CONTROLLER_URL=http://dals-controller:8003
     depends_on:
-      - iss-controller
+      - dals-controller
     networks:
-      - prometheus-prime
+      - dals-network
     restart: unless-stopped
 
   # Service Discovery (Consul)
