@@ -61,17 +61,12 @@ from iss_module.inventory.inventory_manager import CaptainLog
 from iss_module.inventory.exporters import DataExporter as Exporters
 from iss_module.core.utils import get_stardate, current_timecodes
 
-# Prometheus Prime integration (optional import)
+# UCM integration (optional import)
 try:
-    from iss_module.prometheus_integration import (
-        PrometheusISS,
-        create_prometheus_iss_app,
-        ReasoningRequest,
-        ReasoningResponse
-    )
-    PROMETHEUS_AVAILABLE = True
+    from iss_module.integrations.ucm_connector import get_ucm_connector
+    UCM_AVAILABLE = True
 except ImportError:
-    PROMETHEUS_AVAILABLE = False
+    UCM_AVAILABLE = False
 
 # Configuration
 try:
@@ -97,13 +92,10 @@ __all__ = [
     '__version__',
 ]
 
-# Add Prometheus Prime components if available
-if PROMETHEUS_AVAILABLE:
+# Add UCM components if available
+if UCM_AVAILABLE:
     __all__.extend([
-        'PrometheusISS',
-        'create_prometheus_iss_app',
-        'ReasoningRequest',
-        'ReasoningResponse'
+        'get_ucm_connector'
     ])
 
 # Add configuration if available
@@ -127,10 +119,10 @@ PACKAGE_INFO = {
     'optional_requires': {
         'visidata': ['visidata>=2.8'],
         'dev': ['pytest', 'black', 'isort', 'flake8', 'mypy'],
-        'prometheus': ['structlog', 'pydantic-settings', 'redis', 'httpx'],
+        'ucm': ['httpx', 'pydantic-settings'],
     },
     'integrations': {
-        'prometheus_prime': PROMETHEUS_AVAILABLE,
+        'ucm': UCM_AVAILABLE,
         'structured_logging': LOGGING_AVAILABLE,
         'configuration': CONFIG_AVAILABLE,
     }

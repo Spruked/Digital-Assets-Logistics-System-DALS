@@ -29,7 +29,7 @@
 - ✅ Enforced: `"pending_mints": 0, "completed_today": 0` (real status)
 - ✅ Added: `"mint_engine": "disconnected"` when offline
 
-**`/api/modules/prometheus/integration`**
+**`/api/modules/ucm/integration`**
 - ❌ Removed: `"reasoning_cycles": 15678, "data_flow_rate": "2.3 GB/hour"` (fake metrics)
 - ✅ Enforced: `"reasoning_cycles": 0, "data_flow_rate": "—"` (real status)
 - ✅ Added: `"ecosystem_health": "disconnected"` when offline
@@ -93,7 +93,7 @@ if not module_connected:
 
 - [x] **CertSig Mint Engine** - No fake mint counts
 - [x] **Caleon Reasoning** - No fake session numbers  
-- [x] **Prometheus Integration** - No fake cycle counts
+- [x] **UCM Integration** - No fake cycle counts
 - [x] **Activity Simulation** - No fake event generation
 - [x] **System Metrics** - No fake performance data
 - [x] **Login Interface** - No demo credential shortcuts
@@ -116,7 +116,7 @@ if not module_connected:
 
 When connecting real modules:
 1. Replace `module_connected = False` with actual health checks
-2. Implement real API calls to Caleon, CertSig, Prometheus
+2. Implement real API calls to Caleon, CertSig, UCM
 3. Add module heartbeat monitoring
 4. Enable live telemetry streaming
 

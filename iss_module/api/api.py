@@ -27,6 +27,39 @@ try:
 except ImportError as e:
     logging.warning(f"Telemetry API not available: {e}")
     TELEMETRY_AVAILABLE = False
+
+# Import CALEON Security Layer API
+try:
+    from .caleon_api import caleon_router
+    CALEON_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"CALEON Security API not available: {e}")
+    CALEON_AVAILABLE = False
+
+# Import UCM Integration API
+try:
+    from .ucm_api import ucm_router
+    UCM_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"UCM Integration API not available: {e}")
+    UCM_AVAILABLE = False
+
+# Import Alpha CertSig Elite Mint API
+try:
+    from .alpha_certsig_api import alpha_certsig_router
+    ALPHA_CERTSIG_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Alpha CertSig Elite API not available: {e}")
+    ALPHA_CERTSIG_AVAILABLE = False
+
+# Import TrueMark Mint Enterprise API
+try:
+    from .truemark_api import truemark_router
+    TRUEMARK_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"TrueMark Mint Enterprise API not available: {e}")
+    TRUEMARK_AVAILABLE = False
+
 import asyncio
 from pathlib import Path as PathLib
 from passlib.context import CryptContext
@@ -148,6 +181,35 @@ if TELEMETRY_AVAILABLE:
     logger.info("Phase 1 Telemetry API and WebSocket enabled")
 else:
     logger.warning("Phase 1 Telemetry API not available")
+
+# Include CALEON Security Layer Router
+if CALEON_AVAILABLE:
+    app.include_router(caleon_router, tags=["CALEON Security"])
+    logger.info("CALEON Security Layer API enabled")
+else:
+    logger.warning("CALEON Security Layer API not available")
+
+# Include UCM Integration Router
+if UCM_AVAILABLE:
+    app.include_router(ucm_router, tags=["UCM Integration"])
+    logger.info("UCM Integration API enabled - Caleon Prime bridge active")
+else:
+    logger.warning("UCM Integration API not available")
+
+# Include Alpha CertSig Elite Router
+if ALPHA_CERTSIG_AVAILABLE:
+    app.include_router(alpha_certsig_router, prefix="/api", tags=["Alpha CertSig Elite"])
+    logger.info("Alpha CertSig Elite API enabled - NFT minting and domain management active")
+else:
+    logger.warning("Alpha CertSig Elite API not available")
+
+# Include TrueMark Mint Enterprise Router
+if TRUEMARK_AVAILABLE:
+    app.include_router(truemark_router, prefix="/api", tags=["TrueMark Mint Enterprise"])
+    logger.info("TrueMark Mint Enterprise API enabled - Bulk minting and compliance management active")
+else:
+    logger.warning("TrueMark Mint Enterprise API not available")
+
 # --- Authentication Dependency ---
 async def get_current_user(credentials: HTTPBasicCredentials = Depends(basic_auth)):
     """Authenticates user via HTTP Basic credentials."""

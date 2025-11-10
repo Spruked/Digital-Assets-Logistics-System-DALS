@@ -1,5 +1,5 @@
-# ISS Module Dockerfile for Prometheus Prime Integration
-# Multi-stage build for production optimization
+# DALS (Digital Asset Logistics System) Dockerfile
+# Multi-stage build for production optimization with UCM integration readiness
 
 # Build stage
 FROM python:3.11-slim as builder

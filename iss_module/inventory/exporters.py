@@ -11,10 +11,22 @@ logger = logging.getLogger(__name__)
 
 class DataExporter:
     """
-    Data export manager for ISS Module
-    
-    Handles exporting data in various formats (JSON, CSV, Markdown)
-    """
+Data Exporters for the Digital Asset Logistics System (DALS)
+Provides multiple export formats for inventory data
+"""
+
+import json
+import csv
+import os
+from typing import List, Dict, Any, Optional
+from datetime import datetime
+import logging
+from pathlib import Path
+
+from ..core.utils import current_timecodes  # ✅ ISS timestamp integration
+
+
+class DataExporter:
     
     def __init__(self, output_dir: Optional[str] = None):
         self.output_dir = output_dir or self._get_default_output_dir()
@@ -49,9 +61,14 @@ class DataExporter:
             Path to the exported file
         """
         try:
+            # ✅ ISS Timestamp Integration - Use canonical timecodes
+            timecodes = current_timecodes()
+            
             if filename is None:
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                filename = f'inventory_export_{timestamp}.json'
+                timestamp_str = datetime.fromisoformat(
+                    timecodes['iso_timestamp']
+                ).strftime('%Y%m%d_%H%M%S')
+                filename = f'inventory_export_{timestamp_str}.json'
             
             filepath = os.path.join(self.output_dir, filename)
             
@@ -61,8 +78,13 @@ class DataExporter:
             }
             
             if include_metadata:
+                # ✅ Full ISS timestamp suite
                 export_data['metadata'] = {
-                    'export_timestamp': datetime.now().isoformat(),
+                    'export_timestamp_iso': timecodes['iso_timestamp'],
+                    'export_stardate': timecodes['stardate'],
+                    'export_julian': timecodes['julian_date'],
+                    'export_epoch': timecodes['unix_timestamp'],
+                    'export_anchor_hash': timecodes['anchor_hash'],
                     'total_entries': len(entries),
                     'exporter': 'DALS Data Exporter v2.0',
                     'format_version': '2.0'
@@ -95,9 +117,14 @@ class DataExporter:
             Path to the exported file
         """
         try:
+            # ✅ ISS Timestamp Integration - Use canonical timecodes
+            timecodes = current_timecodes()
+            
             if filename is None:
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                filename = f'inventory_export_{timestamp}.csv'
+                timestamp_str = datetime.fromisoformat(
+                    timecodes['iso_timestamp']
+                ).strftime('%Y%m%d_%H%M%S')
+                filename = f'inventory_export_{timestamp_str}.csv'
             
             filepath = os.path.join(self.output_dir, filename)
             
@@ -142,19 +169,28 @@ class DataExporter:
             Path to the exported file
         """
         try:
+            # ✅ ISS Timestamp Integration - Use canonical timecodes
+            timecodes = current_timecodes()
+            
             if filename is None:
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                filename = f'inventory_export_{timestamp}.md'
+                timestamp_str = datetime.fromisoformat(
+                    timecodes['iso_timestamp']
+                ).strftime('%Y%m%d_%H%M%S')
+                filename = f'inventory_export_{timestamp_str}.md'
             
             filepath = os.path.join(self.output_dir, filename)
             
             # Generate markdown content
             content_lines = []
             
-            # Header
+            # Header with full ISS timestamp suite
             content_lines.append("# DALS Inventory Export")
             content_lines.append("")
-            content_lines.append(f"**Export Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+            content_lines.append(f"**Export Date (ISO):** {timecodes['iso_timestamp']}")
+            content_lines.append(f"**Stardate:** {timecodes['stardate']}")
+            content_lines.append(f"**Julian Date:** {timecodes['julian_date']:.6f}")
+            content_lines.append(f"**Unix Epoch:** {timecodes['unix_timestamp']}")
+            content_lines.append(f"**Anchor Hash:** {timecodes['anchor_hash']}")
             content_lines.append(f"**Total Units:** {len(entries)}")
             content_lines.append("")
             
@@ -192,15 +228,22 @@ class Exporters:
     
     @staticmethod
     def to_json_sync(entries: List[Dict[str, Any]], filepath: str) -> str:
-        """Export entries to JSON file (synchronous)"""
+        """Export entries to JSON file (synchronous) - ISS timestamp compliant"""
         try:
+            # ✅ ISS Timestamp Integration
+            timecodes = current_timecodes()
+            
             # Ensure directory exists
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump({
                     'version': '2.0',
-                    'exported_at': datetime.now().isoformat(),
+                    'exported_at_iso': timecodes['iso_timestamp'],
+                    'exported_stardate': timecodes['stardate'],
+                    'exported_julian': timecodes['julian_date'],
+                    'exported_epoch': timecodes['unix_timestamp'],
+                    'anchor_hash': timecodes['anchor_hash'],
                     'count': len(entries),
                     'entries': entries
                 }, f, indent=2, ensure_ascii=False)
@@ -240,14 +283,21 @@ class Exporters:
     
     @staticmethod
     def to_markdown_sync(entries: List[Dict[str, Any]], filepath: str) -> str:
-        """Export entries to Markdown file (synchronous)"""
+        """Export entries to Markdown file (synchronous) - ISS timestamp compliant"""
         try:
+            # ✅ ISS Timestamp Integration
+            timecodes = current_timecodes()
+            
             # Ensure directory exists
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write("# DALS Inventory Export\n\n")
-                f.write(f"**Exported:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"**Exported (ISO):** {timecodes['iso_timestamp']}\n")
+                f.write(f"**Stardate:** {timecodes['stardate']}\n")
+                f.write(f"**Julian Date:** {timecodes['julian_date']:.6f}\n")
+                f.write(f"**Unix Epoch:** {timecodes['unix_timestamp']}\n")
+                f.write(f"**Anchor Hash:** {timecodes['anchor_hash']}\n")
                 f.write(f"**Total Entries:** {len(entries)}\n\n")
 
                 if not entries:

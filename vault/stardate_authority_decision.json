@@ -10,5 +10,5 @@
   "revoked_implementation": "TNG era (year - 2323) * 1000 formula",
   "current_stardate_example": 9410.0762,
   "precision": 4,
-  "note": "Canonical format provides human-scale clarity, logical reversibility, and symbolic precision for Caleon/Prometheus integration"
+  "note": "Canonical format provides human-scale clarity, logical reversibility, and symbolic precision for Caleon/UCM integration"
 }

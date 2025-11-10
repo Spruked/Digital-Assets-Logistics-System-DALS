@@ -1,7 +1,18 @@
-# Digital Asset Logistics System ## ✨ Key Features
+# Digital Asset Logistics System (DALS)
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![DALS-001](https://img.shields.io/badge/DALS--001-compliant-green.svg)](vault/DALS-001-governance-enforcement.md)
+[![Live Data Only](https://img.shields.io/badge/🛡️-Live%20Data%20Only-brightgreen.svg)](vault/DALS-001-governance-enforcement.md)
+
+A comprehensive data management and time anchoring system designed for microservices architectures, with special compatibility for **UCM (Unified Cognition Module)** cognitive systems. Built with **ethical data representation** and **zero-or-empty protocol** compliance.
+
+## ✨ Key Features
 
 - 🌟 **Canonical Stardate System** - Y2K epoch-based time anchoring with positive decimal values
-- ⏰ **Time Anchoring** - Precise timestamp calculations with multiple formats  
+- ⏰ **Time Anchoring** - Precise timestamp calculations with multiple formats
 - 📝 **Asset Tracking** - Comprehensive digital asset lifecycle management
 - 🛡️ **DALS-001 Compliance** - Zero-or-empty protocol for ethical data representation
 - 🗄️ **Data Export** - CSV, JSON, and Markdown export capabilities
@@ -11,20 +22,13 @@
 - 🔗 **Microservice Compatible** - Plug-and-play integration with service meshes
 - 📊 **Structured Logging** - JSON formatted logs with correlation IDs
 - 🚫 **Mock-Free Operation** - No placeholder data, honest module status reporting
-- 🧠 **Prometheus Prime Integration** - Native cognitive architecture compatibilityython 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
-[![DALS-001](https://img.shields.io/badge/DALS--001-compliant-green.svg)](vault/DALS-001-governance-enforcement.md)
-[![Live Data Only](https://img.shields.io/badge/🛡️-Live%20Data%20Only-brightgreen.svg)](vault/DALS-001-governance-enforcement.md)
-
-A comprehensive data management and time anchoring system designed for microservices architectures, with special compatibility for **Prometheus Prime** cognitive systems. Built with **ethical data representation** and **zero-or-empty protocol** compliance.
+- 🧠 **UCM Integration Ready** - Native cognitive architecture compatibility
 
 # Reference: See /docs/governance/DALS_Phase_1_2_Integration_Plans_2025-10-05.pdf
 
 ## ✨ Overview
 
-The Digital Asset Logistics System (DALS) is a sophisticated data management and time anchoring system that provides time anchoring, structured logging, data export, and seamless integration with cognitive computing systems like Prometheus Prime.
+The Digital Asset Logistics System (DALS) is a sophisticated data management and time anchoring system that provides time anchoring, structured logging, data export, and seamless integration with cognitive computing systems like **UCM (Unified Cognition Module)**.
 
 ### 🛡️ Governance Principles
 
@@ -53,7 +57,7 @@ DALS implements a **canonical stardate system** using Y2K epoch (January 1, 2000
 - 🔗 **Microservice Compatible** - Plug-and-play integration with service meshes
 - 📊 **Structured Logging** - JSON formatted logs with correlation IDs
 - 🛡️ **Production Ready** - Circuit breakers, health checks, and monitoring
-- 🧠 **Prometheus Prime Integration** - Native cognitive architecture compatibility
+- 🧠 **Caleon AI + Phi-3 Mini Integration** - Native cognitive architecture compatibility
 
 ## � Quick Start
 
@@ -61,8 +65,8 @@ DALS implements a **canonical stardate system** using Y2K epoch (January 1, 2000
 
 ```bash
 # Clone the repository
-git clone https://github.com/Spruked/DALS.git
-cd DALS
+git clone https://github.com/Spruked/Digital-Assets-Logistics-System-DALS.git
+cd Digital-Assets-Logistics-System-DALS
 
 # Install with pip
 pip install -e .
@@ -127,32 +131,30 @@ docker build -t iss-module .
 docker run -p 8003:8003 iss-module
 ```
 
-## 🔗 Prometheus Prime Integration
+## 🔗 UCM Integration
 
-The ISS Module is designed to integrate seamlessly with Prometheus Prime cognitive architectures:
+The ISS Module is designed to integrate seamlessly with **UCM (Unified Cognition Module)** cognitive architectures:
 
 ```python
-from iss_module.prometheus_integration import create_prometheus_iss_app
+from iss_module.api.api import app
 
-# Create Prometheus Prime compatible service
-app = create_prometheus_iss_app("iss-controller")
+# Create UCM compatible service
+# The ISS Module provides time anchoring and logging for UCM operations
 
 # Reasoning pipeline integration
 @app.post("/api/v1/process")
-async def process_reasoning(request: ReasoningRequest):
-    # Time anchoring + reasoning + logging
-    return await prometheus_iss.process_reasoning(request)
+async def process_reasoning(request: dict):
+    # Time anchoring + reasoning + logging through UCM integration
+    return await ucm_connector.process_reasoning(request)
 ```
 
-### API Gateway Integration
+### UCM Integration Architecture
 
 ```python
-# In your Prometheus Prime API Gateway:
-@app.post("/api/v1/reason")
-async def reasoning_endpoint(request: ReasoningRequest):
-    iss_service = await service_registry.get_service("iss-controller")
-    response = await client.post(f"{iss_service.url}/api/v1/process", json=request.dict())
-    return response.json()
+# UCM runs independently on port 8080
+# DALS connects via HTTP API for cognitive processing
+# CALEON security layer validates all UCM operations
+# Thought Trace UI provides real-time reasoning visualization
 ```
 
 ## �️ Governance & Ethics
@@ -185,7 +187,7 @@ All API endpoints comply with DALS-001. See `vault/DALS-001-governance-enforceme
 | `/api/v1/iss/now` | GET | Current canonical stardate and status |
 | `/api/v1/caleon/status` | GET | Caleon module status (DALS-001 compliant) |
 | `/api/v1/certsig/status` | GET | CertSig module status (DALS-001 compliant) |
-| `/api/v1/prometheus/status` | GET | Prometheus metrics status (DALS-001 compliant) |
+| `/api/v1/ucm/status` | GET | UCM integration status (DALS-001 compliant) |
 | `/api/v1/vault/query` | POST | Query captain's log entries |
 | `/api/v1/log` | POST | Add captain's log entry |
 | `/api/v1/status` | GET | Detailed service status |
@@ -202,9 +204,10 @@ ENVIRONMENT=production
 ISS_HOST=0.0.0.0
 ISS_PORT=8003
 
-# Prometheus Prime Integration
-PROMETHEUS_INTEGRATION_ENABLED=true
-API_GATEWAY_URL=http://api-gateway:8000
+# UCM Integration
+UCM_INTEGRATION_ENABLED=true
+UCM_HOST=localhost
+UCM_PORT=8080
 
 # Service Discovery
 SERVICE_REGISTRY_URL=http://consul:8500
@@ -268,14 +271,15 @@ log.add_entry_sync(
 
 ### For Microservice Architectures
 ```python
-from iss_module.prometheus_integration import PrometheusISS
+from iss_module.api.api import app
+from iss_module.integrations.ucm_connector import get_ucm_connector
 
 # Service integration with health checks and structured logging
-prometheus_iss = PrometheusISS("my-service")
-await prometheus_iss.initialize()
+ucm = get_ucm_connector(ucm_host="localhost", ucm_port=8080)
+await ucm.connect()
 
 # Process with time anchoring and logging
-response = await prometheus_iss.process_reasoning(request)
+response = await ucm.submit_reasoning_request(content="Query text", priority="normal")
 ```
 
 ## 📁 Project Structure
@@ -292,7 +296,7 @@ dals/
 │   │   ├── exporters.py       # Data export utilities
 │   │   └── vd_wrapper.py      # Data analysis integration
 │   ├── api/                   # Web interface
-│   ├── prometheus_integration.py  # Prometheus Prime compatibility
+│   ├── ucm_connector.py  # UCM integration for Caleon AI
 │   ├── config.py              # Configuration management
 │   ├── logging_config.py      # Structured logging
 │   └── service.py             # Microservice entry point
@@ -311,7 +315,7 @@ For comprehensive documentation, integration guides, and implementation details,
 - **[Phase 1 & 2 Integration Plans](docs/governance/DALS_Phase_1_2_Integration_Plans_2025-10-05.pdf)** - Strategic telemetry synchronization plans
 - **[Setup Guides](docs/setup/)** - Quick start and GitHub preparation
 - **[Architecture Overview](docs/architecture/)** - System structure and folder organization  
-- **[Integration Guides](docs/integration/)** - Prometheus Prime, dashboard, and component integration
+- **[Integration Guides](docs/integration/)** - Caleon AI, UCM, dashboard, and component integration
 - **[Deployment Procedures](docs/deployment/)** - Production deployment and Docker configuration
 - **[Assets & Screenshots](docs/assets/)** - Logos, icons, and system screenshots
 

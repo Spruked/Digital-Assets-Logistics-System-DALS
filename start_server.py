@@ -17,13 +17,14 @@ try:
     from iss_module.service import create_app
     import uvicorn
 
+
     def main():
         print("Creating DALS application...")
         app = create_app()
         print(f"App created with {len(app.routes)} routes")
-        print("Starting server on http://127.0.0.1:8003")
+        print("Starting server on http://0.0.0.0:8003 (canonical ISS API port)")
         print("Press Ctrl+C to stop the server")
-        uvicorn.run(app, host="127.0.0.1", port=8003)
+        uvicorn.run(app, host="0.0.0.0", port=8003)
 
     if __name__ == "__main__":
         main()

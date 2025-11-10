@@ -1,0 +1,15 @@
+[Unit]
+Description=Digital Assets Logistics System (DALS) Server
+After=network.target
+
+[Service]
+Type=simple
+User=spruked
+WorkingDirectory=/media/spruked/External1TB/Digital Assets Logistics Systems
+ExecStart=/usr/bin/python3 start_server.py
+Restart=always
+RestartSec=3
+Environment=PYTHONPATH=/media/spruked/External1TB/Digital Assets Logistics Systems
+
+[Install]
+WantedBy=multi-user.target

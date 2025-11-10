@@ -1,4 +1,4 @@
-# Docker Compose for DALS Phase 1 Integration - Production Ready
+# Docker Compose for DALS - Production Ready with UCM Integration Readiness
 
 services:
   # DALS Controller Service (Main ISS Module)
@@ -7,24 +7,25 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: dals-iss-module:v1.0.0  # Pinned version to prevent drift
+    image: dals-controller:v1.0.0  # Pinned version to prevent drift
     container_name: dals-controller
     ports:
-      - "8003:8003"
+      - "8003:8003"  # API Gateway
+      - "8008:8008"  # Dashboard Server
     environment:
       - ENVIRONMENT=production
       - ISS_SERVICE_NAME=dals-controller
       - ISS_HOST=0.0.0.0
       - ISS_PORT=8003
+      - DASHBOARD_PORT=8008
       - LOG_LEVEL=INFO
       - LOG_FORMAT=json
-      - PROMETHEUS_INTEGRATION_ENABLED=true
-      - API_GATEWAY_URL=http://api-gateway:8000
+      - UCM_INTEGRATION_READY=true  # Ready for UCM connection
       - REDIS_URL=redis://redis:6379
       - REDIS_ENABLED=true
-      - PHASE_1_TELEMETRY_ENABLED=true  # Enable Phase 1 features
-      - MODULE_STATUS_TRACKING=true     # Enable comprehensive status tracking
-      - WEBSOCKET_ENABLED=true          # Enable real-time streaming
+      - MODULE_STATUS_TRACKING=true
+      - WEBSOCKET_ENABLED=true
+      - DALS_001_ENFORCED=true
     volumes:
       - ./iss_module/data:/app/data
       - ./vault:/app/vault
@@ -54,20 +55,20 @@ services:
     restart: unless-stopped
     command: redis-server --appendonly yes
 
-  # Prometheus Prime API Gateway (for testing integration)
-  api-gateway:
-    image: prometheus-prime/api-gateway:latest
-    container_name: prometheus-api-gateway
-    ports:
-      - "8000:8000"
-    environment:
-      - ENVIRONMENT=development
-      - ISS_CONTROLLER_URL=http://dals-controller:8003
-    depends_on:
-      - dals-controller
-    networks:
-      - dals-network
-    restart: unless-stopped
+  # UCM Service (Unified Cognition Module) - To be added when UCM repo is available
+  # ucm-service:
+  #   # UCM will be added as a separate service when the repository is ready
+  #   # It will run on port 8080 and provide cognitive processing capabilities
+  #   image: ucm-cognitive-engine:latest
+  #   container_name: dals-ucm
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - UCM_PORT=8080
+  #     - COGNITIVE_MODEL=enabled
+  #   networks:
+  #     - dals-network
+  #   restart: unless-stopped
 
   # Service Discovery (Consul)
   consul:
@@ -83,25 +84,6 @@ services:
       - dals-network
     restart: unless-stopped
     command: consul agent -dev -client=0.0.0.0 -ui
-
-  # Monitoring with Prometheus (optional)
-  prometheus:
-    image: prom/prometheus:v2.47.0  # Pinned version
-    container_name: dals-prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    networks:
-      - dals-network
-    restart: unless-stopped
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.enable-lifecycle'
 
   # Log aggregation with Grafana Loki (optional)
   loki:
@@ -126,15 +108,9 @@ volumes:
   redis_data:
     driver: local
     name: dals-redis-data
-  postgres_data:
-    driver: local
-    name: dals-postgres-data
   consul_data:
     driver: local
     name: dals-consul-data
-  prometheus_data:
-    driver: local
-    name: dals-prometheus-data
   loki_data:
     driver: local
     name: dals-loki-data

@@ -19,7 +19,7 @@ Welcome to the Digital Asset Logistics System (DALS) documentation center. This 
 - **[FOLDER_TREE.md](architecture/FOLDER_TREE.md)** - Complete system folder structure overview
 
 ### 🔗 Integration Guides
-- **[PROMETHEUS_INTEGRATION_COMPLETE.md](integration/PROMETHEUS_INTEGRATION_COMPLETE.md)** - Prometheus Prime cognitive system integration
+- **[CALEON_UCM_INTEGRATION_COMPLETE.md](integration/CALEON_UCM_INTEGRATION_COMPLETE.md)** - Caleon AI + UCM cognitive system integration
 - **[DALS_FULL_DASHBOARD_COMPLETE.md](integration/DALS_FULL_DASHBOARD_COMPLETE.md)** - Complete dashboard integration guide
 - **[CSS_CLEANUP_COMPLETE.md](integration/CSS_CLEANUP_COMPLETE.md)** - CSS optimization and cleanup procedures
 - **[LOGO_INTEGRATION_COMPLETE.md](integration/LOGO_INTEGRATION_COMPLETE.md)** - Logo and branding integration guide

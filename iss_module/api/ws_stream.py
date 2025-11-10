@@ -100,8 +100,63 @@ class TelemetryConnectionManager:
         for connection in disconnected:
             self.disconnect(connection)
 
-# Global connection manager instance
+# AI Comms Connection Manager
+class AICommsConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+        self.ai_sessions: Dict[str, Dict[str, Any]] = {}  # session_id -> session_data
+        
+    async def connect(self, websocket: WebSocket, session_id: str = None):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+        if session_id:
+            self.ai_sessions[session_id] = {
+                "websocket": websocket,
+                "connected_at": datetime.now(timezone.utc).isoformat(),
+                "last_activity": datetime.now(timezone.utc).isoformat(),
+                "status": "active"
+            }
+        logger.info(f"New AI Comms connection. Total: {len(self.active_connections)}")
+        
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+        # Clean up sessions
+        sessions_to_remove = []
+        for session_id, session_data in self.ai_sessions.items():
+            if session_data["websocket"] == websocket:
+                sessions_to_remove.append(session_id)
+        for session_id in sessions_to_remove:
+            del self.ai_sessions[session_id]
+        logger.info(f"AI Comms disconnected. Total: {len(self.active_connections)}")
+        
+    async def broadcast_ai_message(self, message: dict, exclude_websocket: WebSocket = None):
+        """Broadcast AI message to all connected clients"""
+        for connection in self.active_connections:
+            if connection != exclude_websocket:
+                try:
+                    await connection.send_text(json.dumps(message))
+                except Exception as e:
+                    logger.warning(f"Failed to send AI message: {e}")
+                    
+    async def send_ai_response(self, session_id: str, response: dict):
+        """Send response to specific AI session"""
+        if session_id in self.ai_sessions:
+            websocket = self.ai_sessions[session_id]["websocket"]
+            try:
+                await websocket.send_text(json.dumps({
+                    "type": "ai_response",
+                    "session_id": session_id,
+                    "data": response,
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }))
+                self.ai_sessions[session_id]["last_activity"] = datetime.now(timezone.utc).isoformat()
+            except Exception as e:
+                logger.error(f"Failed to send AI response to session {session_id}: {e}")
+
+# Global connection managers
 manager = TelemetryConnectionManager()
+ai_manager = AICommsConnectionManager()
 
 @ws_router.websocket("/ws/telemetry")
 async def telemetry_websocket_endpoint(websocket: WebSocket):
@@ -247,3 +302,121 @@ async def websocket_heartbeat_monitor():
             
         # Send heartbeat every 60 seconds
         await asyncio.sleep(60)
+
+@ws_router.websocket("/ws/ai-comms")
+async def ai_comms_websocket_endpoint(websocket: WebSocket):
+    """
+    WebSocket endpoint for AI communications deck
+    
+    Supports real-time AI interactions, reasoning sessions, and comms broadcasting
+    """
+    session_id = websocket.query_params.get("session_id", f"session_{datetime.now(timezone.utc).timestamp()}")
+    await ai_manager.connect(websocket, session_id)
+    
+    # Send welcome message
+    await websocket.send_text(json.dumps({
+        "type": "comms_connected",
+        "session_id": session_id,
+        "message": "Connected to DALS AI Communications Deck",
+        "capabilities": ["reasoning", "vault_queries", "telemetry", "broadcast"],
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
+    
+    try:
+        while True:
+            # Receive messages from client
+            data = await websocket.receive_text()
+            
+            try:
+                message = json.loads(data)
+                msg_type = message.get("type")
+                
+                if msg_type == "ai_query":
+                    # Process AI query
+                    query = message.get("query", "")
+                    context = message.get("context", {})
+                    
+                    # Simulate AI processing (replace with actual AI integration)
+                    response = {
+                        "query": query,
+                        "response": f"Processing query: {query}",
+                        "confidence": 0.85,
+                        "processing_time": 0.123,
+                        "sources": ["DALS Knowledge Base", "Live Telemetry"]
+                    }
+                    
+                    await ai_manager.send_ai_response(session_id, response)
+                    
+                elif msg_type == "broadcast_message":
+                    # Broadcast message to all AI comms clients
+                    broadcast_data = {
+                        "type": "broadcast",
+                        "sender": session_id,
+                        "message": message.get("message", ""),
+                        "priority": message.get("priority", "normal"),
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }
+                    
+                    await ai_manager.broadcast_ai_message(broadcast_data, websocket)
+                    
+                elif msg_type == "reasoning_request":
+                    # Handle reasoning requests
+                    reasoning_data = {
+                        "type": "reasoning_started",
+                        "session_id": session_id,
+                        "query": message.get("query", ""),
+                        "reasoning_steps": [],
+                        "status": "processing"
+                    }
+                    
+                    await websocket.send_text(json.dumps(reasoning_data))
+                    
+                    # Simulate reasoning steps
+                    steps = [
+                        "Analyzing query parameters",
+                        "Consulting knowledge base", 
+                        "Cross-referencing telemetry data",
+                        "Formulating response"
+                    ]
+                    
+                    for i, step in enumerate(steps):
+                        await asyncio.sleep(0.5)  # Simulate processing time
+                        step_data = {
+                            "type": "reasoning_step",
+                            "session_id": session_id,
+                            "step": i + 1,
+                            "description": step,
+                            "progress": (i + 1) / len(steps)
+                        }
+                        await websocket.send_text(json.dumps(step_data))
+                    
+                    # Final response
+                    final_response = {
+                        "type": "reasoning_complete",
+                        "session_id": session_id,
+                        "conclusion": "Analysis complete - all systems nominal",
+                        "confidence": 0.92,
+                        "evidence_count": 15
+                    }
+                    
+                    await websocket.send_text(json.dumps(final_response))
+                    
+                elif msg_type == "ping":
+                    await websocket.send_text(json.dumps({
+                        "type": "pong",
+                        "session_id": session_id,
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }))
+                    
+            except json.JSONDecodeError:
+                await websocket.send_text(json.dumps({
+                    "type": "error",
+                    "message": "Invalid JSON format",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }))
+                
+    except WebSocketDisconnect:
+        ai_manager.disconnect(websocket)
+    except Exception as e:
+        logger.error(f"AI Comms WebSocket error: {e}")
+        ai_manager.disconnect(websocket)

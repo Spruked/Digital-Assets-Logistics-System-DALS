@@ -26,7 +26,7 @@ docs/architecture/
 ### 🔗 Integration Guides
 ```
 docs/integration/
-├── PROMETHEUS_INTEGRATION_COMPLETE.md      # Prometheus Prime cognitive system integration
+├── CALEON_UCM_INTEGRATION_COMPLETE.md      # Caleon AI + UCM cognitive system integration
 ├── DALS_FULL_DASHBOARD_COMPLETE.md         # Complete dashboard integration guide
 ├── CSS_CLEANUP_COMPLETE.md                 # CSS optimization and cleanup procedures
 └── LOGO_INTEGRATION_COMPLETE.md            # Logo and branding integration guide
@@ -80,7 +80,7 @@ Added the governance document reference to all key documentation files:
 - **docs/README.md** (documentation index)
 - **docs/deployment/DEPLOYMENT.md**
 - **docs/setup/QUICK_START.md**
-- **docs/integration/PROMETHEUS_INTEGRATION_COMPLETE.md**
+- **docs/integration/CALEON_UCM_INTEGRATION_COMPLETE.md**
 - **docs/integration/DALS_FULL_DASHBOARD_COMPLETE.md**
 - **docs/architecture/FOLDER_TREE.md**
 

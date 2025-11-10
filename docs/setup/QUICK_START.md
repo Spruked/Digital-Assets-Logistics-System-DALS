@@ -122,10 +122,10 @@ iss-module --help
 
 Once server is running (`iss-server` or `uvicorn iss_module.api.api:app`):
 
-- **Dashboard**: http://localhost:8000 or http://localhost:8000/dashboard
-- **API Docs**: http://localhost:8000/api/docs  
-- **Health Check**: http://localhost:8000/api/health
-- **Current Stardate**: http://localhost:8000/api/stardate
+- **Dashboard**: http://localhost:8003 or http://localhost:8003/dashboard
+- **API Docs**: http://localhost:8003/api/docs  
+- **Health Check**: http://localhost:8003/api/health
+- **Current Stardate**: http://localhost:8003/api/stardate
 
 ## Integration with Caleon & CertSig
 

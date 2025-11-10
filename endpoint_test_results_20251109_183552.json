@@ -1,0 +1,214 @@
+{
+  "test_date": "2025-11-09T18:35:52.389088",
+  "base_url": "http://localhost:8003",
+  "total_tests": 23,
+  "results": [
+    {
+      "method": "GET",
+      "path": "/",
+      "url": "http://localhost:8003/",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "url": "http://localhost:8003/api/health",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "url": "http://localhost:8003/api/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/docs",
+      "url": "http://localhost:8003/docs",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iss/now",
+      "url": "http://localhost:8003/api/v1/iss/now",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/time",
+      "url": "http://localhost:8003/api/time",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/metrics",
+      "url": "http://localhost:8003/api/telemetry/metrics",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/status",
+      "url": "http://localhost:8003/api/telemetry/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/events",
+      "url": "http://localhost:8003/api/telemetry/events",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/status",
+      "url": "http://localhost:8003/api/caleon/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/threats/status",
+      "url": "http://localhost:8003/api/caleon/threats/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/security/dashboard",
+      "url": "http://localhost:8003/api/caleon/security/dashboard",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ucm/status",
+      "url": "http://localhost:8003/api/ucm/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ucm/health",
+      "url": "http://localhost:8003/api/ucm/health",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/alpha-certsig/health",
+      "url": "http://localhost:8003/api/alpha-certsig/health",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/alpha-certsig/mint-status",
+      "url": "http://localhost:8003/api/alpha-certsig/mint-status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/truemark/health",
+      "url": "http://localhost:8003/api/truemark/health",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/truemark/status",
+      "url": "http://localhost:8003/api/truemark/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/dals/assets",
+      "url": "http://localhost:8003/api/dals/assets",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ws/events",
+      "url": "http://localhost:8003/api/ws/events",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/iss/pulse",
+      "url": "http://localhost:8003/api/modules/iss/pulse",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/caleon/status",
+      "url": "http://localhost:8003/api/modules/caleon/status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/certsig/mint-status",
+      "url": "http://localhost:8003/api/modules/certsig/mint-status",
+      "success": false,
+      "status_code": null,
+      "response_time": null,
+      "error": "Connection refused - is the server running?"
+    }
+  ]
+}

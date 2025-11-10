@@ -25,7 +25,7 @@ openpyxl>=3.1.2
 structlog>=23.2.0
 colorama>=0.4.6
 
-# Prometheus Prime integration dependencies
+# UCM integration dependencies
 pydantic-settings>=2.0.0
 redis>=5.0.0
 httpx>=0.25.2

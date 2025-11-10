@@ -60,7 +60,7 @@ class ModuleStatusManager:
                 "description": "Cognitive Reasoning Engine"
             },
             {
-                "name": "Prometheus_Integration",
+                "name": "UCM_Integration",
                 "version": "1.2.0",
                 "status": "active",
                 "description": "Prime Ecosystem Integration"

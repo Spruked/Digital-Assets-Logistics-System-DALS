@@ -2,7 +2,7 @@
 Structured Logging for ISS Module
 =================================
 
-Provides structured logging capabilities compatible with Prometheus Prime
+Provides structured logging capabilities compatible with Caleon AI + Phi-3 Mini
 microservices logging infrastructure.
 
 Features:
@@ -112,7 +112,7 @@ def configure_structured_logging(
 
 class ISSLogger:
     """
-    Enhanced logger for ISS Module with Prometheus Prime compatibility
+    Enhanced logger for ISS Module with Caleon AI + Phi-3 Mini compatibility
     
     Provides structured logging with context management, performance tracking,
     and error handling capabilities.
