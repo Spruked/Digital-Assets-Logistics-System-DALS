@@ -30,7 +30,7 @@ from fastapi import FastAPI
 import structlog
 
 from iss_module.config import settings, validate_settings
-from iss_module.prometheus_integration import create_prometheus_iss_app
+from iss_module.api.api import app as dals_app
 
 
 # Configure structured logging for Prometheus Prime compatibility
@@ -53,44 +53,42 @@ def setup_logging():
 
 def create_app() -> FastAPI:
     """
-    Create the ISS Controller FastAPI application
+    Create the DALS FastAPI application
     
     Returns:
-        FastAPI application configured for Prometheus Prime integration
+        FastAPI application configured for DALS
     """
     # Setup logging first
     setup_logging()
     
-    logger = structlog.get_logger("iss-controller")
+    logger = structlog.get_logger("dals-service")
     
     # Validate configuration
     config_issues = validate_settings()
     if config_issues:
         logger.warning("Configuration issues detected", issues=config_issues)
     
-    # Create the Prometheus Prime compatible app
-    app = create_prometheus_iss_app(settings.service_name)
+    # Return the main DALS app
+    app = dals_app
     
     # Add custom metadata
     app.state.settings = settings
     app.state.start_time = None
     
     # Update app metadata
-    app.title = "ISS Controller Service"
+    app.title = "Digital Asset Logistics System (DALS)"
     app.description = """
-    Integrated Systems Solution Controller for Prometheus Prime
+    Digital Asset Logistics System for sovereign AI operations
     
-    Provides time anchoring, captain's log management, vault queries,
-    and reasoning pipeline integration for the Prometheus Prime 
-    cognitive architecture.
+    Provides time anchoring, asset tracking, UCM integration,
+    and ethical AI governance for digital asset management.
     
     Key Features:
-    - Compatible with Prometheus Prime API Gateway
-    - Structured logging with JSON output
-    - Health checks and service discovery
-    - Circuit breaker pattern support
-    - Vault management and queries
-    - Captain's log with stardate anchoring
+    - UCM cognitive integration ready
+    - CALEON security layer validation
+    - DALS-001 zero-or-empty compliance
+    - Thought Trace UI for reasoning transparency
+    - Sovereign AI with human oversight
     """
     app.version = settings.version
     
