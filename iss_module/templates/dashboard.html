@@ -2462,6 +2462,9 @@
             <button class="tab-button" data-tab="security">
                 <span>Security Monitor</span>
             </button>
+            <button class="tab-button" data-tab="shim-advisory">
+                <span>SHiM Advisory</span>
+            </button>
             <button class="tab-button" data-tab="telemetry">
                 <span>Telemetry</span>
             </button>
@@ -3088,6 +3091,139 @@
             </div>
         </div>
         <!-- END SECURITY MONITOR TAB -->
+
+        <!-- SHiM ADVISORY TAB -->
+        <div class="tab-content" id="tab-shim-advisory">
+            <h2 style="color: var(--primary-color); margin-bottom: 2rem; text-align: center;">SHiM v1.1 - Spherical Harmonic Integrity Module</h2>
+            <div class="dashboard-grid">
+
+                <!-- SHiM Status Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>SHiM System Status</h3>
+                        <div class="metric-icon">🔮</div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="status-indicator" id="shim-status">
+                            <span class="status-dot status-unknown"></span>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                        <div class="metric-value" id="shim-version">v1.1_spherical</div>
+                        <div class="metric-label">Advisory Mode: <span id="shim-advisory-mode">Active</span></div>
+                        <div class="metric-label">Enforcement: <span id="shim-enforcement">NONE</span></div>
+                    </div>
+                </div>
+
+                <!-- SHiM Analysis Form -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Asset Claim Analysis</h3>
+                        <div class="metric-icon">⚖️</div>
+                    </div>
+                    <div class="metric-content">
+                        <form id="shim-analysis-form">
+                            <div class="form-group">
+                                <label for="claim-input">Asset Claim:</label>
+                                <input type="text" id="claim-input" placeholder="e.g., Ownership transfer: Alice → Bob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="evidence-input">Evidence Types (comma-separated):</label>
+                                <input type="text" id="evidence-input" placeholder="e.g., signature_valid, identity_verified, provenance_intact" required>
+                            </div>
+                            <button type="submit" class="btn-primary" id="analyze-btn">
+                                <span>🔮 Analyze with SHiM</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- SHiM Results Display -->
+                <div class="metric-card" id="shim-results-card" style="display: none;">
+                    <div class="metric-header">
+                        <h3>SHiM Analysis Results</h3>
+                        <div class="metric-icon">📊</div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="shim-result-section">
+                            <h4>Harmonic Analysis</h4>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">SHiM Score:</span>
+                                    <span class="result-value" id="shim-score">-</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Verdict:</span>
+                                    <span class="result-value" id="shim-verdict">-</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Confidence Band:</span>
+                                    <span class="result-value" id="shim-confidence">-</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Asset ID:</span>
+                                    <span class="result-value" id="shim-asset-id">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="shim-result-section">
+                            <h4>Evidence Weighting</h4>
+                            <div id="evidence-weighting" class="evidence-list">
+                                <!-- Evidence items will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="shim-result-section">
+                            <h4>Analysis Explanation</h4>
+                            <div id="shim-explanation" class="explanation-text">
+                                <!-- Explanation will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="shim-result-section">
+                            <h4>Recommended Action</h4>
+                            <div class="action-recommendation" id="shim-recommendation">
+                                <!-- Recommendation will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="shim-result-section final-decision">
+                            <h4>🚫 Final Decision</h4>
+                            <div class="final-decision-box">
+                                <span class="final-decision-text">null</span>
+                                <span class="final-decision-note">(Human Authority Preserved)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SHiM Audit Trail -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Audit Trail</h3>
+                        <div class="metric-icon">📋</div>
+                    </div>
+                    <div class="metric-content">
+                        <div id="shim-audit-trail" class="audit-log">
+                            <div class="audit-entry">
+                                <span class="audit-timestamp">2025-11-15 18:25:00</span>
+                                <span class="audit-event">SHiM v1.1 deployed to DALS Advisory Bus</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-timestamp">2025-11-15 18:25:01</span>
+                                <span class="audit-event">Advisory-only mode confirmed</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-timestamp">2025-11-15 18:25:02</span>
+                                <span class="audit-event">Human authority preserved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END SHiM ADVISORY TAB -->
 
         <!-- BUSINESS ANALYTICS TAB -->
         <div class="tab-content" id="tab-business">
@@ -4304,6 +4440,293 @@
         </div>
 
     </div>
+
+    <!-- SHiM v1.1 Advisory Styles -->
+    <style>
+        /* SHiM Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--surface-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        /* SHiM Results Styles */
+        .shim-result-section {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .shim-result-section h4 {
+            margin: 0 0 1rem 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-color);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .result-value.verdict-high {
+            color: var(--success-color);
+        }
+
+        .result-value.verdict-moderate {
+            color: var(--warning-color);
+        }
+
+        .result-value.verdict-low {
+            color: #f59e0b;
+        }
+
+        .result-value.verdict-conflict {
+            color: var(--error-color);
+        }
+
+        /* Evidence Weighting Styles */
+        .evidence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .evidence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-color);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .evidence-name {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .evidence-bar {
+            flex: 2;
+            height: 8px;
+            background: var(--surface-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .evidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .evidence-weight {
+            flex: 0 0 60px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Explanation Styles */
+        .explanation-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .explanation-item {
+            padding: 0.5rem;
+            background: var(--bg-color);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Recommendation Styles */
+        .action-recommendation {
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .action-recommendation.recommendation-high {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .action-recommendation.recommendation-moderate {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .action-recommendation.recommendation-caution {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Final Decision Styles */
+        .final-decision {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(99, 102, 241, 0.1));
+            border: 2px solid var(--error-color);
+        }
+
+        .final-decision-box {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .final-decision-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--error-color);
+        }
+
+        .final-decision-note {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Audit Trail Styles */
+        .audit-log {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .audit-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .audit-entry:last-child {
+            border-bottom: none;
+        }
+
+        .audit-timestamp {
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .audit-event {
+            color: var(--text-color);
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evidence-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .evidence-bar {
+                width: 100%;
+            }
+
+            .audit-entry {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+        }
+    </style>
 
     <script>
         // Canonical API endpoints (DALS API on port 8003 by default)
@@ -6541,6 +6964,8 @@
                         checkSystemMetrics();
                     } else if (tabName === 'market-intel') {
                         checkMarketIntel();
+                    } else if (tabName === 'shim-advisory') {
+                        initializeSHiM();
                     }
                     
                     console.log(`Switched to tab: ${tabName}`);
@@ -7800,6 +8225,204 @@
             } catch (error) {
                 document.getElementById('ucm-connection-status').textContent = '● Offline';
                 document.getElementById('caleon-status').textContent = '✗ Unavailable';
+            }
+        }
+
+        // ==========================================
+        // SHiM v1.1 Advisory Functions
+        // ==========================================
+
+        async function initializeSHiM() {
+            console.log('Initializing SHiM v1.1 Advisory Interface');
+            await checkSHiMStatus();
+            initializeSHiMForm();
+        }
+
+        async function checkSHiMStatus() {
+            try {
+                const response = await fetch('/api/shim/status');
+                const data = await response.json();
+
+                const statusElement = document.getElementById('shim-status');
+                const versionElement = document.getElementById('shim-version');
+                const advisoryElement = document.getElementById('shim-advisory-mode');
+                const enforcementElement = document.getElementById('shim-enforcement');
+
+                if (data.shim_available) {
+                    statusElement.innerHTML = '<span class="status-dot status-success"></span><span class="status-text">Active</span>';
+                    versionElement.textContent = data.version || 'v1.1_spherical';
+                    advisoryElement.textContent = data.advisory_mode ? 'Active' : 'Inactive';
+                    enforcementElement.textContent = data.enforcement || 'NONE';
+                } else {
+                    statusElement.innerHTML = '<span class="status-dot status-error"></span><span class="status-text">Unavailable</span>';
+                    versionElement.textContent = 'N/A';
+                    advisoryElement.textContent = 'N/A';
+                    enforcementElement.textContent = 'N/A';
+                }
+            } catch (error) {
+                console.error('SHiM status check failed:', error);
+                document.getElementById('shim-status').innerHTML = '<span class="status-dot status-error"></span><span class="status-text">Error</span>';
+            }
+        }
+
+        function initializeSHiMForm() {
+            const form = document.getElementById('shim-analysis-form');
+            const analyzeBtn = document.getElementById('analyze-btn');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const claim = document.getElementById('claim-input').value.trim();
+                const evidenceText = document.getElementById('evidence-input').value.trim();
+
+                if (!claim || !evidenceText) {
+                    alert('Please enter both claim and evidence');
+                    return;
+                }
+
+                // Parse evidence (comma-separated)
+                const evidence = evidenceText.split(',').map(e => e.trim()).filter(e => e);
+
+                if (evidence.length === 0) {
+                    alert('Please enter at least one evidence type');
+                    return;
+                }
+
+                // Disable button and show loading
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<span>🔮 Analyzing...</span>';
+
+                try {
+                    await performSHiMAnalysis(claim, evidence);
+                } catch (error) {
+                    console.error('SHiM analysis failed:', error);
+                    alert('SHiM analysis failed. Please check the console for details.');
+                } finally {
+                    // Re-enable button
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.innerHTML = '<span>🔮 Analyze with SHiM</span>';
+                }
+            });
+        }
+
+        async function performSHiMAnalysis(claim, evidence) {
+            try {
+                const response = await fetch('/api/shim/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        claim: claim,
+                        evidence: evidence
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                displaySHiMResults(data);
+
+                // Add to audit trail
+                addToAuditTrail(`Analysis performed: ${claim.substring(0, 50)}...`);
+
+            } catch (error) {
+                console.error('SHiM analysis error:', error);
+                alert('Failed to perform SHiM analysis: ' + error.message);
+            }
+        }
+
+        function displaySHiMResults(data) {
+            const resultsCard = document.getElementById('shim-results-card');
+            const shimData = data.shim_advisory;
+
+            // Show results card
+            resultsCard.style.display = 'block';
+
+            // Update results
+            document.getElementById('shim-score').textContent = shimData.shim_score;
+            document.getElementById('shim-verdict').textContent = shimData.verdict;
+            document.getElementById('shim-confidence').textContent = shimData.confidence_band;
+            document.getElementById('shim-asset-id').textContent = shimData.asset_id;
+
+            // Update verdict styling
+            const verdictElement = document.getElementById('shim-verdict');
+            verdictElement.className = 'result-value';
+            if (shimData.verdict === 'HIGH_SUPPORT') {
+                verdictElement.classList.add('verdict-high');
+            } else if (shimData.verdict === 'MODERATE') {
+                verdictElement.classList.add('verdict-moderate');
+            } else if (shimData.verdict === 'LOW') {
+                verdictElement.classList.add('verdict-low');
+            } else {
+                verdictElement.classList.add('verdict-conflict');
+            }
+
+            // Display evidence weighting
+            const evidenceContainer = document.getElementById('evidence-weighting');
+            evidenceContainer.innerHTML = '';
+
+            Object.entries(shimData.evidence_weighting).forEach(([evidence, weight]) => {
+                const evidenceItem = document.createElement('div');
+                evidenceItem.className = 'evidence-item';
+                evidenceItem.innerHTML = `
+                    <span class="evidence-name">${evidence}</span>
+                    <div class="evidence-bar">
+                        <div class="evidence-fill" style="width: ${weight * 100}%"></div>
+                    </div>
+                    <span class="evidence-weight">${(weight * 100).toFixed(1)}%</span>
+                `;
+                evidenceContainer.appendChild(evidenceItem);
+            });
+
+            // Display explanation
+            const explanationContainer = document.getElementById('shim-explanation');
+            explanationContainer.innerHTML = '';
+
+            shimData.explanation.forEach(explanation => {
+                const expItem = document.createElement('div');
+                expItem.className = 'explanation-item';
+                expItem.textContent = explanation;
+                explanationContainer.appendChild(expItem);
+            });
+
+            // Display recommendation
+            const recommendationElement = document.getElementById('shim-recommendation');
+            recommendationElement.textContent = shimData.recommended_action;
+            recommendationElement.className = 'action-recommendation';
+
+            if (shimData.verdict === 'HIGH_SUPPORT') {
+                recommendationElement.classList.add('recommendation-high');
+            } else if (shimData.verdict === 'MODERATE') {
+                recommendationElement.classList.add('recommendation-moderate');
+            } else {
+                recommendationElement.classList.add('recommendation-caution');
+            }
+
+            // Scroll to results
+            resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function addToAuditTrail(event) {
+            const auditContainer = document.getElementById('shim-audit-trail');
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+
+            const auditEntry = document.createElement('div');
+            auditEntry.className = 'audit-entry';
+            auditEntry.innerHTML = `
+                <span class="audit-timestamp">${timestamp}</span>
+                <span class="audit-event">${event}</span>
+            `;
+
+            // Insert at the top
+            auditContainer.insertBefore(auditEntry, auditContainer.firstChild);
+
+            // Keep only last 10 entries
+            while (auditContainer.children.length > 10) {
+                auditContainer.removeChild(auditContainer.lastChild);
             }
         }
 
