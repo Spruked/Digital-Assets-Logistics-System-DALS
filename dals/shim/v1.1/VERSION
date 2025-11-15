@@ -1,0 +1,5 @@
+# VERSION
+shim_v1.1_spherical
+canonical_output: hybrid_verbose
+enforcement: NONE
+status: ADVISORY_ONLY
