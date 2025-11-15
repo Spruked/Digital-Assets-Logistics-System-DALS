@@ -1,0 +1,155 @@
+# Docker Compose Development Override for Phase 11-A2
+# Development environment with hot-reload and debugging for Phase 11-A2 features
+
+version: '3.8'
+
+services:
+  # Development DALS Controller with Phase 11-A2
+  dals-controller:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    image: dals-controller:dev-11a2
+    container_name: dals-controller-dev
+    ports:
+      - "8003:8003"  # API Gateway
+      - "8008:8008"  # Dashboard Server
+      - "5678:5678"  # Debug port
+    environment:
+      - ENVIRONMENT=development
+      - ISS_SERVICE_NAME=dals-controller-dev
+      - ISS_HOST=0.0.0.0
+      - ISS_PORT=8003
+      - DASHBOARD_PORT=8008
+      - LOG_LEVEL=DEBUG
+      - LOG_FORMAT=console
+      - PYTHONPATH=/app
+      # Phase 11-A2 Development Settings
+      - PREDICTIVE_ENGINE_ENABLED=true
+      - AUTONOMOUS_PREVENTION_MODE=11-A2
+      - PREDICTIVE_SCAN_INTERVAL=10  # Slower for development debugging
+      - RISK_THRESHOLD_HIGH=80       # Higher threshold for testing
+      - RISK_THRESHOLD_CRITICAL=95
+      - SELF_MODEL_ENABLED=true
+      - AWARENESS_LAYER_ACTIVE=true
+      - VOICE_AWARENESS_ENABLED=true
+      - CANS_AUTONOMOUS_MODE=standard  # Less aggressive for dev
+      - PREDICTIVE_FAILURE_MODELING=true
+      - HEALTH_TREND_ANALYSIS=true
+      - PREVENTION_PROTOCOLS_ACTIVE=true
+      - DEBUG_MODE=true
+      - HOT_RELOAD=true
+    volumes:
+      - .:/app
+      - ./iss_module/data:/app/data
+      - ./vault:/app/vault
+      - ./logs:/app/logs
+      - ./config:/app/config:ro
+    command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "-m", "iss_module.service"]
+    networks:
+      - dals-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Development Redis with debug logging
+  redis:
+    image: redis:7.2-alpine
+    container_name: dals-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - dals-dev-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --loglevel verbose
+
+  # Development UCM with debug mode
+  ucm-service:
+    build:
+      context: ./Unified-Cognition-Module-Caleon-Prime-full-System
+      dockerfile: Dockerfile.dev
+    image: ucm-cognitive-engine:dev-11a2
+    container_name: dals-ucm-dev
+    ports:
+      - "8081:8081"
+      - "5679:5679"  # UCM debug port
+    environment:
+      - ENVIRONMENT=development
+      - UCM_PORT=8081
+      - COGNITIVE_MODEL=enabled
+      - DALS_INTEGRATION=true
+      - DEBUG_MODE=true
+      - PREDICTIVE_AWARENESS_ENABLED=true
+      - CALEON_VOICE_INTEGRATION=true
+      - AUTONOMOUS_MODE=enabled
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System:/app
+      - ./config:/app/config:ro
+      - ./logs/ucm:/app/logs
+    networks:
+      - dals-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Development database for testing
+  postgres:
+    image: postgres:15-alpine
+    container_name: dals-postgres-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=dals_dev
+      - POSTGRES_USER=dals_user
+      - POSTGRES_PASSWORD=dals_secure_dev_2025
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dals-dev-network
+    restart: unless-stopped
+
+  # PgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:7.7
+    container_name: dals-pgadmin-dev
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dev@dals.system
+      - PGADMIN_DEFAULT_PASSWORD=dals_dev_2025
+    volumes:
+      - pgadmin_dev_data:/var/lib/pgadmin
+    networks:
+      - dals-dev-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+networks:
+  dals-dev-network:
+    driver: bridge
+    name: dals-dev-11a2-network
+
+volumes:
+  redis_dev_data:
+    driver: local
+    name: dals-redis-dev-data
+  postgres_dev_data:
+    driver: local
+    name: dals-postgres-dev-data
+  pgadmin_dev_data:
+    driver: local
+    name: dals-pgadmin-dev-data

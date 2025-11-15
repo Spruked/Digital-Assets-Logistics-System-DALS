@@ -1,0 +1,15 @@
+monitor:
+  enabled: true
+  similarity_threshold: 0.93      # cosine on verdict vector
+  lexical_threshold: 0.88         # token-level edit distance ratio
+  prosodic_threshold: 0.15        # RMS energy variance (0-1)
+  debounce_seconds: 0.8           # min interval between pings
+  max_pings_per_utterance: 3
+
+stt:
+  model: "whisper-tiny"           # or any async STT endpoint
+  chunk_seconds: 1.0
+  overlap_seconds: 0.2
+
+embeddings:
+  model: "sentence-transformers/all-MiniLM-L6-v2"

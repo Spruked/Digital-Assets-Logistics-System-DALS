@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueMark Enterprise - Pricing</title>
+    <meta name="description" content="TrueMark Enterprise pricing - Bulk mint knowledge NFTs for teams and enterprises">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1e293b 50%, #0f1419 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #00b4ff;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00b4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #00b4ff;
+            font-size: 1.1rem;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00b4ff, #0099ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .pricing-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 180, 255, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: #00b4ff;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 180, 255, 0.1));
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00b4ff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #00b4ff;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #00b4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-unit {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-left: 0.5rem;
+        }
+
+        .features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .features li::before {
+            content: '✓';
+            color: #00b4ff;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .mint-button {
+            background: linear-gradient(45deg, #00b4ff, #0099ff);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .mint-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 180, 255, 0.1), rgba(0, 153, 255, 0.1));
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #00b4ff;
+        }
+
+        .cta-description {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .demo-button {
+            background: linear-gradient(45deg, #00b4ff, #0099ff);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #00b4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #0099ff;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">TRUEMARK ENTERPRISE</div>
+            <div class="subtitle">Enterprise-Grade NFT Minting</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Scale Your Digital Empire</h1>
+            <p>Bulk mint knowledge NFTs for teams and enterprises. DALS-001 compliant with Caleon Prime's sovereign protection.</p>
+        </section>
+
+        <section class="pricing-grid">
+            <div class="pricing-card">
+                <h3 class="plan-name">Pro Starter</h3>
+                <div class="price">$99<span class="price-unit">/mint</span></div>
+                <ul class="features">
+                    <li>1-10 Enterprise NFTs</li>
+                    <li>Bulk Certificate PDFs</li>
+                    <li>Compliance QRs</li>
+                    <li>ISS/DALS Timestamps</li>
+                    <li>Basic API Access</li>
+                </ul>
+                <a href="/truemark/mint" class="mint-button">Start Pro</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3 class="plan-name">Empire Build</h3>
+                <div class="price">$499<span class="price-unit">/50 mints</span></div>
+                <ul class="features">
+                    <li>Up to 50 NFTs</li>
+                    <li>API Integration Hooks</li>
+                    <li>Multi-Domain Support</li>
+                    <li>Bulk Timestamping</li>
+                    <li>Priority Support</li>
+                    <li>Custom Metadata</li>
+                </ul>
+                <a href="/truemark/mint" class="mint-button">Build Empire</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3 class="plan-name">Custom OZ</h3>
+                <div class="price">Quote</div>
+                <ul class="features">
+                    <li>Unlimited Scale</li>
+                    <li>White-label Platform</li>
+                    <li>DALS Fleet Integration</li>
+                    <li>Custom Contracts</li>
+                    <li>Dedicated Caleon</li>
+                    <li>24/7 Enterprise Support</li>
+                </ul>
+                <a href="/contact" class="mint-button">Get Quote</a>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2 class="cta-title">Demo with Caleon</h2>
+            <p class="cta-description">See how TrueMark Enterprise can transform your organization's digital asset strategy. Schedule a personalized demo with our Caleon AI assistant.</p>
+            <a href="https://calendly.com/caleon-prime/demo" target="_blank" class="demo-button">Schedule Demo</a>
+            <a href="/truemark/mint" class="demo-button">Try Free Demo</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="/tiktok-landing" class="footer-link">Live Sessions</a>
+                <a href="/alpha-certsig/pricing" class="footer-link">Alpha Pricing</a>
+                <a href="/truemark" class="footer-link">Mint Enterprise</a>
+                <a href="/docs" class="footer-link">Documentation</a>
+            </div>
+            <p>&copy; 2025 DALS - Digital Asset Logistics System. Powered by Caleon Prime.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Analytics tracking
+        function trackEvent(event, data) {
+            console.log('Analytics:', event, data);
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event, data, timestamp: new Date().toISOString() })
+            }).catch(err => console.log('Analytics error:', err));
+        }
+
+        // Track pricing interactions
+        document.querySelectorAll('.mint-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const planName = e.target.closest('.pricing-card').querySelector('.plan-name').textContent;
+                trackEvent('pricing_click', { plan: planName, page: 'truemark_pricing' });
+            });
+        });
+
+        // Track demo requests
+        document.querySelectorAll('.demo-button').forEach(button => {
+            button.addEventListener('click', () => {
+                trackEvent('demo_request', { page: 'truemark_pricing' });
+            });
+        });
+
+        // Track page view
+        trackEvent('page_view', { page: 'truemark_pricing' });
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+# DALS Development Dockerfile for Phase 11-A2
+# Development environment with debug tools and hot-reload
+
+FROM python:3.11-slim AS development
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    ENVIRONMENT=development \
+    DEBUG_MODE=true
+
+# Install system dependencies for development
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    vim \
+    htop \
+    net-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install debugpy for debugging
+RUN pip install debugpy
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+# Copy application code
+COPY . /app
+WORKDIR /app
+
+# Install the package in development mode
+RUN pip install -e .
+
+# Create non-root user for development
+RUN groupadd -r iss && useradd -r -g iss iss && \
+    mkdir -p /app/data/logs /app/data/vault /app/exports && \
+    chown -R iss:iss /app
+
+# Switch to non-root user
+USER iss
+
+# Expose ports
+EXPOSE 8003 8008 5678
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8003/health || exit 1
+
+# Default command for development
+CMD ["python", "-m", "iss_module.service"]

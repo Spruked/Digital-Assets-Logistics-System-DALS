@@ -1,0 +1,21 @@
+# knowledge/requirements.txt
+# Dependencies for Knowledge Immortality Engine
+
+# IPFS integration (use latest available)
+ipfshttpclient>=0.7.0
+
+# QR code generation
+qrcode[pil]>=7.3.1
+
+# Image processing for certificates
+Pillow>=9.0.0
+
+# Standard library (usually included)
+# typing - Python 3.5+
+# json - Standard library
+# datetime - Standard library
+# pathlib - Python 3.4+
+# hashlib - Standard library
+# base64 - Standard library
+# logging - Standard library
+# re - Standard library

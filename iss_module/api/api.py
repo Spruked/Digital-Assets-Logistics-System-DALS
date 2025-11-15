@@ -18,6 +18,8 @@ from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 import logging
 import os
+import secrets
+import hashlib
 
 # Import telemetry router for Phase 1 integration
 try:
@@ -60,6 +62,62 @@ except ImportError as e:
     logging.warning(f"TrueMark Mint Enterprise API not available: {e}")
     TRUEMARK_AVAILABLE = False
 
+# Import Voice Communication Portal API
+try:
+    from .voice_api import voice_router
+    VOICE_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Voice Communication Portal API not available: {e}")
+    VOICE_AVAILABLE = False
+
+# Import Cochlear Processor API
+try:
+    from .cochlear_api import cochlear_router
+    COCHLEAR_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Cochlear Processor API not available: {e}")
+    COCHLEAR_AVAILABLE = False
+
+# Import Phonatory Output Module API
+try:
+    from .phonatory_api import phonatory_router
+    PHONATORY_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Phonatory Output Module API not available: {e}")
+    PHONATORY_AVAILABLE = False
+
+# Import Awareness API
+try:
+    from .awareness_router import router as awareness_router
+    AWARENESS_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Awareness API not available: {e}")
+    AWARENESS_AVAILABLE = False
+
+# Import Predictive Failure Modeling API
+try:
+    from .predictive_api import predictive_router
+    PREDICTIVE_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Predictive Failure Modeling API not available: {e}")
+    PREDICTIVE_AVAILABLE = False
+
+# Import GOAT System API
+try:
+    from dals.modules.goat.goat_router import router as goat_router
+    GOAT_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"GOAT System API not available: {e}")
+    GOAT_AVAILABLE = False
+
+# Import SHiM v1.1 Advisory API
+try:
+    from .shim_api import shim_router
+    SHIM_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"SHiM v1.1 Advisory API not available: {e}")
+    SHIM_AVAILABLE = False
+
 import asyncio
 from pathlib import Path as PathLib
 from passlib.context import CryptContext
@@ -81,6 +139,8 @@ from ..models import (
     AssetRecordResponse,
     SystemStatusResponse,
     AssetDependency,
+    LoginRequest,
+    LoginResponse,
 )
 
 # DALS Core Logic
@@ -88,7 +148,13 @@ from ..models import (
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from serial_assignment import assign_digital_asset_id
+try:
+    from serial_assignment import assign_digital_asset_id
+    SERIAL_ASSIGNMENT_AVAILABLE = True
+except ImportError:
+    logger.warning("Serial assignment utility not available")
+    SERIAL_ASSIGNMENT_AVAILABLE = False
+    assign_digital_asset_id = None
 
 # Configuration
 from ..config import settings
@@ -165,6 +231,23 @@ templates = Jinja2Templates(directory=str(templates_dir))
 static_dir = PathLib(__file__).parent.parent / "static"
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
+# Mount public mint pages
+try:
+    alpha_certsig_dir = PathLib(__file__).parent.parent.parent / "alpha-certsig" / "frontend"
+    if alpha_certsig_dir.exists():
+        app.mount("/alpha-certsig", StaticFiles(directory=str(alpha_certsig_dir), html=True), name="alpha-certsig")
+        logger.info(f"Alpha CertSig public mint page mounted at /alpha-certsig")
+except Exception as e:
+    logger.warning(f"Could not mount Alpha CertSig public pages: {e}")
+
+try:
+    truemark_dir = PathLib(__file__).parent.parent.parent / "truemark-mint" / "truemark-website"
+    if truemark_dir.exists():
+        app.mount("/truemark", StaticFiles(directory=str(truemark_dir), html=True), name="truemark")
+        logger.info(f"TrueMark public mint page mounted at /truemark")
+except Exception as e:
+    logger.warning(f"Could not mount TrueMark public pages: {e}")
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -196,6 +279,20 @@ if UCM_AVAILABLE:
 else:
     logger.warning("UCM Integration API not available")
 
+# Include Awareness Router
+if AWARENESS_AVAILABLE:
+    app.include_router(awareness_router, tags=["Awareness"])
+    logger.info("Caleon Awareness API enabled - Self-model operational")
+else:
+    logger.warning("Caleon Awareness API not available")
+
+# Include Predictive Failure Modeling Router
+if PREDICTIVE_AVAILABLE:
+    app.include_router(predictive_router, tags=["Predictive Failure Modeling"])
+    logger.info("Predictive Failure Modeling API enabled - Proactive system health active")
+else:
+    logger.warning("Predictive Failure Modeling API not available")
+
 # Include Alpha CertSig Elite Router
 if ALPHA_CERTSIG_AVAILABLE:
     app.include_router(alpha_certsig_router, prefix="/api", tags=["Alpha CertSig Elite"])
@@ -210,9 +307,66 @@ if TRUEMARK_AVAILABLE:
 else:
     logger.warning("TrueMark Mint Enterprise API not available")
 
+# Include Voice Communication Portal Router
+if VOICE_AVAILABLE:
+    app.include_router(voice_router, prefix="/api", tags=["Voice Communication Portal"])
+    logger.info("Voice Communication Portal API enabled - Real-time voice interaction active")
+else:
+    logger.warning("Voice Communication Portal API not available")
+
+# Include Cochlear Processor Router
+if COCHLEAR_AVAILABLE:
+    app.include_router(cochlear_router, prefix="/api", tags=["Cochlear Processor"])
+    logger.info("Cochlear Processor API enabled - Speech input processing active")
+else:
+    logger.warning("Cochlear Processor API not available")
+
+# Include Phonatory Output Module Router
+if PHONATORY_AVAILABLE:
+    app.include_router(phonatory_router, prefix="/api", tags=["Phonatory Output"])
+    logger.info("Phonatory Output Module API enabled - Voice synthesis active")
+else:
+    logger.warning("Phonatory Output Module API not available")
+
+# Include GOAT System Router
+if GOAT_AVAILABLE:
+    app.include_router(goat_router, prefix="/api", tags=["GOAT System"])
+    logger.info("GOAT System API enabled - Greatest Of All Time teaching system active")
+else:
+    logger.warning("GOAT System API not available")
+
+# Include SHiM v1.1 Advisory Router
+if SHIM_AVAILABLE:
+    app.include_router(shim_router, tags=["SHiM v1.1 - Advisory"])
+    logger.info("SHiM v1.1 Advisory API enabled - Spherical harmonic integrity analysis active")
+else:
+    logger.warning("SHiM v1.1 Advisory API not available")
+
+# Include Market Intelligence Router
+try:
+    from .market_intel_api import market_router
+    MARKET_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Market Intelligence API not available: {e}")
+    MARKET_AVAILABLE = False
+
+if MARKET_AVAILABLE:
+    app.include_router(market_router, prefix="/api", tags=["Market Intelligence"])
+    logger.info("Market Intelligence API enabled - Real-time market data and news active")
+else:
+    logger.warning("Market Intelligence API not available")
+
 # --- Authentication Dependency ---
 async def get_current_user(credentials: HTTPBasicCredentials = Depends(basic_auth)):
     """Authenticates user via HTTP Basic credentials."""
+    # Skip HTTP Basic authentication when `require_auth` is disabled in settings
+    try:
+        if not getattr(settings, 'require_auth', False):
+            return ADMIN_USER  # return a default username for unauthenticated mode
+    except Exception:
+        # safety fallback: proceed with normal basic auth checks
+        pass
+
     correct_username = (credentials.username == ADMIN_USER)
     correct_password = verify_password(credentials.password, ADMIN_PASSWORD_HASH)
     if not (correct_username and correct_password):
@@ -223,6 +377,39 @@ async def get_current_user(credentials: HTTPBasicCredentials = Depends(basic_aut
         )
     return credentials.username
 
+# --- Login Endpoint ---
+def generate_session_token(username: str) -> str:
+    """Generate a simple session token for authentication"""
+    import time
+    timestamp = str(int(time.time()))
+    token_data = f"{username}:{timestamp}:{secrets.token_hex(16)}"
+    return hashlib.sha256(token_data.encode()).hexdigest()
+
+@app.post("/api/auth/login", response_model=LoginResponse)
+async def login(login_data: LoginRequest):
+    """Authenticate user and return session token"""
+    correct_username = (login_data.username == ADMIN_USER)
+    correct_password = verify_password(login_data.password, ADMIN_PASSWORD_HASH)
+    
+    # If auth is disabled, allow login for demo/dev. Otherwise verify credentials.
+    if not getattr(settings, 'require_auth', False) or (correct_username and correct_password):
+        token = generate_session_token(login_data.username)
+        return LoginResponse(
+            success=True,
+            token=token,
+            message="Login successful",
+            user={
+                "username": login_data.username,
+                "role": "admin"
+            }
+        )
+    else:
+        return LoginResponse(
+            success=False,
+            token=None,
+            message="Invalid credentials"
+        )
+
 # --- UI and System Endpoints ---
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -230,24 +417,33 @@ async def root(request: Request):
     # This should be updated to a DALS-specific dashboard
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@app.get("/voice", response_class=HTMLResponse)
+async def voice_portal(request: Request):
+    """Serve the voice communication portal"""
+    return templates.TemplateResponse("voice_portal.html", {"request": request})
+
 @app.get("/api/status", response_model=SystemStatusResponse)
 async def get_system_status():
     """Get current system status"""
     try:
         status = iss_instance.get_status()
         total_assets = len(inventory_manager.units) if inventory_manager and hasattr(inventory_manager, 'units') else 0
-        startup_time = status['system_state'].get('startup_time')
+
+        # Map ISS get_status() keys to SystemStatusResponse
+        sys_status = status.get('status', 'unknown')
+        current_time = status.get('iso_timestamp') or status.get('current_time') or status.get('iso_timestamp')
+        stardate = status.get('current_stardate') or status.get('stardate') or 0.0
+        active_modules = status.get('module_list', [])
+
+        # Uptime is not currently part of ISS.get_status so return None
         uptime = None
-        if startup_time:
-            delta = datetime.now(timezone.utc) - datetime.fromisoformat(startup_time)
-            uptime = str(delta).split('.')[0]
-        
+
         return SystemStatusResponse(
-            status=status['system_state']['system_status'],
+            status=sys_status,
             uptime=uptime,
-            active_modules=status['system_state']['active_modules'],
-            current_time=status['current_time'],
-            stardate=status['stardate'],
+            active_modules=active_modules,
+            current_time=current_time,
+            stardate=stardate,
             total_tracked_assets=total_assets
         )
     except Exception as e:
@@ -273,6 +469,107 @@ async def get_system_telemetry():
         "avg_assignment_latency_ms": round(avg_time * 1000, 2),
         "total_tracked_units": len(inventory_manager.units) if inventory_manager and hasattr(inventory_manager, 'units') else 0
     }
+
+
+@app.get("/api/system/metrics", summary="Real-time System Metrics")
+async def get_system_metrics():
+    """Get comprehensive real-time system metrics - DALS-001 compliant (real data or zeros)"""
+    try:
+        import psutil
+        import platform
+
+        # CPU metrics
+        cpu_percent = psutil.cpu_percent(interval=1)
+        cpu_count = psutil.cpu_count()
+        cpu_count_logical = psutil.cpu_count(logical=True)
+
+        # Memory metrics
+        memory = psutil.virtual_memory()
+        memory_total_gb = round(memory.total / (1024**3), 2)
+        memory_used_gb = round(memory.used / (1024**3), 2)
+        memory_available_gb = round(memory.available / (1024**3), 2)
+        memory_percent = memory.percent
+
+        # Disk metrics
+        disk = psutil.disk_usage('/')
+        disk_total_gb = round(disk.total / (1024**3), 2)
+        disk_used_gb = round(disk.used / (1024**3), 2)
+        disk_free_gb = round(disk.free / (1024**3), 2)
+        disk_percent = disk.percent
+
+        # Network metrics
+        network = psutil.net_io_counters()
+        bytes_sent_mb = round(network.bytes_sent / (1024**2), 2)
+        bytes_recv_mb = round(network.bytes_recv / (1024**2), 2)
+
+        # System info
+        system_info = {
+            "os": platform.system(),
+            "platform": platform.platform(),
+            "architecture": platform.architecture()[0],
+            "python_version": platform.python_version(),
+            "uptime_seconds": int(time.time() - psutil.boot_time())
+        }
+
+        # Process info for DALS
+        process = psutil.Process()
+        process_memory_mb = round(process.memory_info().rss / (1024**2), 2)
+        process_cpu_percent = process.cpu_percent()
+
+        return {
+            "timestamp": format_timestamp(),
+            "system_info": system_info,
+            "cpu": {
+                "usage_percent": cpu_percent,
+                "cores_physical": cpu_count,
+                "cores_logical": cpu_count_logical
+            },
+            "memory": {
+                "total_gb": memory_total_gb,
+                "used_gb": memory_used_gb,
+                "available_gb": memory_available_gb,
+                "usage_percent": memory_percent
+            },
+            "disk": {
+                "total_gb": disk_total_gb,
+                "used_gb": disk_used_gb,
+                "free_gb": disk_free_gb,
+                "usage_percent": disk_percent
+            },
+            "network": {
+                "bytes_sent_mb": bytes_sent_mb,
+                "bytes_recv_mb": bytes_recv_mb
+            },
+            "process": {
+                "memory_mb": process_memory_mb,
+                "cpu_percent": process_cpu_percent
+            }
+        }
+
+    except ImportError:
+        # psutil not available - return zeros (DALS-001 compliant)
+        logger.warning("psutil not available - returning zero metrics")
+        return {
+            "timestamp": format_timestamp(),
+            "system_info": {"status": "psutil_unavailable"},
+            "cpu": {"usage_percent": 0, "cores_physical": 0, "cores_logical": 0},
+            "memory": {"total_gb": 0, "used_gb": 0, "available_gb": 0, "usage_percent": 0},
+            "disk": {"total_gb": 0, "used_gb": 0, "free_gb": 0, "usage_percent": 0},
+            "network": {"bytes_sent_mb": 0, "bytes_recv_mb": 0},
+            "process": {"memory_mb": 0, "cpu_percent": 0}
+        }
+    except Exception as e:
+        logger.error(f"Failed to get system metrics: {e}")
+        # Return zeros on error (DALS-001 compliant)
+        return {
+            "timestamp": format_timestamp(),
+            "error": str(e),
+            "cpu": {"usage_percent": 0, "cores_physical": 0, "cores_logical": 0},
+            "memory": {"total_gb": 0, "used_gb": 0, "available_gb": 0, "usage_percent": 0},
+            "disk": {"total_gb": 0, "used_gb": 0, "free_gb": 0, "usage_percent": 0},
+            "network": {"bytes_sent_mb": 0, "bytes_recv_mb": 0},
+            "process": {"memory_mb": 0, "cpu_percent": 0}
+        }
 
 
 # --- Digital Asset Logistics (DALS) Endpoints ---
@@ -591,7 +888,7 @@ async def get_current_time():
 async def get_iss_timestamp_endpoint():
     """
     Get ISS timestamp data in canonical format
-    AUTHORITY: Spruked - Official DALS/Prometheus Stardate Protocol
+    AUTHORITY: Spruked - Official DALS/UCM Stardate Protocol
     Epoch: January 1, 2000, 00:00:00 UTC
     """
     return get_iss_timestamp()
@@ -714,15 +1011,15 @@ async def get_certsig_mint_status():
             "error": str(e)
         }
 
-@app.get("/api/modules/prometheus/integration")
-async def get_prometheus_integration():
-    """Get Prometheus Prime ecosystem integration status - LIVE DATA ONLY"""
+@app.get("/api/modules/ucm/integration")
+async def get_ucm_integration():
+    """Get UCM ecosystem integration status - LIVE DATA ONLY"""
     try:
         # GOVERNANCE [DALS-001]: No mock data - only live module status
-        # If Prometheus is not running/connected, return inactive state
-        prometheus_connected = False  # TODO: Replace with actual Prometheus connection check
+        # If UCM is not running/connected, return inactive state
+        ucm_connected = False  # TODO: Replace with actual UCM connection check
         
-        if not prometheus_connected:
+        if not ucm_connected:
             return {
                 "ecosystem_health": "disconnected",
                 "connected_modules": {
@@ -739,7 +1036,7 @@ async def get_prometheus_integration():
                 "note": "Module offline - no mock data shown"
             }
             
-        # When Prometheus is actually connected, this would return real data:
+        # When UCM is actually connected, this would return real data:
         return {
             "ecosystem_health": "disconnected",    # Real health from connection
             "connected_modules": {                 # Real module statuses
@@ -755,7 +1052,7 @@ async def get_prometheus_integration():
             "ecosystem_uptime": "—"              # Real uptime
         }
     except Exception as e:
-        logger.error(f"Prometheus integration check failed: {e}")
+        logger.error(f"UCM integration check failed: {e}")
         return {
             "ecosystem_health": "error",
             "connected_modules": {
@@ -768,11 +1065,8 @@ async def get_prometheus_integration():
             "data_flow_rate": "—",
             "reasoning_cycles": 0,
             "symbolic_coherence": "—",
-            "ecosystem_uptime": "—",
-            "error": str(e)
+            "ecosystem_uptime": "—"              # Real uptime
         }
-
-# --- Control Widgets Endpoints ---
 
 @app.post("/api/control/system/restart")
 async def restart_system_module():

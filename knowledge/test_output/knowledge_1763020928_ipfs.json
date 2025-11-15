@@ -1,0 +1,19 @@
+{
+  "bundle_size_bytes": 1755,
+  "content_hash": "21c6c98caeb7579c5c11dafbec33a0f68345acfc23dd5ebfac21abf47191d94d",
+  "merkle_root": "413e28da76a4ceba877fb3167e5bde5f1f9924ce722f2e65b8fcd6d59383f102",
+  "packaging_timestamp": "2025-11-13T02:02:08.879653Z",
+  "asset_count": 0,
+  "simulated": true,
+  "cid": "4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+  "ipfs_url": "ipfs://4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+  "gateway_url": "https://ipfs.io/ipfs/4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+  "filecoin_ready": false,
+  "note": "IPFS not available - using simulated CID for testing",
+  "bundle_metadata": {
+    "knowledge_items": 5,
+    "teaching_points": 0,
+    "years_experience": 5,
+    "profession": "software_engineer"
+  }
+}

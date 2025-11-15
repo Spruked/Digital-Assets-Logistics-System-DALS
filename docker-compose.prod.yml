@@ -1,0 +1,147 @@
+# Docker Compose Production Override for Phase 11-A2
+# Production-ready configuration with enhanced security and monitoring
+
+version: '3.8'
+
+services:
+  # Enhanced DALS Controller with Phase 11-A2
+  dals-controller:
+    environment:
+      # Phase 11-A2 Production Settings
+      - PREDICTIVE_ENGINE_ENABLED=true
+      - AUTONOMOUS_PREVENTION_MODE=11-A2
+      - PREDICTIVE_SCAN_INTERVAL=3  # More frequent scanning in production
+      - RISK_THRESHOLD_HIGH=65      # Lower threshold for earlier prevention
+      - RISK_THRESHOLD_CRITICAL=85
+      - SELF_MODEL_ENABLED=true
+      - AWARENESS_LAYER_ACTIVE=true
+      - VOICE_AWARENESS_ENABLED=true
+      - CANS_AUTONOMOUS_MODE=aggressive
+      - PREDICTIVE_FAILURE_MODELING=true
+      - HEALTH_TREND_ANALYSIS=true
+      - PREVENTION_PROTOCOLS_ACTIVE=true
+      # Security enhancements
+      - CALEON_SECURITY_LAYER_ENABLED=true
+      - FOUNDER_OVERRIDE_ENABLED=true
+      - ETHICAL_CONSTRAINTS_ENFORCED=true
+      # Performance optimizations
+      - REDIS_CACHE_ENABLED=true
+      - WEBSOCKET_COMPRESSION=true
+      - API_RATE_LIMITING=true
+      # Monitoring
+      - METRICS_COLLECTION=true
+      - HEALTH_MONITORING_INTERVAL=10
+      - LOG_AGGREGATION_ENABLED=true
+    volumes:
+      - ./iss_module/data:/app/data
+      - ./vault:/app/vault
+      - ./logs:/app/logs
+      - ./config:/app/config:ro
+      # Add SSL certificates for production
+      - ./ssl:/app/ssl:ro
+    secrets:
+      - dals_founder_key
+      - ucm_encryption_key
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Enhanced Redis with persistence and security
+  redis:
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD:-dals_secure_2025}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Enhanced UCM with Phase 11-A2 integration
+  ucm-service:
+    environment:
+      - PREDICTIVE_AWARENESS_ENABLED=true
+      - CALEON_VOICE_INTEGRATION=true
+      - AUTONOMOUS_MODE=enabled
+      - SECURITY_LAYER_ACTIVE=true
+    volumes:
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System:/app
+      - ./config:/app/config:ro
+      - ./logs/ucm:/app/logs
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # Monitoring stack for Phase 11-A2
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: dals-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - dals-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: dals-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-caleon_prime_2025}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - dals-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+secrets:
+  dals_founder_key:
+    file: ./vault/founder_key.enc
+  ucm_encryption_key:
+    file: ./vault/ucm_key.enc
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

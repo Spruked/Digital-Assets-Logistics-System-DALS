@@ -20,10 +20,10 @@ async def dashboard(request: Request):
     """Serve the DALS dashboard"""
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
-@app.get("/health")
-async def health():
-    """Health check"""
-    return {"status": "healthy", "service": "dals-dashboard"}
+@app.get("/login", response_class=HTMLResponse)
+async def login(request: Request):
+    """Serve the login page"""
+    return templates.TemplateResponse("login.html", {"request": request})
 
 if __name__ == "__main__":
     print("Starting DALS Dashboard on http://127.0.0.1:8008")

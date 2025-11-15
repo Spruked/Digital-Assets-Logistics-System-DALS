@@ -1,8 +1,9 @@
 # DALS (Digital Asset Logistics System) Dockerfile
 # Multi-stage build for production optimization with UCM integration readiness
+# Updated for Phase 11-A2: Autonomous Predictive Prevention
 
 # Build stage
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -33,7 +34,7 @@ WORKDIR /app
 RUN pip install -e .
 
 # Production stage
-FROM python:3.11-slim as production
+FROM python:3.11-slim AS production
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -41,7 +42,17 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PATH="/opt/venv/bin:$PATH" \
     ENVIRONMENT=production \
     ISS_HOST=0.0.0.0 \
-    ISS_PORT=8003
+    ISS_PORT=8003 \
+    # Phase 11-A2 Environment Variables
+    PREDICTIVE_ENGINE_ENABLED=true \
+    AUTONOMOUS_PREVENTION_MODE=11-A2 \
+    PREDICTIVE_SCAN_INTERVAL=5 \
+    RISK_THRESHOLD_HIGH=70 \
+    RISK_THRESHOLD_CRITICAL=90 \
+    SELF_MODEL_ENABLED=true \
+    AWARENESS_LAYER_ACTIVE=true \
+    VOICE_AWARENESS_ENABLED=true \
+    CANS_AUTONOMOUS_MODE=aggressive
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \

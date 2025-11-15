@@ -1,0 +1,26 @@
+# Minimal test Dockerfile for Phase 11-A2
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    ENVIRONMENT=production \
+    PREDICTIVE_ENGINE_ENABLED=true \
+    AUTONOMOUS_PREVENTION_MODE=11-A2
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+RUN mkdir -p /app
+WORKDIR /app
+
+# Copy health server
+COPY health_server.py /app/health_server.py
+RUN chmod +x /app/health_server.py
+
+EXPOSE 8003
+
+CMD ["python3", "/app/health_server.py"]

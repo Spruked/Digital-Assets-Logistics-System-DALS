@@ -1,0 +1,233 @@
+# DALS Production Deployment for IONOS Server
+# Deploy alongside existing "Shioh Ridge Katahdins" website
+
+version: '3.8'
+
+services:
+  # ==========================================
+  # REVERSE PROXY - Routes traffic between services
+  # ==========================================
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: dals-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./ssl:/etc/ssl/certs:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - dals-api
+      - dals-dashboard
+      - ucm-service
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # ==========================================
+  # DALS API SERVICE
+  # ==========================================
+  dals-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: dals-api:v1.0.0
+    container_name: dals-api
+    environment:
+      - ENVIRONMENT=production
+      - ISS_SERVICE_NAME=dals-api
+      - ISS_HOST=0.0.0.0
+      - ISS_PORT=8003
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - REDIS_URL=redis://redis:6379
+      - REDIS_ENABLED=true
+      - WEBSOCKET_ENABLED=true
+      - DALS_001_ENFORCED=true
+      - UCM_HOST=ucm-service
+      - UCM_PORT=8081
+      - OLLAMA_HOST=ollama-service
+      - OLLAMA_PORT=11434
+    volumes:
+      - ./iss_module/data:/app/data
+      - ./vault:/app/vault
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - ollama-service
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ==========================================
+  # DALS DASHBOARD SERVICE
+  # ==========================================
+  dals-dashboard:
+    image: python:3.11-slim
+    container_name: dals-dashboard
+    working_dir: /app
+    command: python dashboard_server.py
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./dashboard_server.py:/app/dashboard_server.py
+      - ./iss_module/templates:/app/iss_module/templates
+      - ./iss_module/static:/app/iss_module/static
+    environment:
+      - DASHBOARD_PORT=8008
+      - DALS_API_URL=http://dals-api:8003
+    depends_on:
+      - dals-api
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # ==========================================
+  # UCM COGNITIVE ENGINE
+  # ==========================================
+  ucm-service:
+    build:
+      context: ./Unified-Cognition-Module-Caleon-Prime-full-System
+      dockerfile: Dockerfile
+    image: ucm-cognitive-engine:v1.0.0
+    container_name: ucm-service
+    environment:
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8081
+      - LOG_LEVEL=INFO
+      - REDIS_URL=redis://redis:6379
+      - OLLAMA_ENDPOINT=http://ollama-service:11434
+    volumes:
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System/vault:/app/vault
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System/logs:/app/logs
+    depends_on:
+      - redis
+      - ollama-service
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================
+  # OLLAMA AI SERVICE
+  # ==========================================
+  ollama-service:
+    image: ollama/ollama:latest
+    container_name: ollama-service
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODELS=/models
+    volumes:
+      - ollama_models:/models
+      - ollama_data:/root/.ollama
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ==========================================
+  # REDIS CACHE & SESSION STORE
+  # ==========================================
+  redis:
+    image: redis:7.2-alpine
+    container_name: dals-redis
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================
+  # MONITORING - PROMETHEUS
+  # ==========================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dals-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # ==========================================
+  # LOG AGGREGATION - LOKI
+  # ==========================================
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: dals-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki-config.yaml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # ==========================================
+  # SERVICE DISCOVERY - CONSUL
+  # ==========================================
+  consul:
+    image: consul:1.15
+    container_name: dals-consul
+    ports:
+      - "8500:8500"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    volumes:
+      - consul_data:/consul/data
+    networks:
+      - dals-network
+    restart: unless-stopped
+    command: consul agent -dev -client=0.0.0.0 -ui
+
+volumes:
+  redis_data:
+  ollama_models:
+  ollama_data:
+  prometheus_data:
+  loki_data:
+  consul_data:
+  nginx_logs:
+
+networks:
+  dals-network:
+    driver: bridge

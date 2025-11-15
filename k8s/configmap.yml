@@ -1,0 +1,78 @@
+# DALS Phase 11-A2 ConfigMap
+# Non-sensitive configuration for Caleon Prime
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dals-config
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: config
+    phase: 11-A2
+data:
+  # Phase 11-A2 Environment Variables
+  PREDICTIVE_ENGINE_ENABLED: "true"
+  AUTONOMOUS_PREVENTION_MODE: "11-A2"
+  PREDICTIVE_SCAN_INTERVAL: "5"
+  RISK_THRESHOLD_HIGH: "70"
+  RISK_THRESHOLD_MEDIUM: "50"
+  RISK_THRESHOLD_LOW: "30"
+
+  # CANS Configuration
+  CANS_MODE: "aggressive"
+  CANS_RESPONSE_TIMEOUT: "1"
+  CANS_HEALING_ENABLED: "true"
+
+  # Voice Awareness
+  VOICE_AWARENESS_ENABLED: "true"
+  VOICE_LANGUAGE: "en-US"
+  VOICE_RATE: "0.9"
+
+  # Self-Model Configuration
+  SELF_MODEL_TRACKING: "true"
+  SELF_MODEL_LEARNING_RATE: "0.1"
+  SELF_MODEL_CONFIDENCE_THRESHOLD: "0.8"
+
+  # Service Configuration
+  ISS_HOST: "0.0.0.0"
+  ISS_PORT: "8003"
+  DASHBOARD_PORT: "8008"
+  ENVIRONMENT: "production"
+
+  # UCM Integration
+  UCM_HOST: "ucm-service.dals-system.svc.cluster.local"
+  UCM_PORT: "8081"
+  UCM_CONNECT_TIMEOUT: "30"
+  UCM_REQUEST_TIMEOUT: "60"
+
+  # Redis Configuration
+  REDIS_HOST: "redis-service.dals-system.svc.cluster.local"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  REDIS_PASSWORD: ""  # Set via secret
+
+  # Monitoring
+  METRICS_ENABLED: "true"
+  PROMETHEUS_PORT: "9090"
+  GRAFANA_PORT: "3000"
+
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  LOG_CORRELATION_ID: "true"
+
+  # Security
+  DALS_001_ENFORCED: "true"
+  FOUNDER_OVERRIDE_ENABLED: "true"
+  CALEON_SECURITY_LAYER: "active"
+
+  # Performance
+  MAX_WORKERS: "4"
+  WORKER_TIMEOUT: "30"
+  CONNECTION_POOL_SIZE: "10"
+
+  # Health Checks
+  HEALTH_CHECK_INTERVAL: "30"
+  HEALTH_CHECK_TIMEOUT: "10"
+  HEALTH_CHECK_RETRIES: "3"

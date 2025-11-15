@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueMark Enterprise - Upload Assets</title>
+    <meta name="description" content="Bulk upload and configure your enterprise NFT collection with advanced options">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #00b4ff;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00b4ff, #0099cc, #00b4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #00b4ff;
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        /* Progress */
+        .progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #00b4ff;
+            color: #00b4ff;
+        }
+
+        .step.completed { background: #00b4ff; color: white; }
+        .step.active { background: #00b4ff; color: white; }
+
+        .step-line {
+            width: 60px;
+            height: 2px;
+            background: #00b4ff;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-zone {
+            border: 3px dashed #00b4ff;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(0, 180, 255, 0.05);
+        }
+
+        .upload-zone:hover {
+            background: rgba(0, 180, 255, 0.1);
+            border-color: #0099cc;
+        }
+
+        .upload-zone.dragover {
+            background: rgba(0, 180, 255, 0.2);
+            border-color: #00ff88;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #00b4ff;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #00b4ff;
+        }
+
+        .upload-subtext {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Configuration */
+        .config-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .config-group {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 180, 255, 0.2);
+        }
+
+        .config-title {
+            color: #00b4ff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(0, 180, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #00b4ff;
+            box-shadow: 0 0 10px rgba(0, 180, 255, 0.3);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* File List */
+        .file-list {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 180, 255, 0.2);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+        }
+
+        .file-details h4 {
+            margin-bottom: 0.25rem;
+            color: #00b4ff;
+        }
+
+        .file-details small {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .file-remove {
+            color: #ff4444;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3rem 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00b4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4);
+        }
+
+        .btn.secondary {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00b4ff;
+            border: 2px solid #00b4ff;
+        }
+
+        .btn.secondary:hover {
+            background: #00b4ff;
+            color: white;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .config-section {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">TRUEMARK ENTERPRISE</div>
+            <div class="subtitle">Bulk Asset Upload & Configuration</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Progress Indicator -->
+        <div class="progress">
+            <div class="step completed">1</div>
+            <div class="step-line"></div>
+            <div class="step active">2</div>
+            <div class="step-line"></div>
+            <div class="step">3</div>
+            <div class="step-line"></div>
+            <div class="step">4</div>
+        </div>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <h2 style="text-align: center; color: #00b4ff; margin-bottom: 2rem; font-size: 1.8rem;">Upload Your Assets</h2>
+
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drop files here or click to browse</div>
+                <div class="upload-subtext">Supports: Images, Videos, Audio, Documents (Max 100MB per file)</div>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+
+            <div class="file-list" id="fileList" style="display: none;">
+                <h3 style="color: #00b4ff; margin-bottom: 1rem;">Uploaded Files (0)</h3>
+                <div id="fileItems"></div>
+            </div>
+        </section>
+
+        <!-- Configuration Section -->
+        <section class="config-section">
+            <div class="config-group">
+                <div class="config-title">Collection Settings</div>
+
+                <div class="form-group">
+                    <label class="form-label">Collection Name</label>
+                    <input type="text" class="form-input" id="collectionName" placeholder="My Enterprise Collection">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="collectionDesc" placeholder="Describe your NFT collection..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="category">
+                        <option value="">Select Category</option>
+                        <option value="art">Digital Art</option>
+                        <option value="music">Music & Audio</option>
+                        <option value="documents">Documents & Certificates</option>
+                        <option value="data">Data & Analytics</option>
+                        <option value="gaming">Gaming Assets</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="config-group">
+                <div class="config-title">Minting Options</div>
+
+                <div class="form-group">
+                    <label class="form-label">Royalty Percentage</label>
+                    <input type="number" class="form-input" id="royalty" placeholder="5" min="0" max="10" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Edition Size (per asset)</label>
+                    <input type="number" class="form-input" id="editionSize" placeholder="1" min="1" max="10000">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="autoMetadata" checked>
+                    <label for="autoMetadata">Auto-generate metadata</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ipfsStorage" checked>
+                    <label for="ipfsStorage">Store on IPFS (decentralized)</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="bulkMint" checked>
+                    <label for="bulkMint">Enable bulk minting</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn secondary" onclick="goBack()">← Back</button>
+            <button class="btn" onclick="proceedToVerify()">Review & Mint →</button>
+        </div>
+    </main>
+
+    <script>
+        let uploadedFiles = [];
+
+        // Upload zone functionality
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const fileItems = document.getElementById('fileItems');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', handleDragOver);
+        uploadZone.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            addFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            addFiles(files);
+        }
+
+        function addFiles(files) {
+            files.forEach(file => {
+                if (file.size > 100 * 1024 * 1024) { // 100MB limit
+                    alert(`File ${file.name} is too large. Maximum size is 100MB.`);
+                    return;
+                }
+
+                const fileId = Date.now() + Math.random();
+                uploadedFiles.push({
+                    id: fileId,
+                    file: file,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                });
+            });
+
+            updateFileList();
+        }
+
+        function updateFileList() {
+            if (uploadedFiles.length > 0) {
+                fileList.style.display = 'block';
+                fileList.querySelector('h3').textContent = `Uploaded Files (${uploadedFiles.length})`;
+
+                fileItems.innerHTML = uploadedFiles.map(file => `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">${getFileIcon(file.type)}</div>
+                            <div class="file-details">
+                                <h4>${file.name}</h4>
+                                <small>${formatFileSize(file.size)} • ${file.type || 'Unknown type'}</small>
+                            </div>
+                        </div>
+                        <div class="file-remove" onclick="removeFile('${file.id}')">✕</div>
+                    </div>
+                `).join('');
+            } else {
+                fileList.style.display = 'none';
+            }
+        }
+
+        function getFileIcon(type) {
+            if (type.startsWith('image/')) return '🖼️';
+            if (type.startsWith('video/')) return '🎥';
+            if (type.startsWith('audio/')) return '🎵';
+            if (type.includes('pdf') || type.includes('document')) return '📄';
+            return '📁';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile(fileId) {
+            uploadedFiles = uploadedFiles.filter(f => f.id !== fileId);
+            updateFileList();
+        }
+
+        // Navigation
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        function proceedToVerify() {
+            // Validate form
+            const collectionName = document.getElementById('collectionName').value.trim();
+            if (!collectionName) {
+                alert('Please enter a collection name');
+                return;
+            }
+
+            if (uploadedFiles.length === 0) {
+                alert('Please upload at least one file');
+                return;
+            }
+
+            // Store data for next page
+            const config = {
+                collectionName,
+                description: document.getElementById('collectionDesc').value,
+                category: document.getElementById('category').value,
+                royalty: document.getElementById('royalty').value || '5',
+                editionSize: document.getElementById('editionSize').value || '1',
+                autoMetadata: document.getElementById('autoMetadata').checked,
+                ipfsStorage: document.getElementById('ipfsStorage').checked,
+                bulkMint: document.getElementById('bulkMint').checked,
+                files: uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }))
+            };
+
+            localStorage.setItem('truemark_config', JSON.stringify(config));
+
+            // Navigate to verify page
+            window.location.href = 'verify.html';
+        }
+
+        // Analytics tracking
+        function trackEvent(event, data) {
+            console.log('Analytics:', event, data);
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event, data, timestamp: new Date().toISOString() })
+            }).catch(err => console.log('Analytics error:', err));
+        }
+
+        trackEvent('page_view', { page: 'truemark_upload' });
+    </script>
+</body>
+</html>

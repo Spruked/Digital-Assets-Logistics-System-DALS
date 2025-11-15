@@ -1,0 +1,125 @@
+# Minimal DALS Stack - Core Services Only
+# Use: docker-compose -f docker-compose.minimal.yml up -d
+
+version: '3.8'
+
+services:
+  # Redis for caching and session storage
+  redis:
+    image: redis:7.2-alpine
+    container_name: dals-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - dals-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # UCM Service (Unified Cognition Module) - Caleon's Brain
+  ucm-service:
+    build:
+      context: ./Unified-Cognition-Module-Caleon-Prime-full-System
+      dockerfile: Dockerfile
+    image: ucm-cognitive-engine:v1.0.0
+    container_name: dals-ucm
+    ports:
+      - "8081:8081"  # UCM cognitive brain
+    environment:
+      - ENVIRONMENT=production
+      - UCM_PORT=8081
+      - COGNITIVE_MODEL=enabled
+      - DALS_INTEGRATION=true
+      - REDIS_URL=redis://redis:6379
+      - HOST=0.0.0.0
+      - PORT=8081
+    volumes:
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System:/app
+      - ./config:/app/config:ro
+    networks:
+      - dals-network
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # DALS Controller Service (Main ISS Module)
+  dals-controller:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: dals-controller:v1.0.0
+    container_name: dals-controller
+    ports:
+      - "8003:8003"  # API Gateway
+      - "8008:8008"  # Dashboard Server
+    environment:
+      - ENVIRONMENT=production
+      - ISS_SERVICE_NAME=dals-controller
+      - ISS_HOST=0.0.0.0
+      - ISS_PORT=8003
+      - DASHBOARD_PORT=8008
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - UCM_INTEGRATION_READY=true
+      - UCM_BACKEND_URL=http://ucm-service:8081
+      - REDIS_URL=redis://redis:6379
+      - REDIS_ENABLED=true
+      - MODULE_STATUS_TRACKING=true
+      - WEBSOCKET_ENABLED=true
+      - DALS_001_ENFORCED=true
+      - PREDICTIVE_ENGINE_ENABLED=true
+      - AUTONOMOUS_PREVENTION_MODE=11-A2
+      - VOICE_AWARENESS_ENABLED=true
+    volumes:
+      - ./iss_module/data:/app/data
+      - ./vault:/app/vault
+      - ./logs:/app/logs
+      - ./config:/app/config:ro
+    depends_on:
+      - redis
+      - ucm-service
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Service Discovery (Consul) - Optional
+  consul:
+    image: consul:1.15
+    container_name: iss-consul
+    ports:
+      - "8500:8500"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    volumes:
+      - consul_data:/consul/data
+    networks:
+      - dals-network
+    restart: unless-stopped
+    command: consul agent -dev -client=0.0.0.0 -ui
+
+networks:
+  dals-network:
+    driver: bridge
+    name: dals-phase1-network
+
+volumes:
+  redis_data:
+    driver: local
+    name: dals-redis-data
+  consul_data:
+    driver: local
+    name: dals-consul-data

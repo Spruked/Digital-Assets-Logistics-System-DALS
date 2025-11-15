@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha CertSig Elite - Pricing</title>
+    <meta name="description" content="Alpha CertSig Elite pricing - Mint one-of-a-kind knowledge NFTs with exclusive alpha access">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #d4af37;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #d4af37;
+            font-size: 1.1rem;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .pricing-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: #d4af37;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(212, 175, 55, 0.1));
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #d4af37;
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-unit {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-left: 0.5rem;
+        }
+
+        .features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .features li::before {
+            content: '✓';
+            color: #d4af37;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .mint-button {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: black;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .mint-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 215, 0, 0.1));
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .cta-description {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .flash-offer {
+            background: linear-gradient(45deg, #ff0080, #ff4444);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 2rem;
+            animation: pulse 1s infinite;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #d4af37;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #ffd700;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">ALPHA CERTSIG ELITE</div>
+            <div class="subtitle">Exclusive Alpha Access</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Choose Your Elite Tier</h1>
+            <p>Mint one-of-a-kind knowledge NFTs with Big Daddy Spruk's exclusive alpha access. Powered by Caleon Prime's sovereign smarts.</p>
+        </section>
+
+        <section class="pricing-grid">
+            <div class="pricing-card">
+                <h3 class="plan-name">Solo Spruik</h3>
+                <div class="price">$49<span class="price-unit">/mint</span></div>
+                <ul class="features">
+                    <li>1 Elite Knowledge NFT</li>
+                    <li>IPFS Permanent Storage</li>
+                    <li>Printable Certificate</li>
+                    <li>QR Code Referral (10% off)</li>
+                    <li>ISS/DALS Timestamps</li>
+                </ul>
+                <a href="/alpha-certsig/mint" class="mint-button">Mint Now</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3 class="plan-name">Elite Squad</h3>
+                <div class="price">$199<span class="price-unit">/5 mints</span></div>
+                <ul class="features">
+                    <li>5 Elite Knowledge NFTs</li>
+                    <li>Bulk IPFS Upload</li>
+                    <li>.eth Domain Upsell</li>
+                    <li>Priority Minting</li>
+                    <li>Exclusive Alpha Access</li>
+                    <li>Caleon Fast-Track</li>
+                </ul>
+                <a href="/alpha-certsig/mint" class="mint-button">Mint Elite Squad</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3 class="plan-name">Pazzaz Lifetime</h3>
+                <div class="price">$999</div>
+                <ul class="features">
+                    <li>Unlimited Elite NFTs</li>
+                    <li>Custom Contract Terms</li>
+                    <li>Caleon Priority Access</li>
+                    <li>Direct Spruk Consult</li>
+                    <li>White-label Options</li>
+                    <li>Lifetime Support</li>
+                </ul>
+                <a href="/alpha-certsig/mint" class="mint-button">Claim Lifetime</a>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="flash-offer">🎫 20% OFF LIVE WITH BIG DADDY!</div>
+            <h2 class="cta-title">Ready to Mint Elite?</h2>
+            <p class="cta-description">Join Big Daddy Spruk's live TikTok session for exclusive drops and flash discounts. Your squad gets 20% off when you share the love!</p>
+            <a href="https://tiktok.com/@bigdaddyspruk" target="_blank" class="mint-button" style="background: linear-gradient(45deg, #ff0080, #ff4444); color: white;">Watch Live on TikTok</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="/tiktok-landing" class="footer-link">Live Sessions</a>
+                <a href="/alpha-certsig" class="footer-link">Mint Elite</a>
+                <a href="/truemark/pricing" class="footer-link">Enterprise Pricing</a>
+                <a href="/docs" class="footer-link">Documentation</a>
+            </div>
+            <p>&copy; 2025 DALS - Digital Asset Logistics System. Powered by Caleon Prime.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Analytics tracking
+        function trackEvent(event, data) {
+            console.log('Analytics:', event, data);
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event, data, timestamp: new Date().toISOString() })
+            }).catch(err => console.log('Analytics error:', err));
+        }
+
+        // Track pricing interactions
+        document.querySelectorAll('.mint-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const planName = e.target.closest('.pricing-card').querySelector('.plan-name').textContent;
+                trackEvent('pricing_click', { plan: planName, page: 'alpha_pricing' });
+            });
+        });
+
+        // Track page view
+        trackEvent('page_view', { page: 'alpha_pricing' });
+    </script>
+</body>
+</html>

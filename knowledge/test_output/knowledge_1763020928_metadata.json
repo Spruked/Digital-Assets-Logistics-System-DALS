@@ -1,0 +1,144 @@
+{
+  "name": "Software Engineer Expertise Knowledge NFT",
+  "description": "Preserved expertise of a 5+ year veteran Software_Engineer. Master of 4 specialties and 1 advanced procedures. Specializes in: Python, Docker, JavaScript. Verified by Alpha CertSig. Knowledge immortality achieved through blockchain. One of a kind digital legacy preservation.",
+  "image": "https://ipfs.io/ipfs/4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+  "external_url": "https://ipfs.io/ipfs/4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+  "animation_url": null,
+  "attributes": [
+    {
+      "trait_type": "Profession",
+      "value": "Software_Engineer",
+      "display_type": null
+    },
+    {
+      "trait_type": "Specialization",
+      "value": "Software_Engineer",
+      "display_type": null
+    },
+    {
+      "trait_type": "Years Experience",
+      "value": 5,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Expertise Tier",
+      "value": "Intermediate",
+      "display_type": null
+    },
+    {
+      "trait_type": "Specialties Count",
+      "value": 4,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Procedures Mastered",
+      "value": 1,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Teaching Points",
+      "value": 0,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Knowledge Density",
+      "value": 13,
+      "display_type": "number",
+      "max_value": 100
+    },
+    {
+      "trait_type": "Specialty 1",
+      "value": "Python",
+      "display_type": null
+    },
+    {
+      "trait_type": "Specialty 2",
+      "value": "Docker",
+      "display_type": null
+    },
+    {
+      "trait_type": "Specialty 3",
+      "value": "JavaScript",
+      "display_type": null
+    },
+    {
+      "trait_type": "Specialty 4",
+      "value": "React",
+      "display_type": null
+    },
+    {
+      "trait_type": "Verified",
+      "value": "Alpha CertSig",
+      "display_type": null
+    },
+    {
+      "trait_type": "Merkle Root",
+      "value": "413e28da76a4ceba...",
+      "display_type": null
+    },
+    {
+      "trait_type": "Filecoin Ready",
+      "value": "No",
+      "display_type": null
+    }
+  ],
+  "properties": {
+    "content_hash": "21c6c98caeb7579c5c11dafbec33a0f68345acfc23dd5ebfac21abf47191d94d",
+    "merkle_root": "413e28da76a4ceba877fb3167e5bde5f1f9924ce722f2e65b8fcd6d59383f102",
+    "ipfs_cid": "4psfcktqtkrd2iaj6ymy7ekvveenojpq000000000000000000000000000",
+    "filecoin_ready": false,
+    "knowledge_payload": {
+      "name": "Test Engineer",
+      "expertise_level": "Software Engineer",
+      "years_experience": 5,
+      "profession": "software_engineer",
+      "specialization": null,
+      "specialties": [
+        "Python",
+        "Docker",
+        "JavaScript",
+        "React"
+      ],
+      "procedures_mastered": [
+        "Database connection pool exhaustion"
+      ],
+      "signature_routines": [
+        "Database connection pool exhaustion"
+      ],
+      "teaching_notes": [],
+      "tools_mastered": [],
+      "challenges_overcome": [
+        "Microservices architecture with Kubernetes"
+      ],
+      "key_insights": [
+        "Microservices architecture with Kubernetes"
+      ],
+      "founder_message": "Digitally preserved by Alpha CertSig. Knowledge immortality achieved.",
+      "timestamp": "2025-11-13T02:02:08.873725Z",
+      "version": "1.0",
+      "processing_metadata": {
+        "session_id": "knowledge_1763020928",
+        "questions_answered": 9,
+        "processing_engine": "KnowledgeStructurer v1.0",
+        "total_specialties": 4,
+        "total_procedures": 1,
+        "total_teaching_points": 0,
+        "structured_at": "2025-11-13T02:02:08.873725Z"
+      },
+      "expertise_tier": "Advanced",
+      "knowledge_density_score": 13,
+      "profession_insights": []
+    },
+    "packaging_metadata": {
+      "packaged_at": "2025-11-13T02:02:08.879653Z",
+      "packager_version": "NFTMetadataBuilder v1.0"
+    }
+  },
+  "founder_seal": "TrueMark Certified - Alpha CertSig",
+  "verification": {
+    "issuer": "Digital Asset Logistics System (DALS)",
+    "standard": "Knowledge NFT v1.0",
+    "blockchain": "Ethereum ERC-721",
+    "timestamp": "2025-11-13T02:02:08.884171Z"
+  }
+}

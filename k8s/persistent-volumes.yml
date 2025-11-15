@@ -1,0 +1,55 @@
+# DALS Phase 11-A2 Persistent Storage
+# Vault and logs persistence across pod restarts
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dals-vault-pvc
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: vault-storage
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard  # Adjust based on your cluster
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dals-logs-pvc
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: logs-storage
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard  # Adjust based on your cluster
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dals-redis-pvc
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: redis-storage
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard  # Adjust based on your cluster

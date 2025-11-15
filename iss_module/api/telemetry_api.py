@@ -13,6 +13,12 @@ import hmac
 import time
 import logging
 from enum import Enum
+import sys
+import os
+
+# Import seed reference for telemetry
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'Unified-Cognition-Module-Caleon-Prime-full-System', 'reference_seed'))
+from seed_loader import get_seed_hash
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -281,11 +287,17 @@ async def get_telemetry_status():
     Returns: Last packet timestamps, data counts, system health
     """
     try:
+        # Get seed status
+        seed_hash = get_seed_hash()
+        seed_active = bool(seed_hash)
+        
         status = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "modules": {},
             "system_health": "optimal",
-            "total_packets": 0
+            "total_packets": 0,
+            "seed_active": seed_active,
+            "seed_hash": seed_hash
         }
         
         for module, data_list in telemetry_cache.items():

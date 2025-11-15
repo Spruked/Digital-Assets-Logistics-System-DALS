@@ -1,0 +1,339 @@
+{
+  "summary": {
+    "timestamp": "2025-11-12T20:00:16.714318Z",
+    "total": 23,
+    "success": 12,
+    "errors": 2,
+    "other": 9
+  },
+  "results": [
+    {
+      "method": "GET",
+      "path": "/",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>DALS - Digital Asset Logistics System</title>\n "
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "status": "healthy",
+        "timestamp": "2025-11-12T20:00:09.587861+00:00",
+        "stardate": 9447.8334
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "expected": 200,
+      "success": false,
+      "status": 500,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Failed to get system status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/docs",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"https://"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iss/now",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "timestamp_iso": "2025-11-12T20:00:09.623015Z",
+        "timestamp_epoch": 1762977609,
+        "timestamp_julian": 2460992.333445,
+        "stardate_iss": 9447.8334
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/time",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "iso": "2025-11-12T20:00:09.626017+00:00",
+        "stardate": "Stardate 9447.8334",
+        "julian": "JD 2460992.333438",
+        "human": "2025-11-12 20:00:09 UTC"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/metrics",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "status": "Healthy",
+        "timestamp": "2025-11-12T20:00:09.631288+00:00",
+        "dals_assets_assigned": 0,
+        "avg_assignment_latency_ms": 0.0,
+        "total_tracked_units": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/status",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/telemetry/events",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/status",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/threats/status",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "security_level": "normal",
+        "malevolence_score": 0.0,
+        "active_threats": 0,
+        "intrusion_attempts": 0,
+        "honeypot_active": false,
+        "attacker_sessions": 0,
+        "recent_threats": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/caleon/security/dashboard",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/ucm/status",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "ucm_status": {
+          "connection_state": "disconnected",
+          "ucm_endpoint": "localhost:8080",
+          "health_status": "unknown",
+          "last_health_check": null,
+          "metrics": {
+            "total_requests": 0,
+            "total_errors": 0,
+            "success_rate": 0.0,
+            "avg_response_time": 0.0,
+            "last_request": null
+          }
+        },
+        "caleon_security": {
+          "gateway_active": false,
+          "commands_processed": 0,
+          "commands_blocked": 0,
+          "security_level": "normal"
+        },
+        "integration_health": "inactive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/ucm/health",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "status": "error",
+        "error": "'CaleonSecurityLayer' object has no attribute 'get_stardate'",
+        "ucm_service": "unavailable",
+        "fallback_mode": "standalone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/alpha-certsig/health",
+      "expected": 200,
+      "success": false,
+      "status": null,
+      "error": "'dict' object has no attribute 'iso_timestamp'",
+      "body_preview": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/alpha-certsig/mint-status",
+      "expected": 200,
+      "success": false,
+      "status": null,
+      "error": "'dict' object has no attribute 'iso_timestamp'",
+      "body_preview": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/truemark/health",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/truemark/status",
+      "expected": 200,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/dals/assets",
+      "expected": 200,
+      "success": false,
+      "status": 401,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not authenticated"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/ws/events",
+      "expected": 426,
+      "success": false,
+      "status": 404,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "detail": "Not Found"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/iss/pulse",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "pulse_rate": "1.047 Hz",
+        "chronon_phase": "stable",
+        "temporal_drift": "\u00b10.001%",
+        "anchor_strength": "99.7%",
+        "last_sync": "2025-11-12T20:00:16.683728+00:00",
+        "stardate_accuracy": "\u00b10.0001",
+        "interplanetary_offset": "0.0000234 cycles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/caleon/status",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "module": "caleon",
+        "status": "inactive",
+        "reasoning_sessions": 0,
+        "current_task": "\u2014",
+        "last_activity": "\u2014",
+        "health": "disconnected",
+        "note": "Module offline - no mock data shown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/modules/certsig/mint-status",
+      "expected": 200,
+      "success": true,
+      "status": 200,
+      "error": null,
+      "body_preview": null,
+      "body": {
+        "mint_engine": "disconnected",
+        "pending_mints": 0,
+        "completed_today": 0,
+        "validation_queue": 0,
+        "nft_types_active": 0,
+        "blockchain_status": {
+          "ethereum": "disconnected",
+          "polygon": "disconnected",
+          "arbitrum": "disconnected"
+        },
+        "vault_integrity": "\u2014",
+        "metadata_layers": 0,
+        "note": "Module offline - no mock data shown"
+      }
+    }
+  ]
+}

@@ -465,7 +465,7 @@ class CaleonSecurityLayer:
                 "query_length": len(query),
                 "mode": mode,
                 "ethical_check_performed": ethical_check,
-                "stardate": self.get_stardate(),
+                "stardate": get_stardate(),
                 "validation_timestamp": datetime.now(timezone.utc).isoformat()
             }
 

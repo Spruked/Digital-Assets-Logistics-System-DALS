@@ -1,9 +1,9 @@
 """
-ISS Module Configuration for Prometheus Prime Integration
-========================================================
+ISS Module Configuration for UCM Integration
+===========================================
 
 Configuration classes and settings management compatible with 
-Prometheus Prime microservices architecture.
+UCM microservices architecture.
 
 Provides:
 - Environment-based configuration
@@ -39,7 +39,7 @@ class LogLevel(str, Enum):
 
 class ISSSettings(BaseSettings):
     """
-    ISS Module settings compatible with Prometheus Prime
+    ISS Module settings compatible with UCM
     
     Reads configuration from environment variables with fallback defaults.
     """
@@ -89,7 +89,7 @@ class ISSSettings(BaseSettings):
     require_auth: bool = Field(default=False)
     admin_user: str = Field(default="admin")
     admin_password_hash: str = Field(
-        default="$2b$12$GZ.V11o.JJv2j1j5lJ.fS.eN/O2p.9A7Z.zC6l3bJ5n.zC6l3bJ5",  # Default hash for "password123"
+        default="$2b$12$hMDHY6YDS.LhqCsXXE8fFuYpL6vLq1Y7jZQlGChas0nHvcsgy8.26",  # Hash for "admin123"
     )
     
     # Circuit breaker settings
@@ -129,12 +129,12 @@ class ISSSettings(BaseSettings):
     visidata_enabled: bool = Field(default=False)
     visidata_port: int = Field(default=8080)
     
-    # Prometheus Prime integration
-    prometheus_integration_enabled: bool = Field(default=True)
+    # UCM integration
+    ucm_integration_enabled: bool = Field(default=True)
     reasoning_timeout_ms: int = Field(default=5000)
     vault_query_limit: int = Field(default=1000)
     
-    # External service URLs (for Prometheus Prime ecosystem)
+    # External service URLs (for UCM ecosystem)
     cochlear_processor_url: Optional[str] = Field(default=None)
     phonatory_output_url: Optional[str] = Field(default=None)
     vault_manager_url: Optional[str] = Field(default=None)
@@ -231,9 +231,9 @@ def validate_settings():
         if settings.log_level == LogLevel.DEBUG:
             issues.append("LOG_LEVEL should not be DEBUG in production")
     
-    if settings.prometheus_integration_enabled:
+    if settings.ucm_integration_enabled:
         if not settings.api_gateway_url:
-            issues.append("API_GATEWAY_URL required for Prometheus integration")
+            issues.append("API_GATEWAY_URL required for UCM integration")
     
     return issues
 

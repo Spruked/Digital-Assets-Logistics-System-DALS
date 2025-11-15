@@ -68,6 +68,16 @@ class SystemStatusResponse(BaseModel):
     stardate: float
     total_tracked_assets: int
 
+class LoginRequest(BaseModel):
+    username: str = Field(..., description="Username for authentication")
+    password: str = Field(..., description="Password for authentication")
+
+class LoginResponse(BaseModel):
+    success: bool = Field(description="Whether login was successful")
+    token: Optional[str] = Field(None, description="Authentication token for subsequent requests")
+    message: str = Field(description="Login result message")
+    user: Optional[Dict[str, Any]] = Field(None, description="User information if login successful")
+
 # --- Inventory Manager Dataclass ---
 
 @dataclass

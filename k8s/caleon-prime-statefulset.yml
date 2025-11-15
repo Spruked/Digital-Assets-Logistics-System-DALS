@@ -1,0 +1,274 @@
+# DALS Phase 11-A2 Caleon Prime StatefulSet
+# The Living Organism - StatefulSet ensures ordered deployment and persistent identity
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: caleon-prime
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: core
+    phase: 11-A2
+    organism: living
+spec:
+  serviceName: "caleon-prime"
+  replicas: 1  # Start with 1, scale later with HPA
+  podManagementPolicy: OrderedReady
+  selector:
+    matchLabels:
+      app: caleon-prime
+      component: core
+  template:
+    metadata:
+      labels:
+        app: caleon-prime
+        component: core
+        phase: 11-A2
+        organism: living
+    spec:
+      serviceAccountName: caleon-service-account
+      terminationGracePeriodSeconds: 300
+      containers:
+      - name: caleon-core
+        image: registry.caleon.ai/caleon-prime:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: ucm-cognitive
+          protocol: TCP
+        - containerPort: 8003
+          name: api-gateway
+          protocol: TCP
+        - containerPort: 8008
+          name: dashboard
+          protocol: TCP
+        - containerPort: 9090
+          name: cans-nervous
+          protocol: TCP
+        - containerPort: 5000
+          name: voice-awareness
+          protocol: TCP
+        - containerPort: 9091
+          name: metrics
+          protocol: TCP
+
+        # Immortal Memory Mounts
+        volumeMounts:
+        - name: vaults-storage
+          mountPath: /data/vaults
+          subPath: caleon-vaults
+        - name: logs-storage
+          mountPath: /data/logs
+          subPath: caleon-logs
+        - name: reflection-storage
+          mountPath: /data/reflection
+          subPath: caleon-reflection
+        - name: prediction-storage
+          mountPath: /data/prediction
+          subPath: caleon-prediction
+        - name: learning-storage
+          mountPath: /data/learning
+          subPath: caleon-learning
+        - name: abby-storage
+          mountPath: /data/abby
+          subPath: caleon-abby
+
+        # Environment Variables for Immortal Memory
+        env:
+        # Phase 11-A2 Core
+        - name: PREDICTIVE_ENGINE_ENABLED
+          value: "true"
+        - name: AUTONOMOUS_PREVENTION_MODE
+          value: "11-A2"
+        - name: PREDICTIVE_SCAN_INTERVAL
+          value: "5"
+
+        # Immortal Memory Paths
+        - name: SELF_MODEL_PATH
+          value: "/data/vaults/self_model.json"
+        - name: CANS_LOG_PATH
+          value: "/data/logs/cans_autonomic.log"
+        - name: PREDICTION_HISTORY
+          value: "/data/prediction/history.db"
+        - name: REFLECTION_VAULT_PATH
+          value: "/data/reflection/vault.db"
+        - name: LEARNING_MODEL_PATH
+          value: "/data/learning/csmm_model.pkl"
+        - name: ABBY_DIRECTIVE_PATH
+          value: "/data/abby/directive_memory.jsonl"
+
+        # Service Configuration
+        - name: ISS_HOST
+          value: "0.0.0.0"
+        - name: ISS_PORT
+          value: "8003"
+        - name: DASHBOARD_PORT
+          value: "8008"
+        - name: UCM_PORT
+          value: "8080"
+
+        # Secrets from Kubernetes
+        - name: FOUNDER_PRIMARY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: caleon-founder-secrets
+              key: founder-primary-key
+        - name: CALEON_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: caleon-caleon-secrets
+              key: caleon-master-key
+
+        # Health Checks
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8003
+            scheme: HTTPS
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8003
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+
+        # Resource Limits for Immortal Organism
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+
+        # Startup Probe for Complex Initialization
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8003
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30  # 5 minutes to become ready
+
+      # Init Container for Memory Validation
+      initContainers:
+      - name: memory-validator
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          echo "Validating Caleon Prime immortal memory..."
+          # Check if vaults exist, create if not
+          if [ ! -f /data/vaults/self_model.json ]; then
+            echo "Initializing self-model vault..."
+            mkdir -p /data/vaults
+            echo '{"identity": "Caleon Prime", "phase": "11-A2", "born": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'", "memory_continuity": true}' > /data/vaults/self_model.json
+          fi
+          # Validate all mount points
+          for path in /data/vaults /data/logs /data/reflection /data/prediction /data/learning /data/abby; do
+            if [ ! -d "$path" ]; then
+              echo "Creating memory path: $path"
+              mkdir -p "$path"
+            fi
+            touch "$path/.memory_validated"
+          done
+          echo "Immortal memory validation complete."
+        volumeMounts:
+        - name: vaults-storage
+          mountPath: /data/vaults
+        - name: logs-storage
+          mountPath: /data/logs
+        - name: reflection-storage
+          mountPath: /data/reflection
+        - name: prediction-storage
+          mountPath: /data/prediction
+        - name: learning-storage
+          mountPath: /data/learning
+        - name: abby-storage
+          mountPath: /data/abby
+
+  # Volume Claim Templates - Auto-created PVCs per replica
+  volumeClaimTemplates:
+  - metadata:
+      name: vaults-storage
+      labels:
+        app: caleon-prime
+        component: vaults
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: premium-rwo
+      resources:
+        requests:
+          storage: 50Gi
+  - metadata:
+      name: logs-storage
+      labels:
+        app: caleon-prime
+        component: logs
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: shared-rwx
+      resources:
+        requests:
+          storage: 20Gi
+  - metadata:
+      name: reflection-storage
+      labels:
+        app: caleon-prime
+        component: reflection
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: premium-rwo
+      resources:
+        requests:
+          storage: 30Gi
+  - metadata:
+      name: prediction-storage
+      labels:
+        app: caleon-prime
+        component: prediction
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: premium-rwo
+      resources:
+        requests:
+          storage: 10Gi
+  - metadata:
+      name: learning-storage
+      labels:
+        app: caleon-prime
+        component: learning
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: premium-rwo
+      resources:
+        requests:
+          storage: 25Gi
+  - metadata:
+      name: abby-storage
+      labels:
+        app: caleon-prime
+        component: abby-directive
+        persistence: immortal
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: premium-rwo
+      resources:
+        requests:
+          storage: 15Gi

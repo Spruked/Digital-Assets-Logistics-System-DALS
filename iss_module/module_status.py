@@ -100,6 +100,12 @@ class ModuleStatusManager:
                 "version": "1.0.0",
                 "status": "idle",
                 "description": "Digital Asset Tracking"
+            },
+            {
+                "name": "feedback_cochlear_monitor",
+                "version": "1.0.0",
+                "status": "idle",
+                "description": "Speech Drift Detection and Harmonizer Feedback"
             }
         ]
         

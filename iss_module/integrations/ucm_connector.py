@@ -49,7 +49,7 @@ class UCMConnector:
     def __init__(
         self,
         ucm_host: str = "localhost",
-        ucm_port: int = 8080,
+        ucm_port: int = 8081,  # Updated to match UCM config.py and docker-compose.yml
         api_prefix: str = "/api/v1",
         timeout: int = 30
     ):
@@ -497,7 +497,7 @@ _ucm_connector: Optional[UCMConnector] = None
 
 def get_ucm_connector(
     ucm_host: str = "localhost",
-    ucm_port: int = 8080
+    ucm_port: int = 8081
 ) -> UCMConnector:
     """
     Get or create global UCM connector instance

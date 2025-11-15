@@ -1,0 +1,11 @@
+{
+  "name": ".vault Domain",
+  "description": "TLD NFT representing full ownership and minting authority for the .vault namespace under DALS.",
+  "image": "https://spruked.cloud/assets/images/vault-logo.png",
+  "external_url": "https://spruked.cloud/vault",
+  "attributes": [
+    { "trait_type": "Category", "value": "Top-Level Domain" },
+    { "trait_type": "Network", "value": "Polygon" },
+    { "trait_type": "Utility", "value": "Domain Registry + NFT Minting Rights" }
+  ]
+}

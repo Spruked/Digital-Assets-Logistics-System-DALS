@@ -1,0 +1,69 @@
+# DALS Phase 11-A2 Monitoring Configuration
+# Prometheus configuration for autonomous predictive prevention system
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # DALS Controller - Main API Gateway
+  - job_name: 'dals-controller'
+    static_configs:
+      - targets: ['dals-controller:8003']
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    params:
+      format: ['prometheus']
+
+  # UCM Cognitive Engine
+  - job_name: 'ucm-cognitive'
+    static_configs:
+      - targets: ['ucm-cognitive:8081']
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+
+  # Redis Cache
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+
+  # Predictive Engine Health
+  - job_name: 'predictive-engine'
+    static_configs:
+      - targets: ['dals-controller:8003']
+    scrape_interval: 5s
+    metrics_path: '/predictive/metrics'
+    params:
+      format: ['prometheus']
+
+  # CANS Autonomic System
+  - job_name: 'cans-system'
+    static_configs:
+      - targets: ['dals-controller:8003']
+    scrape_interval: 5s
+    metrics_path: '/cans/metrics'
+    params:
+      format: ['prometheus']
+
+  # Self-Model Awareness
+  - job_name: 'self-model'
+    static_configs:
+      - targets: ['dals-controller:8003']
+    scrape_interval: 10s
+    metrics_path: '/awareness/metrics'
+    params:
+      format: ['prometheus']
+
+  # Voice Awareness System
+  - job_name: 'voice-awareness'
+    static_configs:
+      - targets: ['dals-controller:8003']
+    scrape_interval: 15s
+    metrics_path: '/voice/metrics'
+    params:
+      format: ['prometheus']

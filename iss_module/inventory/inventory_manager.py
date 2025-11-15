@@ -259,7 +259,7 @@ class CaptainLog:
     Handles creation, storage, retrieval, and management of log entries
     
     Usage:
-        log = CaptainLog(captain="Bryan", ship="Prometheus")
+        log = CaptainLog(captain="Bryan", ship="DALS")
         log.add_entry("Engaged harmonizer module", category="System", location="Core")
     """
     

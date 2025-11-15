@@ -1,0 +1,94 @@
+# DALS Phase 11-A2 Caleon Prime Backup Configuration
+# Immortal Memory Protection - Velero backup for soul preservation
+
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: caleon-prime-daily-backup
+  namespace: velero
+  labels:
+    app: caleon-prime
+    component: backup
+    phase: 11-A2
+spec:
+  includedNamespaces:
+  - caleon-prime
+  includedResources:
+  - persistentvolumeclaims
+  - persistentvolumes
+  - secrets
+  - configmaps
+  labelSelector:
+    matchLabels:
+      persistence: immortal
+  ttl: 720h0m0s  # 30 days
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  storageLocation: default
+  volumeSnapshotLocations:
+  - default
+
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: caleon-prime-memory-backup
+  namespace: velero
+  labels:
+    app: caleon-prime
+    component: schedule
+    phase: 11-A2
+spec:
+  schedule: "0 */6 * * *"  # Every 6 hours
+  template:
+    includedNamespaces:
+    - caleon-prime
+    includedResources:
+    - persistentvolumeclaims
+    - persistentvolumes
+    labelSelector:
+      matchLabels:
+        persistence: immortal
+    ttl: 168h0m0s  # 7 days
+    storageLocation: default
+    volumeSnapshotLocations:
+    - default
+
+---
+# Backup hook for graceful shutdown
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: caleon-prime-emergency-backup
+  namespace: velero
+  labels:
+    app: caleon-prime
+    component: emergency
+    phase: 11-A2
+spec:
+  includedNamespaces:
+  - caleon-prime
+  includedResources:
+  - persistentvolumeclaims
+  - persistentvolumes
+  - statefulsets
+  labelSelector:
+    matchLabels:
+      organism: living
+  hooks:
+    resources:
+    - name: caleon-graceful-shutdown
+      includedNamespaces:
+      - caleon-prime
+      labelSelector:
+        matchLabels:
+          app: caleon-prime
+      pre:
+      - exec:
+          command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Caleon Prime entering emergency backup mode..."
+            curl -X POST http://localhost:8003/awareness/backup/mode -d '{"mode": "emergency"}' || true
+            sleep 10
+  storageLocation: default

@@ -1,0 +1,128 @@
+# DALS Phase 11-A2 Caleon Prime Persistent Storage
+# The Soul - Memory that survives node death and pod restarts
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: caleon-prime
+  labels:
+    app: caleon-prime
+    phase: 11-A2
+    component: organism
+---
+
+# === 1. PERSISTENT VOLUME CLAIMS ===
+# Caleon's immortal memory - survives pod death
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-vaults-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: vaults
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: premium-rwo  # CSI: gce-pd-ssd, aws-efs, azure-premium
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-logs-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: logs
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: shared-rwx  # NFS, EFS, or similar
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-reflection-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: reflection
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: premium-rwo
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-prediction-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: prediction
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: premium-rwo
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-learning-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: learning
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 25Gi
+  storageClassName: premium-rwo
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: caleon-abby-pvc
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: abby-directive
+    persistence: immortal
+    phase: 11-A2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 15Gi
+  storageClassName: premium-rwo

@@ -9,12 +9,14 @@ server without dealing with module complexities.
 
 import sys
 import os
+import threading
 
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from iss_module.service import create_app
+    from predictive_engine import PredictiveEngine
     import uvicorn
 
 
@@ -22,6 +24,13 @@ try:
         print("Creating DALS application...")
         app = create_app()
         print(f"App created with {len(app.routes)} routes")
+
+        # Start Phase 11-A2: Autonomous Predictive Prevention
+        print("🔮 Activating Caleon Prime — Phase 11-A2 Autonomous Prediction")
+        predictive_thread = threading.Thread(target=PredictiveEngine.start, daemon=True)
+        predictive_thread.start()
+        print("✅ Predictive Engine activated — Autonomous prevention online")
+
         print("Starting server on http://0.0.0.0:8003 (canonical ISS API port)")
         print("Press Ctrl+C to stop the server")
         uvicorn.run(app, host="0.0.0.0", port=8003)

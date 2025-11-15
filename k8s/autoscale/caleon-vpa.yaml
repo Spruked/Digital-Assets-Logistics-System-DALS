@@ -1,0 +1,112 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: caleon-prime-vpa
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: vertical-autoscaling
+    phase: 11-A2
+    organism: living
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: caleon-prime
+  updatePolicy:
+    updateMode: Auto
+    minReplicas: 1
+  resourcePolicy:
+    containerPolicies:
+    - containerName: caleon-prime
+      minAllowed:
+        cpu: 500m
+        memory: 1Gi
+      maxAllowed:
+        cpu: 4000m
+        memory: 8Gi
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+    - containerName: init-memory-validator
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 500m
+        memory: 512Mi
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: caleon-vpa-admission-controller
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: vertical-autoscaling
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: caleon-vpa-role
+  labels:
+    app: caleon-prime
+    component: vertical-autoscaling
+rules:
+- apiGroups: ["autoscaling.k8s.io"]
+  resources: ["verticalpodautoscalers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["autoscaling.k8s.io"]
+  resources: ["verticalpodautoscalers/status"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["create", "get", "list", "update"]
+- apiGroups: [""]
+  resources: ["pods", "nodes", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets", "deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: caleon-vpa-binding
+  labels:
+    app: caleon-prime
+    component: vertical-autoscaling
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: caleon-vpa-role
+subjects:
+- kind: ServiceAccount
+  name: caleon-vpa-admission-controller
+  namespace: caleon-prime
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: caleon-vpa-webhook
+  labels:
+    app: caleon-prime
+    component: vertical-autoscaling
+webhooks:
+- admissionReviewVersions: ["v1"]
+  clientConfig:
+    service:
+      name: vpa-webhook
+      namespace: kube-system
+      path: "/v1/update"
+  failurePolicy: Ignore
+  matchPolicy: Equivalent
+  name: vpa.k8s.io
+  rules:
+  - apiGroups: [""]
+    apiVersions: ["v1"]
+    operations: ["CREATE"]
+    resources: ["pods"]
+  sideEffects: None
+  timeoutSeconds: 30

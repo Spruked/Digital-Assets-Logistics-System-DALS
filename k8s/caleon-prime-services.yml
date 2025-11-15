@@ -1,0 +1,91 @@
+# DALS Phase 11-A2 Caleon Prime Services
+# The Nervous System - Service endpoints for the living organism
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: caleon-prime-service
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: core
+    phase: 11-A2
+    organism: living
+spec:
+  selector:
+    app: caleon-prime
+    component: core
+  ports:
+  - name: ucm-cognitive
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: api-gateway
+    port: 8003
+    targetPort: 8003
+    protocol: TCP
+  - name: dashboard
+    port: 8008
+    targetPort: 8008
+    protocol: TCP
+  - name: cans-nervous
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  - name: voice-awareness
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+  - name: metrics
+    port: 9091
+    targetPort: 9091
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Headless service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: caleon-prime-headless
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: headless
+    phase: 11-A2
+spec:
+  clusterIP: None
+  selector:
+    app: caleon-prime
+    component: core
+  ports:
+  - name: ucm-cognitive
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: api-gateway
+    port: 8003
+    targetPort: 8003
+    protocol: TCP
+
+---
+# Service for immortal memory access
+apiVersion: v1
+kind: Service
+metadata:
+  name: caleon-memory-service
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: memory
+    phase: 11-A2
+spec:
+  selector:
+    app: caleon-prime
+    component: core
+  ports:
+  - name: memory-api
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+  type: ClusterIP

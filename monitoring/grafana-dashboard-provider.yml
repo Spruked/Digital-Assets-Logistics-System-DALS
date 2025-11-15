@@ -1,0 +1,10 @@
+apiVersion: 1
+
+providers:
+  - name: 'DALS Phase 11-A2 Dashboard'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards

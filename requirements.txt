@@ -24,11 +24,13 @@ openpyxl>=3.1.2
 # Logging and monitoring
 structlog>=23.2.0
 colorama>=0.4.6
+prometheus-client>=0.19.0
 
 # UCM integration dependencies
 pydantic-settings>=2.0.0
 redis>=5.0.0
 httpx>=0.25.2
+aiohttp>=3.9.0
 
 # Async support  
 typing-extensions>=4.8.0
@@ -60,8 +62,18 @@ pytz>=2023.3
 click>=8.1.7
 rich>=13.7.0
 pathlib2>=2.3.7
+psutil>=5.9.0          # system health metrics
+
+# Market Intelligence dependencies
+yfinance>=0.2.28        # Yahoo Finance data
+feedparser>=6.0.10      # RSS feed parsing
+pycoingecko>=3.1.0      # CoinGecko crypto API
 
 # Optional: For enhanced data visualization
 matplotlib>=3.8.2
 seaborn>=0.13.0
 plotly>=5.17.0
+
+# GOAT Module dependencies
+networkx>=3.2.1
+ipfshttpclient>=0.8.0a2  # Fixed: use alpha version that exists

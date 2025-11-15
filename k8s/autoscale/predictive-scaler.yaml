@@ -1,0 +1,231 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: predictive-scaler
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: predictive-autoscaling
+    phase: 11-A2
+    organism: living
+spec:
+  schedule: "*/1 * * * *"  # Every minute
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      template:
+        metadata:
+          labels:
+            app: caleon-prime
+            component: predictive-scaler
+        spec:
+          serviceAccountName: caleon-autoscaler
+          restartPolicy: Never
+          containers:
+            - name: predictive-scaler
+              image: registry.caleon.ai/predictive-scaler:latest
+              imagePullPolicy: Always
+              env:
+                - name: SCALE_UP_THRESHOLD
+                  value: "75"
+                - name: SCALE_DOWN_THRESHOLD
+                  value: "35"
+                - name: PREDICTION_ENDPOINT
+                  value: "http://caleon-prime-service.caleon-prime.svc.cluster.local:8080/awareness/predict/system"
+                - name: HPA_NAME
+                  value: "caleon-prime-hpa"
+                - name: HPA_NAMESPACE
+                  value: "caleon-prime"
+                - name: MIN_REPLICAS
+                  value: "1"
+                - name: MAX_REPLICAS
+                  value: "10"
+                - name: SCALE_UP_FACTOR
+                  value: "2"
+                - name: SCALE_DOWN_FACTOR
+                  value: "0.5"
+                - name: CONFIDENCE_THRESHOLD
+                  value: "70"
+                - name: LOG_LEVEL
+                  value: "INFO"
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+                runAsUser: 1000
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: predictive-scaler-config
+  namespace: caleon-prime
+  labels:
+    app: caleon-prime
+    component: predictive-autoscaling
+data:
+  scaling-logic.py: |
+    #!/usr/bin/env python3
+    """
+    Caleon Prime Predictive Autoscaling Logic
+    Phase 11-A2: Autonomous Predictive Prevention
+    """
+
+    import os
+    import json
+    import requests
+    import logging
+    from datetime import datetime, timedelta
+    from kubernetes import client, config
+
+    # Configure logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logger = logging.getLogger(__name__)
+
+    class PredictiveScaler:
+        def __init__(self):
+            self.scale_up_threshold = float(os.getenv('SCALE_UP_THRESHOLD', '75'))
+            self.scale_down_threshold = float(os.getenv('SCALE_DOWN_THRESHOLD', '35'))
+            self.prediction_endpoint = os.getenv('PREDICTION_ENDPOINT')
+            self.hpa_name = os.getenv('HPA_NAME', 'caleon-prime-hpa')
+            self.hpa_namespace = os.getenv('HPA_NAMESPACE', 'caleon-prime')
+            self.min_replicas = int(os.getenv('MIN_REPLICAS', '1'))
+            self.max_replicas = int(os.getenv('MAX_REPLICAS', '10'))
+            self.scale_up_factor = float(os.getenv('SCALE_UP_FACTOR', '2'))
+            self.scale_down_factor = float(os.getenv('SCALE_DOWN_FACTOR', '0.5'))
+            self.confidence_threshold = float(os.getenv('CONFIDENCE_THRESHOLD', '70'))
+
+            # Load Kubernetes config
+            try:
+                config.load_incluster_config()
+            except:
+                config.load_kube_config()
+
+            self.autoscaling_api = client.AutoscalingV2Api()
+            self.apps_api = client.AppsV1Api()
+
+        def get_prediction(self):
+            """Get system prediction from Caleon Prime"""
+            try:
+                response = requests.get(self.prediction_endpoint, timeout=10)
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    logger.warning(f"Prediction endpoint returned {response.status_code}")
+                    return None
+            except Exception as e:
+                logger.error(f"Failed to get prediction: {e}")
+                return None
+
+        def get_current_replicas(self):
+            """Get current replica count from HPA"""
+            try:
+                hpa = self.autoscaling_api.read_namespaced_horizontal_pod_autoscaler(
+                    self.hpa_name, self.hpa_namespace
+                )
+                return hpa.status.current_replicas
+            except Exception as e:
+                logger.error(f"Failed to get current replicas: {e}")
+                return self.min_replicas
+
+        def scale_hpa(self, target_replicas):
+            """Scale the HPA minReplicas to force immediate scaling"""
+            try:
+                # Get current HPA
+                hpa = self.autoscaling_api.read_namespaced_horizontal_pod_autoscaler(
+                    self.hpa_name, self.hpa_namespace
+                )
+
+                # Update minReplicas to force scaling
+                hpa.spec.min_replicas = max(self.min_replicas, min(target_replicas, self.max_replicas))
+
+                # Apply the update
+                self.autoscaling_api.patch_namespaced_horizontal_pod_autoscaler(
+                    self.hpa_name, self.hpa_namespace, hpa
+                )
+
+                logger.info(f"Scaled HPA minReplicas to {hpa.spec.min_replicas}")
+                return True
+
+            except Exception as e:
+                logger.error(f"Failed to scale HPA: {e}")
+                return False
+
+        def calculate_scaling_decision(self, prediction):
+            """Calculate if scaling is needed based on prediction"""
+            if not prediction:
+                return None
+
+            current_replicas = self.get_current_replicas()
+
+            # Check for failure predictions
+            failure_predictions = prediction.get('failure_predictions', [])
+            for pred in failure_predictions:
+                confidence = pred.get('confidence', 0)
+                time_to_failure = pred.get('time_to_failure_minutes', 60)
+
+                if confidence >= self.confidence_threshold and time_to_failure <= 30:
+                    # Scale up immediately for imminent failure
+                    target_replicas = min(int(current_replicas * self.scale_up_factor), self.max_replicas)
+                    logger.info(f"Imminent failure predicted (confidence: {confidence}%, TTF: {time_to_failure}min). Scaling to {target_replicas} replicas")
+                    return target_replicas
+
+            # Check resource predictions
+            resource_predictions = prediction.get('resource_predictions', {})
+            cpu_prediction = resource_predictions.get('cpu_utilization_percent', 0)
+            memory_prediction = resource_predictions.get('memory_utilization_percent', 0)
+
+            if cpu_prediction >= self.scale_up_threshold or memory_prediction >= self.scale_up_threshold:
+                target_replicas = min(int(current_replicas * self.scale_up_factor), self.max_replicas)
+                logger.info(f"High resource usage predicted (CPU: {cpu_prediction}%, RAM: {memory_prediction}%). Scaling to {target_replicas} replicas")
+                return target_replicas
+
+            elif cpu_prediction <= self.scale_down_threshold and memory_prediction <= self.scale_down_threshold and current_replicas > self.min_replicas:
+                target_replicas = max(int(current_replicas * self.scale_down_factor), self.min_replicas)
+                logger.info(f"Low resource usage predicted (CPU: {cpu_prediction}%, RAM: {memory_prediction}%). Scaling to {target_replicas} replicas")
+                return target_replicas
+
+            return None
+
+        def run(self):
+            """Main scaling logic"""
+            logger.info("Starting Caleon Prime predictive autoscaling cycle")
+
+            # Get prediction from Caleon Prime
+            prediction = self.get_prediction()
+            if not prediction:
+                logger.warning("No prediction available, skipping scaling decision")
+                return
+
+            # Calculate scaling decision
+            target_replicas = self.calculate_scaling_decision(prediction)
+
+            if target_replicas is not None:
+                # Execute scaling
+                success = self.scale_hpa(target_replicas)
+                if success:
+                    logger.info(f"Successfully initiated scaling to {target_replicas} replicas")
+                else:
+                    logger.error("Failed to execute scaling")
+            else:
+                logger.info("No scaling action required")
+
+    if __name__ == "__main__":
+        scaler = PredictiveScaler()
+        scaler.run()

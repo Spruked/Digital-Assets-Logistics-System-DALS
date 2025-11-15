@@ -3,10 +3,10 @@ ISS Controller Microservice
 ===========================
 
 Standalone microservice that integrates ISS Module capabilities into 
-the Prometheus Prime cognitive architecture.
+the UCM cognitive architecture.
 
 This service provides:
-- Health checks compatible with Prometheus Prime
+- Health checks compatible with UCM
 - Reasoning pipeline integration
 - Vault management and queries  
 - Captain's log management
@@ -33,9 +33,9 @@ from iss_module.config import settings, validate_settings
 from iss_module.api.api import app as dals_app
 
 
-# Configure structured logging for Prometheus Prime compatibility
+# Configure structured logging for UCM compatibility
 def setup_logging():
-    """Setup structured logging compatible with Prometheus Prime"""
+    """Setup structured logging compatible with UCM"""
     
     processors = [
         structlog.processors.TimeStamper(fmt="ISO"),
@@ -157,12 +157,12 @@ def setup_signal_handlers(app: FastAPI):
 
 def run_server():
     """
-    Run the ISS Controller microservice
+    Run the DALS microservice
     
     This function starts the service with proper configuration,
     logging, and signal handling.
     """
-    logger = structlog.get_logger("iss-controller.startup")
+    logger = structlog.get_logger("dals.startup")
     
     logger.info(
         "Starting ISS Controller",

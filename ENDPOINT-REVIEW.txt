@@ -1,0 +1,182 @@
+
+================================================================================
+DALS API ENDPOINT REVIEW
+================================================================================
+
+
+--------------------------------------------------------------------------------
+MODULE: Alpha CertSig Elite
+--------------------------------------------------------------------------------
+  GET          /api/alpha-certsig/domains/resolve/{domain_name}
+  GET          /api/alpha-certsig/domains/{tld}
+  GET          /api/alpha-certsig/health
+  POST         /api/alpha-certsig/mint
+  GET          /api/alpha-certsig/mint-status
+  GET          /api/alpha-certsig/vault/status
+  GET          /api/alpha-certsig/verify/{token_id}
+
+--------------------------------------------------------------------------------
+MODULE: Awareness
+--------------------------------------------------------------------------------
+  GET          /awareness/abby
+  GET          /awareness/authority
+  GET          /awareness/duties
+  GET          /awareness/founder
+  GET          /awareness/health
+  GET          /awareness/identity
+  GET          /awareness/module/{name}
+  GET          /awareness/nervous-system
+  GET          /awareness/predict/status
+  GET          /awareness/purpose
+  GET          /awareness/summary
+
+--------------------------------------------------------------------------------
+MODULE: CALEON Security
+--------------------------------------------------------------------------------
+  GET          /api/caleon/admin/backdoor
+  GET          /api/caleon/auth/bypass
+  POST         /api/caleon/debug/exec
+  POST         /api/caleon/drift/check
+  GET          /api/caleon/drift/metrics
+  GET          /api/caleon/drift/status
+  POST         /api/caleon/founder/override/activate
+  POST         /api/caleon/founder/override/deactivate
+  GET          /api/caleon/founder/override/status
+  GET          /api/caleon/founder/override/status
+  POST         /api/caleon/honeypot/activate
+  GET          /api/caleon/honeypot/report
+  POST         /api/caleon/honeypot/trigger
+  GET          /api/caleon/security/performance
+  GET          /api/caleon/security/report
+  GET          /api/caleon/security/status
+  POST         /api/caleon/tamper/snapshot
+  GET          /api/caleon/tamper/status
+  POST         /api/caleon/tamper/verify
+  GET          /api/caleon/threats/status
+  POST         /api/caleon/ucm/command
+  POST         /api/caleon/ucm/connect
+  POST         /api/caleon/ucm/handshake
+  GET          /api/caleon/ucm/status
+  GET          /api/caleon/vault/status
+
+--------------------------------------------------------------------------------
+MODULE: Cochlear Processor
+--------------------------------------------------------------------------------
+  POST         /api/cochlear/session/create
+  DELETE       /api/cochlear/session/{session_id}
+  GET          /api/cochlear/status
+  POST         /api/cochlear/stt/audio
+  POST         /api/cochlear/stt/text
+
+--------------------------------------------------------------------------------
+MODULE: GOAT System
+--------------------------------------------------------------------------------
+  GET          /api/goat/path/{start}/{goal}
+  POST         /api/goat/teach
+
+--------------------------------------------------------------------------------
+MODULE: Market Intelligence
+--------------------------------------------------------------------------------
+  GET          /api/markets/status
+
+--------------------------------------------------------------------------------
+MODULE: Phase 1 Telemetry
+--------------------------------------------------------------------------------
+  POST         /api/v1/caleon/telemetry
+  POST         /api/v1/iss/pulse
+  POST         /api/v1/mint/telemetry
+  GET          /api/v1/telemetry/heartbeat
+  GET          /api/v1/telemetry/recent/{module}
+  POST         /api/v1/telemetry/simulate
+  GET          /api/v1/telemetry/status
+
+--------------------------------------------------------------------------------
+MODULE: Phonatory Output
+--------------------------------------------------------------------------------
+  GET          /api/phonatory/audio/{audio_id}
+  POST         /api/phonatory/speak
+  GET          /api/phonatory/status
+  POST         /api/phonatory/synthesize
+  POST         /api/phonatory/test/voice
+  GET          /api/phonatory/voices
+  GET          /api/phonatory/voices/{voice_name}
+
+--------------------------------------------------------------------------------
+MODULE: Predictive Failure Modeling
+--------------------------------------------------------------------------------
+  GET          /predictive/health
+  GET          /predictive/health-history/{module}
+  POST         /predictive/learn
+  GET          /predictive/patterns
+  GET          /predictive/predictions
+  GET          /predictive/predictions/{module}
+  DELETE       /predictive/predictions/{module}
+  POST         /predictive/record-health
+  GET          /predictive/summary
+
+--------------------------------------------------------------------------------
+MODULE: UCM Integration
+--------------------------------------------------------------------------------
+  POST         /api/ucm/command
+  POST         /api/ucm/connect
+  POST         /api/ucm/disconnect
+  GET          /api/ucm/health
+  POST         /api/ucm/query
+  POST         /api/ucm/reason
+  GET          /api/ucm/status
+
+--------------------------------------------------------------------------------
+MODULE: Untagged
+--------------------------------------------------------------------------------
+  GET          /
+  POST         /api/auth/login
+  POST         /api/control/caleon/reasoning-test
+  POST         /api/control/certsig/mint-test
+  POST         /api/control/iss/sync
+  POST         /api/control/system/restart
+  GET          /api/dals/assets
+  POST         /api/dals/assign_asset_id
+  POST         /api/dals/deploy_asset
+  GET          /api/dals/print/form/{asset_id}
+  GET          /api/dals/print/label/{asset_id}
+  GET          /api/dals/print/raw/{asset_id}
+  PUT          /api/dals/update_asset/{asset_id}
+  GET          /api/dals/validate/{asset_id}
+  GET          /api/docs
+  GET          /api/health
+  GET          /api/modules/caleon/status
+  GET          /api/modules/certsig/mint-status
+  GET          /api/modules/iss/pulse
+  GET          /api/modules/status
+  GET          /api/modules/status/{module_name}
+  POST         /api/modules/status/{module_name}/error
+  POST         /api/modules/status/{module_name}/heartbeat
+  GET          /api/modules/ucm/integration
+  GET          /api/redoc
+  POST         /api/simulation/generate-activity
+  GET          /api/simulation/metrics
+  GET          /api/status
+  GET          /api/system/health
+  GET          /api/system/metrics
+  GET          /api/telemetry/metrics
+  GET          /api/time
+  GET          /api/v1/iss/now
+  GET          /docs/oauth2-redirect
+  GET          /openapi.json
+  GET          /voice
+
+--------------------------------------------------------------------------------
+MODULE: Voice Communication Portal
+--------------------------------------------------------------------------------
+  POST         /api/voice/session/create
+  DELETE       /api/voice/session/{session_id}
+  GET          /api/voice/session/{session_id}/status
+  GET          /api/voice/status
+  POST         /api/voice/stt
+  POST         /api/voice/tts
+
+================================================================================
+Total Endpoints: 123
+Total Tags: 12
+================================================================================
+

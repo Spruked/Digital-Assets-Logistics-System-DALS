@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALS Mint - Live with Big Daddy Spruk</title>
+    <meta name="description" content="Mint Knowledge NFTs live with Big Daddy Spruk - Certs that command the chain">
+    <link rel="icon" href="/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #00b4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00b4ff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Live Stream Section */
+        .live-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .live-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, #ff0080, #ff4444);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff88;
+            margin: 1rem 0;
+        }
+
+        .tiktok-embed {
+            max-width: 600px;
+            margin: 2rem auto;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* Mint Selector */
+        .mint-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .mint-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .mint-card:hover {
+            border-color: #00ff88;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .mint-card.elite {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(184, 134, 11, 0.1));
+            border: 2px solid #d4af37;
+        }
+
+        .mint-card.enterprise {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 180, 255, 0.1));
+            border: 2px solid #00b4ff;
+        }
+
+        .mint-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .mint-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .mint-description {
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .mint-button {
+            background: linear-gradient(45deg, #00ff88, #00b4ff);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .mint-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+
+        /* QR Section */
+        .qr-section {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 180, 255, 0.1));
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .qr-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .qr-description {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 15px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #00b4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #00ff88;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .mint-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .live-section {
+                padding: 2rem 1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">DALS MINT</div>
+            <div class="tagline">Live with Big Daddy Spruk</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>🚀 DROP IN 2H — MINT LIVE! 🚀</h1>
+            <p>Spruk's Knowledge NFTs: Certs That Command the Chain. Join the live minting session and claim your piece of digital legacy.</p>
+        </section>
+
+        <section class="live-section">
+            <div class="live-header">
+                <div class="live-badge">
+                    🔴 LIVE NOW
+                </div>
+                <h2>Big Daddy Spruk Live Minting Session</h2>
+                <div class="countdown" id="countdown">00:00:00</div>
+            </div>
+
+            <div class="tiktok-embed">
+                <!-- TikTok Live Embed Placeholder -->
+                <div style="width: 100%; height: 600px; background: rgba(0,0,0,0.5); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #00ff88; font-size: 1.2rem;">
+                    🎥 TikTok Live Stream Embed<br>
+                    <small>Live minting session with Big Daddy Spruk</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="mint-selector">
+            <div class="mint-card elite" onclick="window.location.href='/alpha-certsig'">
+                <div class="mint-icon">👑</div>
+                <h3 class="mint-title">Alpha CertSig Elite</h3>
+                <p class="mint-description">One-of-a-kind cert-faced NFTs with ISS/DALS timestamps. Exclusive alpha access with Caleon-powered sovereignty.</p>
+                <button class="mint-button">Mint Elite NFT</button>
+            </div>
+
+            <div class="mint-card enterprise" onclick="window.location.href='/truemark'">
+                <div class="mint-icon">🏢</div>
+                <h3 class="mint-title">TrueMark Enterprise</h3>
+                <p class="mint-description">Bulk mint cert-faced NFTs for teams and enterprises. DALS-001 compliant with multi-domain support.</p>
+                <button class="mint-button">Mint Enterprise</button>
+            </div>
+        </section>
+
+        <section class="qr-section">
+            <h2 class="qr-title">🎫 Flash Discount QR</h2>
+            <p class="qr-description">Scan for 15% off your next mint. Share with your squad and level up together!</p>
+            <div class="qr-code" id="qr-code">
+                QR CODE<br>15% OFF
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="/alpha-certsig/pricing" class="footer-link">Alpha Pricing</a>
+                <a href="/truemark/pricing" class="footer-link">Enterprise Pricing</a>
+                <a href="https://tiktok.com/@bigdaddyspruk" class="footer-link" target="_blank">TikTok Live</a>
+                <a href="/docs" class="footer-link">Documentation</a>
+            </div>
+            <p>&copy; 2025 DALS - Digital Asset Logistics System. Powered by Caleon Prime.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const target = new Date();
+            target.setHours(target.getHours() + 2); // 2 hours from now
+
+            const diff = target - now;
+
+            if (diff > 0) {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').textContent =
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                document.getElementById('countdown').textContent = 'LIVE NOW!';
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Analytics tracking
+        function trackEvent(event, data) {
+            console.log('Analytics:', event, data);
+            // Send to DALS analytics endpoint
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event, data, timestamp: new Date().toISOString() })
+            }).catch(err => console.log('Analytics error:', err));
+        }
+
+        // Track page views
+        trackEvent('page_view', { page: 'tiktok_landing' });
+
+        // Track mint button clicks
+        document.querySelectorAll('.mint-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const card = e.target.closest('.mint-card');
+                const mintType = card.classList.contains('elite') ? 'alpha_elite' : 'truemark_enterprise';
+                trackEvent('mint_click', { type: mintType });
+            });
+        });
+
+        // Generate QR Code (placeholder)
+        document.getElementById('qr-code').innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🎫</div>
+                <div>15% OFF</div>
+                <small>Scan to save</small>
+            </div>
+        `;
+    </script>
+</body>
+</html>

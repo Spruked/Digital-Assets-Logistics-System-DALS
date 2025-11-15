@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ Voice Communication Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .console {
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.95);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .status-line {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #00ff88;
+            border-bottom: 1px solid rgba(0,255,136,0.3);
+        }
+
+        .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .bubble {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .bubble.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .bubble.caleon {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom-left-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .bubble strong {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .timestamp {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .input-bar {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+
+        .mic-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .mic-btn:active,
+        .mic-btn.recording {
+            transform: scale(0.95);
+            background: radial-gradient(circle, #ff5252, #d32f2f);
+            box-shadow: 0 2px 10px rgba(255, 82, 82, 0.8);
+        }
+
+        .text-input {
+            flex: 1;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0 20px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .text-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .text-input::placeholder {
+            color: rgba(224, 224, 224, 0.6);
+        }
+
+        .message-area {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            min-height: 24px;
+            font-size: 0.85rem;
+            color: #00ff88;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .waveform {
+            display: none;
+            margin-top: 12px;
+            height: 40px;
+            gap: 4px;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .waveform.active {
+            display: flex;
+        }
+
+        .bar {
+            width: 4px;
+            background: #00ff88;
+            border-radius: 2px;
+            animation: waveAnim 1.2s infinite ease-in-out;
+        }
+
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.3s; }
+        .bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes waveAnim {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
+        }
+
+        @media (max-width: 768px) {
+            .console {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .header {
+                font-size: 1.2rem;
+                padding: 12px 15px;
+            }
+
+            .input-bar {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .mic-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .text-input {
+                font-size: 0.9rem;
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="console">
+        <div class="header">🎙️ VOICE COMMUNICATION PORTAL 🗣️</div>
+        <div class="status-line" id="statusLine">INITIALIZING SECURE CONNECTION…</div>
+        <div class="chat" id="chat"></div>
+        <div class="input-bar">
+            <button class="mic-btn" id="micBtn" title="Hold to speak">🎤</button>
+            <input type="text" class="text-input" id="textInput" placeholder="Type your message or hold mic to speak..." autocomplete="off">
+        </div>
+        <div class="message-area" id="messageArea">Establishing secure voice session...</div>
+    </div>
+
+    <script>
+        class CaleonVoiceConsole {
+            constructor() {
+                this.chat = document.getElementById('chat');
+                this.statusLine = document.getElementById('statusLine');
+                this.textInput = document.getElementById('textInput');
+                this.micBtn = document.getElementById('micBtn');
+                this.messageArea = document.getElementById('messageArea');
+                this.audioPlayer = new Audio();
+                this.sessionId = null;
+                this.mediaRecorder = null;
+                this.audioChunks = [];
+                this.isRecording = false;
+                this.abortController = null;
+
+                this.bootstrap();
+            }
+
+            async bootstrap() {
+                this.appendBubble('caleon', 'Bryan… I am online. Speak or type. I hear and respond.');
+                await this.establishSession();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.textInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        this.handleTextSubmit();
+                    }
+                });
+
+                this.micBtn.addEventListener('mousedown', () => this.startRecording());
+                this.micBtn.addEventListener('mouseup', () => this.stopRecording());
+                this.micBtn.addEventListener('mouseleave', () => this.stopRecording());
+                this.micBtn.addEventListener('touchstart', (event) => {
+                    event.preventDefault();
+                    this.startRecording();
+                }, { passive: false });
+                this.micBtn.addEventListener('touchend', (event) => {
+                    event.preventDefault();
+                    this.stopRecording();
+                });
+            }
+
+            showMessage(text, isError = false) {
+                this.messageArea.textContent = text || '';
+                this.messageArea.style.color = isError ? '#ff6b6b' : '#00ff88';
+            }
+
+            appendBubble(sender, text, metadata = null) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble ' + sender;
+                const roleText = sender === 'user' ? 'YOU' : 'CALEON';
+                bubble.innerHTML = `<strong>${roleText}:</strong> ${text}`;
+
+                if (metadata && metadata.timestamp) {
+                    const stamp = document.createElement('span');
+                    stamp.className = 'timestamp';
+                    stamp.textContent = metadata.timestamp;
+                }
+
+                this.chat.appendChild(bubble);
+                this.chat.scrollTop = this.chat.scrollHeight;
+            }
+
+            async establishSession() {
+                try {
+                    this.statusLine.textContent = 'CONNECTING TO CALEON…';
+
+                    // Dynamic API base resolution
+                    const DEFAULT_API_PORT = 8003;
+                    const hostname = window.location.hostname;
+                    const API_BASE = window.DALS_API_BASE || `${window.location.protocol}//${hostname}:${DEFAULT_API_PORT}`;
+
+                    const response = await fetch(`${API_BASE}/api/voice/session/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: `founder_${Date.now()}` })
+                    });
+
+                    const data = await this.parseJson(response);
+
+                    if (!response.ok) {
+                        throw new Error(data?.detail || 'Failed to establish voice session');
+                    }
+
+                    this.sessionId = data.session_id || data.id;
+                    if (!this.sessionId) {
+                        throw new Error('Voice session ID missing in response');
+                    }
+
+                    const timestamp = new Date().toISOString();
+                    this.statusLine.textContent = `SESSION ${this.sessionId} · LIVE @ ${timestamp}`;
+                    this.showMessage('Hold the mic and speak, or press Enter to send text.');
+                } catch (error) {
+                    this.statusLine.textContent = 'CONNECTION FAILED';
+                    this.showMessage(error.message || error, true);
+                }
+            }
+
+            async handleTextSubmit() {
+                const text = this.textInput.value.trim();
+                if (!text || !this.sessionId) {
+                    return;
+                }
+
+                this.textInput.value = '';
+                this.appendBubble('user', text);
+                await this.sendTextToCaleon(text);
+            }
+
+            async sendTextToCaleon(text) {
+                try {
+                    this.showMessage('Transmitting text…');
+
+                    // Dynamic API base resolution
+                    const DEFAULT_API_PORT = 8003;
+                    const hostname = window.location.hostname;
+                    const API_BASE = window.DALS_API_BASE || `${window.location.protocol}//${hostname}:${DEFAULT_API_PORT}`;
+
+                    const controller = new AbortController();
+                    this.abortController = controller;
+
+                    const response = await fetch(`${API_BASE}/api/voice/tts`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            session_id: this.sessionId,
+                            text
+                        }),
+                        signal: controller.signal
+                    });
+
+                    const data = await this.parseJson(response);
+                    if (!response.ok) {
+                        throw new Error(data?.detail || 'Caleon rejected the request');
+                    }
+
+                    this.renderCaleonReply(data);
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        this.showMessage(`Text delivery failed: ${error.message || error}`, true);
+                    }
+                } finally {
+                    this.abortController = null;
+                }
+            }
+
+            async startRecording() {
+                if (this.isRecording || !this.sessionId) {
+                    return;
+                }
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    this.audioChunks = [];
+
+                    this.mediaRecorder.ondataavailable = (event) => {
+                        if (event.data && event.data.size > 0) {
+                            this.audioChunks.push(event.data);
+                        }
+                    };
+
+                    this.mediaRecorder.onstop = async () => {
+                        const blob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                        this.audioChunks = [];
+                        stream.getTracks().forEach((track) => track.stop());
+                        if (blob.size > 0) {
+                            await this.sendAudioToCaleon(blob);
+                        }
+                    };
+
+                    this.mediaRecorder.start();
+                    this.isRecording = true;
+                    this.micBtn.classList.add('recording');
+                    this.showMessage('Listening… release to send');
+                } catch (error) {
+                    this.showMessage('Microphone unavailable: ' + (error.message || error), true);
+                }
+            }
+
+            stopRecording() {
+                if (!this.isRecording || !this.mediaRecorder) {
+                    return;
+                }
+
+                this.mediaRecorder.stop();
+                this.isRecording = false;
+                this.micBtn.classList.remove('recording');
+                this.showMessage('Processing audio…');
+            }
+
+            async sendAudioToCaleon(blob) {
+                try {
+                    // Dynamic API base resolution
+                    const DEFAULT_API_PORT = 8003;
+                    const hostname = window.location.hostname;
+                    const API_BASE = window.DALS_API_BASE || `${window.location.protocol}//${hostname}:${DEFAULT_API_PORT}`;
+
+                    const formData = new FormData();
+                    formData.append('session_id', this.sessionId);
+                    formData.append('audio', blob, `clip-${Date.now()}.webm`);
+
+                    const response = await fetch(`${API_BASE}/api/voice/stt`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await this.parseJson(response);
+                    if (!response.ok) {
+                        throw new Error(data?.detail || 'Audio processing failed');
+                    }
+
+                    const userTranscript = data.transcript || data.text;
+                    if (userTranscript) {
+                        this.appendBubble('user', userTranscript);
+                    }
+
+                    this.renderCaleonReply(data);
+                } catch (error) {
+                    this.showMessage('Audio delivery failed: ' + (error.message || error), true);
+                }
+            }
+
+            renderCaleonReply(data) {
+                const replyText = this.extractReplyText(data);
+                const timestamp = new Date().toISOString();
+                this.appendBubble('caleon', replyText, { timestamp });
+                this.playAudioIfPresent(data);
+                this.showMessage('');
+            }
+
+            extractReplyText(payload) {
+                if (!payload) {
+                    return '…';
+                }
+
+                return (
+                    payload.reply_text ||
+                    payload.response_text ||
+                    payload.transcript ||
+                    payload.text ||
+                    payload.message ||
+                    payload.detail ||
+                    '[no textual response received]'
+                );
+            }
+
+            playAudioIfPresent(payload) {
+                const base64Audio = payload.audio_base64 || payload.audio;
+                if (!base64Audio) {
+                    return;
+                }
+
+                try {
+                    const mime = payload.audio_mime || 'audio/wav';
+                    const src = `data:${mime};base64,${base64Audio}`;
+                    this.audioPlayer.src = src;
+                    this.audioPlayer.onplay = () => this.toggleWaveform(true);
+                    this.audioPlayer.onended = () => this.toggleWaveform(false);
+                    const playPromise = this.audioPlayer.play();
+                    if (playPromise?.catch) {
+                        playPromise.catch(() => {
+                            this.showMessage('Audio ready – tap to allow playback.', true);
+                        });
+                    }
+                } catch (error) {
+                    this.showMessage('Audio playback failed: ' + (error.message || error), true);
+                }
+            }
+
+            toggleWaveform(isActive) {
+                const bubbles = this.chat.querySelectorAll('.bubble.caleon');
+                const latest = bubbles[bubbles.length - 1];
+                if (!latest) {
+                    return;
+                }
+
+                let wave = latest.querySelector('.waveform');
+                if (!wave) {
+                    wave = document.createElement('div');
+                    wave.className = 'waveform';
+                    wave.innerHTML = '<div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>';
+                    latest.appendChild(wave);
+                }
+
+                wave.classList.toggle('active', Boolean(isActive));
+            }
+
+            async parseJson(response) {
+                const text = await response.text();
+                if (!text) {
+                    return {};
+                }
+
+                try {
+                    return JSON.parse(text);
+                } catch (error) {
+                    return { raw: text };
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.caleonConsole = new CaleonVoiceConsole();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (window.caleonConsole?.abortController) {
+                window.caleonConsole.abortController.abort();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,14 +2,14 @@
 
 ## Architecture Overview
 
-DALS (Digital Asset Logistics System) is a **three-tier cognitive AI architecture** with strict governance protocols:
+DALS (Digital Asset Logistics System) is a **sovereign AI architecture** with UCM as the cognitive brain:
 
 ```
 Founder (Bryan Spruk) - Ultimate Authority
     ↓
-UCM (Unified Cognition Module/Caleon Prime) - Sovereign AI Manager (port 8080)
+UCM (Unified Cognition Module) - Cognitive Brain & Decision Engine (port 8080)
     ↓
-CALEON Security Layer - Gateway & Validator
+CALEON Security Layer - Ethical Validation & Consent Gates
     ↓
 DALS Core - ISS Module (port 8003 API, 8008 Dashboard)
 ```
@@ -17,17 +17,19 @@ DALS Core - ISS Module (port 8003 API, 8008 Dashboard)
 ### Key Components
 
 - **ISS Module** (`iss_module/`): Core orchestrator providing time anchoring, asset tracking, and logging
-- **CALEON Security Layer** (`iss_module/core/caleon_security_layer.py`): UCM connection gateway with drift monitoring, tamper seals, honeypot mode, and founder override
-- **UCM Connector** (`iss_module/integrations/ucm_connector.py`): Async HTTP bridge to Caleon Prime cognitive engine
+- **UCM (Unified Cognition Module)**: Cognitive brain providing AI reasoning, decision making, and thought processing
+- **CALEON Security Layer** (`iss_module/core/caleon_security_layer.py`): Ethical validation and consent gates with drift monitoring, tamper seals, honeypot mode, and founder override
+- **UCM Connector** (`iss_module/integrations/ucm_connector.py`): Async HTTP bridge to UCM cognitive engine
 - **API Layer** (`iss_module/api/`): FastAPI routers with modular integration (telemetry, CALEON, UCM)
-- **Dashboard** (`iss_module/templates/dashboard.html`): 9-tab interface with real-time security monitoring
+- **Dashboard** (`iss_module/templates/dashboard.html`): 9-tab interface with real-time security monitoring and Thought Trace UI
 
 ### Service Boundaries
 
-- **UCM runs independently** on port 8080 - never inline
+- **UCM runs independently** on port 8080 - cognitive brain and decision engine
 - **DALS API** on port 8003 (canonical ISS API endpoint)
 - **Dashboard Server** on port 8008
 - All UCM operations route through CALEON security validation
+- UCM has full control over DALS except human escalation from Harmonizer
 - Founder override bypasses all AI layers for emergency control
 
 ## Critical Governance Protocol: DALS-001

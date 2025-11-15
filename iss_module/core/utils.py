@@ -77,7 +77,7 @@ def format_timestamp(dt=None, format_type='iso'):
 def get_iss_timestamp():
     """
     Get ISS timestamp data in canonical format
-    AUTHORITY: Spruked - Official DALS/Prometheus Stardate Protocol
+    AUTHORITY: Spruked - Official DALS/UCM Stardate Protocol
     """
     now = datetime.now(timezone.utc)
     timestamp_iso = now.isoformat().replace('+00:00', 'Z')

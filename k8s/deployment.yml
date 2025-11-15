@@ -1,0 +1,265 @@
+# DALS Phase 11-A2 Kubernetes Deployment
+# Complete orchestration for Caleon Prime autonomous infrastructure
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dals-controller
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: controller
+    phase: 11-A2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dals-11a2
+      component: controller
+  template:
+    metadata:
+      labels:
+        app: dals-11a2
+        component: controller
+        phase: 11-A2
+    spec:
+      serviceAccountName: dals-service-account
+      containers:
+      - name: dals-controller
+        image: dals-controller:11a2
+        ports:
+        - containerPort: 8003
+          name: api
+        - containerPort: 8008
+          name: dashboard
+        env:
+        # ConfigMap values
+        - name: PREDICTIVE_ENGINE_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: PREDICTIVE_ENGINE_ENABLED
+        - name: AUTONOMOUS_PREVENTION_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: AUTONOMOUS_PREVENTION_MODE
+        - name: PREDICTIVE_SCAN_INTERVAL
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: PREDICTIVE_SCAN_INTERVAL
+        - name: RISK_THRESHOLD_HIGH
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: RISK_THRESHOLD_HIGH
+        - name: CANS_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: CANS_MODE
+        - name: VOICE_AWARENESS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: VOICE_AWARENESS_ENABLED
+        - name: SELF_MODEL_TRACKING
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: SELF_MODEL_TRACKING
+        - name: ISS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: ISS_HOST
+        - name: ISS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: ISS_PORT
+        - name: DASHBOARD_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: DASHBOARD_PORT
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: ENVIRONMENT
+        - name: UCM_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: UCM_HOST
+        - name: UCM_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: UCM_PORT
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: REDIS_PORT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: LOG_LEVEL
+        - name: DALS_001_ENFORCED
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: DALS_001_ENFORCED
+        - name: FOUNDER_OVERRIDE_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: FOUNDER_OVERRIDE_ENABLED
+        - name: CALEON_SECURITY_LAYER
+          valueFrom:
+            configMapKeyRef:
+              name: dals-config
+              key: CALEON_SECURITY_LAYER
+
+        # Secret values
+        - name: FOUNDER_PRIMARY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dals-founder-secrets
+              key: founder-primary-key
+        - name: CALEON_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dals-caleon-secrets
+              key: caleon-master-key
+        - name: UCM_BRIDGE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: dals-ucm-secrets
+              key: ucm-bridge-token
+        - name: PREDICTIVE_ENGINE_SA_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: dals-service-accounts
+              key: predictive-engine-sa-token
+
+        volumeMounts:
+        - name: tls-certs
+          mountPath: /etc/ssl/certs
+          readOnly: true
+        - name: vault-storage
+          mountPath: /app/vault
+        - name: logs-storage
+          mountPath: /app/logs
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8003
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8003
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+      volumes:
+      - name: tls-certs
+        secret:
+          secretName: dals-tls-certificates
+      - name: vault-storage
+        persistentVolumeClaim:
+          claimName: dals-vault-pvc
+      - name: logs-storage
+        persistentVolumeClaim:
+          claimName: dals-logs-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dals-service
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: controller
+spec:
+  selector:
+    app: dals-11a2
+    component: controller
+  ports:
+  - name: api
+    port: 8003
+    targetPort: 8003
+    protocol: TCP
+  - name: dashboard
+    port: 8008
+    targetPort: 8008
+    protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dals-service-account
+  namespace: dals-system
+  labels:
+    app: dals-11a2
+    component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dals-cluster-role
+  labels:
+    app: dals-11a2
+rules:
+- apiGroups: [""]
+  resources: ["secrets", "configmaps", "services", "endpoints"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dals-cluster-role-binding
+  labels:
+    app: dals-11a2
+subjects:
+- kind: ServiceAccount
+  name: dals-service-account
+  namespace: dals-system
+roleRef:
+  kind: ClusterRole
+  name: dals-cluster-role
+  apiGroup: rbac.authorization.k8s.io

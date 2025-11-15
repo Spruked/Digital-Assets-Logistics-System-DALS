@@ -1,13 +1,20 @@
-# Docker Compose for DALS - Production Ready with UCM Integration Readiness
+# Master Docker Compose for Complete DALS Ecosystem
+# Includes DALS Core + CertSig + TrueMark + UCM for Live Video Minting
+
+version: '3.8'
 
 services:
+  # ============================================================================
+  # DALS CORE SERVICES
+  # ============================================================================
+
   # DALS Controller Service (Main ISS Module)
   dals-controller:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: dals-controller:v1.0.0  # Pinned version to prevent drift
+    image: dals-controller:v1.0.0
     container_name: dals-controller
     ports:
       - "8003:8003"  # API Gateway
@@ -20,18 +27,39 @@ services:
       - DASHBOARD_PORT=8008
       - LOG_LEVEL=INFO
       - LOG_FORMAT=json
-      - UCM_INTEGRATION_READY=true  # Ready for UCM connection
+      - UCM_INTEGRATION_READY=true
       - REDIS_URL=redis://redis:6379
       - REDIS_ENABLED=true
       - MODULE_STATUS_TRACKING=true
       - WEBSOCKET_ENABLED=true
       - DALS_001_ENFORCED=true
+      # Phase 11-A2: Autonomous Predictive Prevention
+      - PREDICTIVE_ENGINE_ENABLED=true
+      - AUTONOMOUS_PREVENTION_MODE=11-A2
+      - PREDICTIVE_SCAN_INTERVAL=5
+      - RISK_THRESHOLD_HIGH=70
+      - RISK_THRESHOLD_CRITICAL=90
+      - SELF_MODEL_ENABLED=true
+      - AWARENESS_LAYER_ACTIVE=true
+      - VOICE_AWARENESS_ENABLED=true
+      - CANS_AUTONOMOUS_MODE=aggressive
+      - PREDICTIVE_FAILURE_MODELING=true
+      - HEALTH_TREND_ANALYSIS=true
+      - PREVENTION_PROTOCOLS_ACTIVE=true
+      # Minting Service URLs
+      - CERTSIG_BACKEND_URL=http://alphacertsig-backend:8080
+      - TRUEMARK_BACKEND_URL=http://truemark-backend:5000
+      - UCM_BACKEND_URL=http://ucm-service:8081
     volumes:
       - ./iss_module/data:/app/data
       - ./vault:/app/vault
       - ./logs:/app/logs
+      - ./config:/app/config:ro  # Mount config for cochlear monitor
     depends_on:
       - redis
+      - alphacertsig-backend
+      - truemark-backend
+      - ucm-service
     networks:
       - dals-network
     restart: unless-stopped
@@ -40,11 +68,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s
 
-  # Redis for caching and session storage - Pinned version
+    # Redis for caching and session storage - Pinned version
   redis:
-    image: redis:7.2-alpine  # Pinned to prevent silent updates
+    image: redis:7.2-alpine
     container_name: dals-redis
     ports:
       - "6379:6379"
@@ -55,20 +83,145 @@ services:
     restart: unless-stopped
     command: redis-server --appendonly yes
 
-  # UCM Service (Unified Cognition Module) - To be added when UCM repo is available
-  # ucm-service:
-  #   # UCM will be added as a separate service when the repository is ready
-  #   # It will run on port 8080 and provide cognitive processing capabilities
-  #   image: ucm-cognitive-engine:latest
-  #   container_name: dals-ucm
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - UCM_PORT=8080
-  #     - COGNITIVE_MODEL=enabled
-  #   networks:
-  #     - dals-network
-  #   restart: unless-stopped
+  # ============================================================================
+  # NFT MINTING SERVICES
+  # ============================================================================
+
+  # Alpha CertSig Elite Backend
+  alphacertsig-backend:
+    build:
+      context: ./alpha-certsig/backend
+      dockerfile: Dockerfile
+    image: alphacertsig-backend:v1.0.0
+    container_name: alphacertsig-backend
+    ports:
+      - "9000:8080"  # Exposed on 9000 to avoid conflicts
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - REDIS_URL=redis://redis:6379
+      - IPFS_NODE_URL=https://ipfs.infura.io:5001
+      - WEB3_PROVIDER_URL=https://polygon-mainnet.infura.io/v3/YOUR_PROJECT_ID
+      - CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890
+    volumes:
+      - ./alpha-certsig/backend/app:/app
+      - ./alpha-certsig/shared/contracts:/app/contracts:ro
+      - ./alpha-certsig/backend/logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Alpha CertSig Elite Frontend
+  alphacertsig-frontend:
+    build:
+      context: ./alpha-certsig/frontend
+      dockerfile: Dockerfile
+    image: alphacertsig-frontend:v1.0.0
+    container_name: alphacertsig-frontend
+    ports:
+      - "3001:80"  # Changed from 3000 to avoid conflict with Shiloh Ridge Farm
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_BACKEND_URL=http://alphacertsig-backend:8080
+      - REACT_APP_DALS_API_URL=http://dals-controller:8003
+    depends_on:
+      - alphacertsig-backend
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # TrueMark Mint Backend
+  truemark-backend:
+    build:
+      context: ./truemark-mint
+      dockerfile: Dockerfile.backend
+    image: truemark-backend:v1.0.0
+    container_name: truemark-backend
+    ports:
+      - "9001:5000"  # Exposed on 9001 to avoid conflicts
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///data/truemark.db
+      - REDIS_URL=redis://redis:6379
+      - IPFS_NODE_URL=https://ipfs.infura.io:5001
+      - WEB3_PROVIDER_URL=https://mainnet.infura.io/v3/YOUR_PROJECT_ID
+      - CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890
+    volumes:
+      - ./truemark-mint/Alpha-mint-engine:/app
+      - ./truemark-mint/data:/app/data
+      - ./truemark-mint/logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # TrueMark Mint Frontend
+  truemark-frontend:
+    build:
+      context: ./truemark-mint
+      dockerfile: Dockerfile.frontend
+    image: truemark-frontend:v1.0.0
+    container_name: truemark-frontend
+    ports:
+      - "8082:8080"  # Changed from 8081 to avoid conflict with UCM
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_BACKEND_URL=http://truemark-backend:5000
+      - REACT_APP_DALS_API_URL=http://dals-controller:8003
+    depends_on:
+      - truemark-backend
+    networks:
+      - dals-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # COGNITIVE SERVICES
+  # ============================================================================
+
+  # UCM Service (Unified Cognition Module)
+  ucm-service:
+    build:
+      context: ./Unified-Cognition-Module-Caleon-Prime-full-System
+      dockerfile: Dockerfile
+    image: ucm-cognitive-engine:v1.0.0
+    container_name: dals-ucm
+    ports:
+      - "8081:8081"  # UCM cognitive brain (matches config.py default)
+    environment:
+      - ENVIRONMENT=production
+      - UCM_PORT=8081
+      - COGNITIVE_MODEL=enabled
+      - DALS_INTEGRATION=true
+      - REDIS_URL=redis://redis:6379
+      - HOST=0.0.0.0
+      - PORT=8081
+    volumes:
+      - ./Unified-Cognition-Module-Caleon-Prime-full-System:/app
+      - ./config:/app/config:ro  # Mount cochlear config
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   # Service Discovery (Consul)
   consul:
