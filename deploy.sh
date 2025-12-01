@@ -1,5 +1,5 @@
 #!/bin/bash
-# ISS Module Deployment Script for Prometheus Prime Integration
+# ISS Module Deployment Script for UCM + Gyro-Cortical Harmonizer Integration
 
 set -e
 
@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 SERVICE_NAME="iss-controller"
 IMAGE_NAME="iss-module"
 VERSION="1.0.0"
-NETWORK_NAME="prometheus-prime"
+NETWORK_NAME="ucm-harmonizer"
 
 # Functions
 log_info() {
@@ -165,7 +165,7 @@ cleanup() {
 
 # Main deployment functions
 deploy() {
-    log_info "Starting ISS Module deployment for Prometheus Prime..."
+    log_info "Starting ISS Module deployment for UCM + Gyro-Cortical Harmonizer..."
     
     check_requirements
     setup_environment
@@ -176,7 +176,7 @@ deploy() {
     show_status
     
     log_success "ISS Module deployed successfully!"
-    log_info "You can now integrate with Prometheus Prime API Gateway"
+    log_info "You can now integrate with UCM cognitive architecture and Harmonizer reasoning pipeline"
 }
 
 # Command line interface

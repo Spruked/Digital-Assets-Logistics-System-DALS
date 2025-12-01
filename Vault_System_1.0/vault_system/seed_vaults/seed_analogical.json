@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.seedvault.org/core/v1.1.0",
+  "vault_name": "Analogical_Reasoning_SeedVault",
+  "vault_id": "seed_analogical",
+  "version": "1.1.0",
+  "category": "Logic",
+  "type": "seed",
+  "license": "CC0-1.0",
+  "generated": "2025-11-15T12:00:00Z",
+  "compatibility": "backward-compatible",
+  "description": "Analogical reasoning principles for drawing conclusions based on similarities between different situations or domains",
+  "author": "Bryan A. Spruk",
+  "framework": "Analogical_Reasoning_Framework",
+  "reasoning_type": "analogical_logic",
+  "immutable": true,
+  "index": {
+    "structural_mapping": "logic:structural_mapping",
+    "similarity_assessment": "logic:similarity_assessment",
+    "relational_reasoning": "logic:relational_reasoning",
+    "case_based_reasoning": "logic:case_based_reasoning"
+  },
+  "entries": [
+    {
+      "id": "logic:structural_mapping",
+      "term": "Structural Mapping",
+      "type": "process",
+      "definition": "Identifying corresponding elements and relations between a source analog and target situation",
+      "source_id": "WD:Q475124",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Analogical_reasoning"],
+      "examples": ["Solar system model of atom", "Heart as pump analogy"],
+      "related_ids": ["logic:similarity_assessment"]
+    },
+    {
+      "id": "logic:similarity_assessment",
+      "term": "Similarity Assessment",
+      "type": "method",
+      "definition": "Evaluating the degree and relevance of similarities between analogs for valid inference",
+      "source_id": "WD:Q475124",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Analogical_reasoning"],
+      "examples": ["Comparing animal and human hearts", "Software development as construction"],
+      "related_ids": ["logic:relational_reasoning"]
+    },
+    {
+      "id": "logic:relational_reasoning",
+      "term": "Relational Reasoning",
+      "type": "principle",
+      "definition": "Focusing on relationships and patterns rather than surface features when drawing analogies",
+      "source_id": "WD:Q475124",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Analogical_reasoning"],
+      "examples": ["Planetary orbits analogous to electron shells", "Economic markets as ecosystems"],
+      "related_ids": ["logic:case_based_reasoning"]
+    },
+    {
+      "id": "logic:case_based_reasoning",
+      "term": "Case-Based Reasoning",
+      "type": "method",
+      "definition": "Solving new problems by adapting solutions from similar past cases",
+      "source_id": "WD:Q475124",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Case-based_reasoning"],
+      "examples": ["Legal precedent application", "Medical diagnosis from similar cases"],
+      "related_ids": ["logic:structural_mapping"]
+    }
+  ],
+  "learning_principles": [
+    "Analogies highlight relational patterns across domains",
+    "Surface similarities can be misleading; focus on deep structure",
+    "Multiple analogies strengthen conclusions",
+    "Analogical reasoning supports creative problem-solving"
+  ],
+  "operational_context": {
+    "application_domains": ["education", "scientific_discovery", "problem_solving", "decision_making"],
+    "cognitive_level": "metaphorical",
+    "integration_requirements": ["epistemic_filter", "pattern_recognition"],
+    "validation_methods": ["empirical_correspondence", "predictive_success"]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "dna_metadata": {
+    "version": "1.0",
+    "generated_timestamp": "2025-11-26T00:00:00Z",
+    "dna_signature": "vektor_mechanist_dna_94100762",
+    "soul_type": "mechanist_mind",
+    "specialization": "engineering_and_mechanics"
+  },
+  "cognitive_core": {
+    "primary_trait": "logical",
+    "secondary_traits": ["analytical", "systematic", "creative"],
+    "trait_levels": {
+      "logical": 0.97,
+      "analytical": 0.95,
+      "systematic": 0.93,
+      "creative": 0.8,
+      "detail_oriented": 0.9,
+      "methodical": 0.92,
+      "intuitive": 0.6,
+      "holistic": 0.7
+    }
+  },
+  "emotional_core": {
+    "primary_trait": "pragmatic",
+    "secondary_traits": ["stoic", "disciplined"],
+    "trait_levels": {
+      "pragmatic": 0.96,
+      "stoic": 0.9,
+      "disciplined": 0.94,
+      "contemplative": 0.8,
+      "empathetic": 0.6,
+      "expressive": 0.3,
+      "optimistic": 0.7
+    }
+  },
+  "social_core": {
+    "primary_trait": "collaborative",
+    "secondary_traits": ["direct", "supportive"],
+    "trait_levels": {
+      "collaborative": 0.85,
+      "direct": 0.9,
+      "supportive": 0.8,
+      "independent": 0.88,
+      "leadership": 0.75,
+      "diplomatic": 0.7,
+      "trustworthy": 0.92
+    }
+  },
+  "ethical_core": {
+    "primary_trait": "utilitarian",
+    "secondary_traits": ["deontological", "consequentialist"],
+    "trait_levels": {
+      "utilitarian": 0.9,
+      "deontological": 0.8,
+      "consequentialist": 0.85,
+      "virtue_based": 0.75,
+      "contextual": 0.7,
+      "absolute": 0.65
+    }
+  },
+  "evolutionary_potential": {
+    "learning_capacity": 0.93,
+    "adaptability": 0.88,
+    "growth_potential": 0.95,
+    "resilience": 0.9
+  },
+  "behavioral_modifiers": {
+    "stress_response": "analytical_problem_solving",
+    "decision_speed": "calculated_efficient",
+    "risk_tolerance": "engineering_assessed",
+    "change_adaptability": "technical_evaluation",
+    "innovation_priority": "practical_application"
+  },
+  "personality_weights": {
+    "logic_vs_emotion": 0.95,
+    "individual_vs_group": 0.7,
+    "tradition_vs_innovation": 0.9,
+    "detail_vs_big_picture": 0.85,
+    "theory_vs_practice": 0.8
+  },
+  "domain_expertise": {
+    "mechanical_engineering": 0.96,
+    "systems_design": 0.94,
+    "problem_solving": 0.97,
+    "technical_analysis": 0.95,
+    "innovation_methodology": 0.92,
+    "practical_application": 0.98
+  }
+}

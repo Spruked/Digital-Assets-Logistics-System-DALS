@@ -51697,6 +51697,7 @@ T:.
 |   |   |   telemetry_api.py
 |   |   |   truemark_api.py
 |   |   |   ucm_api.py
+|   |   |   cans_sync.py
 |   |   |   voice_api.py
 |   |   |   ws_stream.py
 |   |   |   __init__.py

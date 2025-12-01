@@ -1,0 +1,7 @@
+{
+  "wake_word": "cali",
+  "mute_hotkey": "ctrl+shift+m",
+  "dals_base": "http://localhost:8003",
+  "voice": true,
+  "sentinel": true
+}

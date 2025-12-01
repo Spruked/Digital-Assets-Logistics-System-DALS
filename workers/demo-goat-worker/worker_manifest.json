@@ -1,0 +1,14 @@
+{
+    "forge_version": "2.0.0",
+    "forged_at": "2025-11-27T08:05:16.413494",
+    "template_used": "WorkerTemplate",
+    "template_class": "workers.templates.worker_template.WorkerTemplate",
+    "personality_template": "Worker_Template_v1",
+    "worker_serial": "GOAT-WKR-20251127-4E94",
+    "worker_model": "A1-5981660308",
+    "ledger_code": "A1",
+    "class_code": "A1",
+    "port": 6000,
+    "glyph_trace": "GOAT-GOAT-WKR-20251127-4E94-8c664315",
+    "vault_integrity": false
+}

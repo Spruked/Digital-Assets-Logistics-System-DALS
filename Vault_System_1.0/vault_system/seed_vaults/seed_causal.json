@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.seedvault.org/core/v1.1.0",
+  "vault_name": "Causal_Reasoning_SeedVault",
+  "vault_id": "seed_causal",
+  "version": "1.1.0",
+  "category": "Logic",
+  "type": "seed",
+  "license": "CC0-1.0",
+  "generated": "2025-11-15T12:00:00Z",
+  "compatibility": "backward-compatible",
+  "description": "Causal reasoning principles for understanding cause-effect relationships and counterfactual analysis",
+  "author": "Bryan A. Spruk",
+  "framework": "Causal_Reasoning_Framework",
+  "reasoning_type": "causal_logic",
+  "immutable": true,
+  "index": {
+    "causal_inference": "logic:causal_inference",
+    "counterfactual_reasoning": "logic:counterfactual_reasoning",
+    "intervention_analysis": "logic:intervention_analysis",
+    "causal_mechanisms": "logic:causal_mechanisms"
+  },
+  "entries": [
+    {
+      "id": "logic:causal_inference",
+      "term": "Causal Inference",
+      "type": "process",
+      "definition": "Determining whether one event causes another based on evidence and reasoning",
+      "source_id": "WD:Q5058907",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Causal_inference"],
+      "examples": ["Does smoking cause lung cancer?", "Impact of education on income"],
+      "related_ids": ["logic:counterfactual_reasoning"]
+    },
+    {
+      "id": "logic:counterfactual_reasoning",
+      "term": "Counterfactual Reasoning",
+      "type": "method",
+      "definition": "Considering what would have happened if circumstances had been different",
+      "source_id": "WD:Q5058907",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Counterfactual_conditional"],
+      "examples": ["What if the Titanic had enough lifeboats?", "Alternative history scenarios"],
+      "related_ids": ["logic:intervention_analysis"]
+    },
+    {
+      "id": "logic:intervention_analysis",
+      "term": "Intervention Analysis",
+      "type": "principle",
+      "definition": "Understanding causal relationships by considering the effects of deliberate changes",
+      "source_id": "WD:Q5058907",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Causal_inference"],
+      "examples": ["Clinical trials testing drug effects", "Policy impact evaluation"],
+      "related_ids": ["logic:causal_mechanisms"]
+    },
+    {
+      "id": "logic:causal_mechanisms",
+      "term": "Causal Mechanisms",
+      "type": "concept",
+      "definition": "The underlying processes or pathways through which causes produce effects",
+      "source_id": "WD:Q5058907",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Causal_mechanism"],
+      "examples": ["How aspirin reduces pain", "Economic mechanisms of inflation"],
+      "related_ids": ["logic:causal_inference"]
+    }
+  ],
+  "learning_principles": [
+    "Correlation does not imply causation",
+    "Causal claims require strong evidence and alternative explanations",
+    "Counterfactual reasoning reveals causal necessity and sufficiency",
+    "Understanding mechanisms strengthens causal inferences"
+  ],
+  "operational_context": {
+    "application_domains": ["science", "policy", "medicine", "economics"],
+    "cognitive_level": "mechanistic",
+    "integration_requirements": ["empirical_evidence", "statistical_analysis"],
+    "validation_methods": ["experimental_design", "longitudinal_studies"]
+  }
+}

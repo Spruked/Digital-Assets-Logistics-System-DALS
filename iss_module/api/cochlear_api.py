@@ -258,3 +258,14 @@ async def end_cochlear_session(session_id: str) -> Dict[str, Any]:
 
 
 logger.info("Cochlear Processor API initialized")
+
+
+# ==========================================
+# CANS AUTONOMIC SYNC INTEGRATION
+# ==========================================
+try:
+    from .cans_sync import router as cans_sync_router
+    cochlear_router.include_router(cans_sync_router, prefix="/sync", tags=["CANS Sync"])  # exposed as /api/cochlear/sync/*
+    logger.info("CANS autonomic sync endpoints enabled for Cochlear Processor")
+except ImportError as e:
+    logger.warning(f"CANS sync router not available for Cochlear: {e}")

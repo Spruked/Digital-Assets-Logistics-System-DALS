@@ -498,6 +498,77 @@ class CaleonSecurityLayer:
                 "error": str(e)
             }
 
+    async def validate_operation(
+        self,
+        operation: str,
+        data: Dict[str, Any],
+        threat_level: str = "medium"
+    ) -> Dict[str, Any]:
+        """
+        Validate a general operation for security compliance
+
+        Args:
+            operation: Name of the operation being performed
+            data: Operation data to validate
+            threat_level: Expected threat level ("low", "medium", "high")
+
+        Returns:
+            Validation result with approval status
+        """
+        try:
+            # For sovereign AI operations, perform basic validation
+            security_issues = []
+
+            # Check data integrity
+            if not isinstance(data, dict):
+                security_issues.append("Invalid data format")
+
+            # Check for suspicious patterns in operation data
+            data_str = json.dumps(data).lower()
+            suspicious_patterns = ["<script", "javascript:", "eval(", "exec("]
+            for pattern in suspicious_patterns:
+                if pattern in data_str:
+                    security_issues.append(f"Suspicious pattern detected: {pattern}")
+
+            # Threat level assessment
+            threat_multiplier = {"low": 0.3, "medium": 0.6, "high": 1.0}.get(threat_level, 0.6)
+
+            # Approve if no security issues found
+            approved = len(security_issues) == 0
+
+            if not approved:
+                # Log security event for blocked operations
+                await self._log_security_event(
+                    ThreatType.UNAUTHORIZED_ACCESS,
+                    SecurityLevel.HIGH,
+                    f"Operation validation blocked: {operation}",
+                    {
+                        "operation": operation,
+                        "security_issues": security_issues,
+                        "threat_level": threat_level,
+                        "data_size": len(data_str)
+                    }
+                )
+
+            return {
+                "approved": approved,
+                "reason": "Approved" if approved else f"Blocked: {', '.join(security_issues)}",
+                "security_issues": security_issues,
+                "threat_level": threat_level,
+                "threat_score": len(security_issues) * threat_multiplier
+            }
+
+        except Exception as e:
+            logger.error(f"Operation validation failed: {e}")
+            return {
+                "approved": False,
+                "reason": f"Validation error: {str(e)}",
+                "security_issues": ["Validation system error"],
+                "threat_level": threat_level,
+                "threat_score": 1.0,
+                "error": str(e)
+            }
+
     async def _analyze_command_malevolence(self, command: Dict[str, Any]) -> Tuple[bool, Dict[str, Any]]:
         """
         Analyze command for malevolent intent

@@ -597,13 +597,23 @@ CANS_AUTONOMOUS_MODE=aggressive
 - WebSocket live updates
 - Connection management
 
-### Prometheus Integration
-**Port:** 9090  
+### Unified Cognition Module (UCM)
+**Port:** 8080  
 **Features:**
-- Custom metrics export
-- Health check monitoring
-- Service discovery
-- Alerting rules
+- Cognitive reasoning engine
+- Multi-modal input processing
+- Ethical decision framework
+- Memory vault integration
+- Real-time thought processing
+
+### Gyro-Cortical Harmonizer
+**Port:** 8081  
+**Features:**
+- 5+1 logic cycle reasoning
+- ±3σ convergence validation
+- Philosophical guide rotation
+- Final verdict articulation
+- Ethical/spin-based truth resolution
 
 ### Grafana Dashboards
 **Port:** 3000  

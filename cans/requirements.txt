@@ -1,0 +1,32 @@
+# CANS - Cognitive Autonomous Neural Synchronizer Requirements
+
+# Core web framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# HTTP client for service communication
+httpx==0.25.2
+
+# Data validation
+pydantic==2.5.0
+
+# CORS support
+python-multipart==0.0.6
+
+# Logging and monitoring
+structlog==23.2.0
+
+# Async utilities
+asyncio-mqtt==0.16.1  # Optional: for MQTT-based monitoring
+
+# Development and testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2  # For testing API endpoints
+
+# Optional: Metrics and monitoring
+prometheus-client==0.19.0  # For metrics collection
+psutil==5.9.6  # System monitoring
+
+# Configuration
+python-dotenv==1.0.0

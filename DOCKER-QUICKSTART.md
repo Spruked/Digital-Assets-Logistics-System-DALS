@@ -17,6 +17,7 @@ This Docker stack includes:
    - Main API: http://localhost:8003
    - Dashboard: http://localhost:8008
    - Voice communication endpoints
+   - **Cali_X_One Host Bubble** - Sovereign AI supervisor
 
 4. **Consul** (port 8500)
    - Service discovery
@@ -28,15 +29,35 @@ This Docker stack includes:
 
 - **DALS Dashboard**: http://localhost:8008
   - Voice & I/O tab for speaking to Caleon
-  
+  - **Host Bubble**: Floating blue orb (bottom-right) for Cali_X_One
+
 - **DALS API Docs**: http://localhost:8003/docs
   - Interactive API documentation
-  
+
 - **UCM Health**: http://localhost:8081/health
   - Caleon cognitive brain status
-  
+
 - **Consul UI**: http://localhost:8500
   - Service discovery dashboard
+
+---
+
+## 🎤 Cali_X_One Host Bubble - Sovereign AI Supervisor
+
+**Instant Access to System Orchestration:**
+
+1. **Look for the Blue Orb** in bottom-right corner of any page
+2. **Say "Cali"** to activate voice interface
+3. **Or Click the Orb** to open control panel
+4. **Ask Questions** about system status, workers, or request assistance
+5. **Get Real-time Help** with system orchestration and monitoring
+
+**Cali_X_One Capabilities:**
+- System health monitoring and alerts
+- Worker status and performance tracking
+- Voice-activated assistance and commands
+- Real-time system orchestration
+- Sovereign AI decision support
 
 ---
 

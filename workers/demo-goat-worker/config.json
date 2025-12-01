@@ -1,0 +1,18 @@
+{
+    "worker_serial": "GOAT-WKR-20251127-4E94",
+    "model_id": "A1-5981660308",
+    "glyph_trace": "GOAT-GOAT-WKR-20251127-4E94-8c664315",
+    "accountability_vault": {},
+    "reflection_vault": {},
+    "ap_helix_ref": "AP-GOAT-WKR-20251127-4E94-20251127",
+    "ucm_plugin_pipe": "ucm-pipe-GOAT-WKR-20251127-4E94",
+    "worker_name": "demo-goat-worker",
+    "worker_type": "goat",
+    "class_code": "A1",
+    "ledger_code": "A1",
+    "port": 6000,
+    "wedg_home": "GOAT",
+    "dals_registry_endpoint": "http://dals.local:9000/api/v1/registry/heartbeat",
+    "ucm_host": "http://ucm.local:8000",
+    "heartbeat_interval": 30
+}

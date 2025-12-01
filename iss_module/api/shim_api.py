@@ -24,6 +24,8 @@ try:
 except ImportError as e:
     logging.warning(f"SHiM v1.1 not available: {e}")
     SHIM_AVAILABLE = False
+    DALSAdvisor = None
+    validate_shim_output = None
 
 # Pydantic models for request/response
 class SHIMAnalysisRequest(BaseModel):
@@ -43,6 +45,45 @@ class SHIMAnalysisResponse(BaseModel):
     """Response model for SHiM analysis."""
     shim_advisory: Dict[str, Any] = Field(..., description="SHiM advisory output")
     dals_final_decision: Optional[Any] = Field(None, description="Always null - human authority preserved")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "shim_advisory": {
+                    "version": "shim_v1.1_spherical",
+                    "timestamp": "2025-11-15T10:30:00Z",
+                    "asset_id": "DAL-2025-11-ABC",
+                    "claim": "Ownership transfer: Alice → Bob",
+                    "shim_score": 0.87,
+                    "verdict": "HIGH_SUPPORT",
+                    "confidence_band": "NARROW",
+                    "evidence_weighting": {
+                        "alice_signature_valid": 0.96,
+                        "bob_identity_verified": 0.98,
+                        "asset_provenance_intact": 0.93
+                    },
+                    "explanation": [
+                        "Strong harmonic overlap detected in: alice_signature_valid, bob_identity_verified",
+                        "Dominant spherical harmonics: ℓ=2, m=1, ℓ=2, m=-1, ℓ=1, m=0",
+                        "High coherence indicates strong evidence alignment",
+                        "Provenance audit depth: 7 blocks analyzed"
+                    ],
+                    "risk_flags": [
+                        {
+                            "risk_type": "regulatory_gaps",
+                            "severity": "MEDIUM",
+                            "description": "Potential regulatory compliance gaps detected",
+                            "recommendation": "Conduct regulatory compliance check and add required evidence"
+                        }
+                    ],
+                    "advisory_mode": True,
+                    "enforcement": "NONE",
+                    "recommended_action": "Proceed to human review and multi-sig approval",
+                    "audit_trace_id": "SHIM-ADV-2025-11-15-XYZ"
+                },
+                "dals_final_decision": None
+            }
+        }
 
 # Create router
 shim_router = APIRouter(
@@ -77,7 +118,7 @@ async def analyze_claim(request: SHIMAnalysisRequest):
         )
 
         # Validate output against schema
-        if not validate_shim_output(result):
+        if validate_shim_output and not validate_shim_output(result):
             logging.error("SHiM output failed schema validation")
             raise HTTPException(
                 status_code=500,
@@ -122,7 +163,7 @@ async def shim_health():
         )
 
         # Validate the response
-        if validate_shim_output(test_result):
+        if validate_shim_output and validate_shim_output(test_result):
             return {
                 "status": "healthy",
                 "version": "shim_v1.1_spherical",

@@ -16,7 +16,9 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional, Literal
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
+from pathlib import Path
 import logging
+logger = logging.getLogger("DALS.API")
 import os
 import secrets
 import hashlib
@@ -45,6 +47,14 @@ try:
 except ImportError as e:
     logging.warning(f"UCM Integration API not available: {e}")
     UCM_AVAILABLE = False
+
+# Import Minting API
+try:
+    from .minting_api import minting_router
+    MINTING_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Minting API not available: {e}")
+    MINTING_AVAILABLE = False
 
 # Import Alpha CertSig Elite Mint API
 try:
@@ -118,6 +128,30 @@ except ImportError as e:
     logging.warning(f"SHiM v1.1 Advisory API not available: {e}")
     SHIM_AVAILABLE = False
 
+# Import OBS Bridge API
+try:
+    from dals.modules.obs_bridge import obs_router
+    OBS_BRIDGE_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"OBS Bridge API not available: {e}")
+    OBS_BRIDGE_AVAILABLE = False
+
+# Import Gyro-Cortical Harmonizer API
+try:
+    from .harmonizer_api import harmonizer_router
+    HARMONIZER_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Gyro-Cortical Harmonizer API not available: {e}")
+    HARMONIZER_AVAILABLE = False
+
+# Import Workers Management API
+try:
+    from .workers_api import router as workers_router
+    WORKERS_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Workers Management API not available: {e}")
+    WORKERS_AVAILABLE = False
+
 import asyncio
 from pathlib import Path as PathLib
 from passlib.context import CryptContext
@@ -149,7 +183,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 try:
-    from serial_assignment import assign_digital_asset_id
+    from iss_module.utils.serial_assignment import assign_digital_asset_id
     SERIAL_ASSIGNMENT_AVAILABLE = True
 except ImportError:
     logger.warning("Serial assignment utility not available")
@@ -257,6 +291,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Cali_X_One MetaMask signing interface
+@app.get("/sign-cali", response_class=HTMLResponse)
+async def sign_cali():
+    """Serve the Cali_X_One MetaMask signing interface"""
+    try:
+        # Use relative path from container working directory (/app)
+        html_path = Path("sign_cali.html")
+        return html_path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Signing interface not found")
+
 # Include Phase 1 Telemetry Router
 if TELEMETRY_AVAILABLE:
     app.include_router(telemetry_router, tags=["Phase 1 Telemetry"])
@@ -267,8 +312,12 @@ else:
 
 # Include CALEON Security Layer Router
 if CALEON_AVAILABLE:
-    app.include_router(caleon_router, tags=["CALEON Security"])
-    logger.info("CALEON Security Layer API enabled")
+    try:
+        app.include_router(caleon_router, tags=["CALEON Security"])
+        logger.info("CALEON Security Layer API enabled")
+    except Exception as e:
+        logger.error(f"Failed to include CALEON router: {e}")
+        CALEON_AVAILABLE = False
 else:
     logger.warning("CALEON Security Layer API not available")
 
@@ -278,6 +327,13 @@ if UCM_AVAILABLE:
     logger.info("UCM Integration API enabled - Caleon Prime bridge active")
 else:
     logger.warning("UCM Integration API not available")
+
+# Include Minting Router
+if MINTING_AVAILABLE:
+    app.include_router(minting_router, tags=["Minting"])
+    logger.info("Minting API enabled - Alpha CertSig and TrueMark plugins active")
+else:
+    logger.warning("Minting API not available")
 
 # Include Awareness Router
 if AWARENESS_AVAILABLE:
@@ -342,6 +398,20 @@ if SHIM_AVAILABLE:
 else:
     logger.warning("SHiM v1.1 Advisory API not available")
 
+# Include Gyro-Cortical Harmonizer Router
+if HARMONIZER_AVAILABLE:
+    app.include_router(harmonizer_router, tags=["Gyro-Cortical Harmonizer"])
+    logger.info("Gyro-Cortical Harmonizer API enabled - Final verdict engine active")
+else:
+    logger.warning("Gyro-Cortical Harmonizer API not available")
+
+# Include Workers Management Router
+if WORKERS_AVAILABLE:
+    app.include_router(workers_router, prefix="/api", tags=["Workers Management"])
+    logger.info("Workers Management API enabled - Industrial-grade worker cloning engine v2.0 active")
+else:
+    logger.warning("Workers Management API not available")
+
 # Include Market Intelligence Router
 try:
     from .market_intel_api import market_router
@@ -355,6 +425,13 @@ if MARKET_AVAILABLE:
     logger.info("Market Intelligence API enabled - Real-time market data and news active")
 else:
     logger.warning("Market Intelligence API not available")
+
+# Include OBS Bridge Router
+if OBS_BRIDGE_AVAILABLE:
+    app.include_router(obs_router, prefix="/api", tags=["OBS Control"])
+    logger.info("OBS Bridge API enabled - OBS Studio control active")
+else:
+    logger.warning("OBS Bridge API not available")
 
 # --- Authentication Dependency ---
 async def get_current_user(credentials: HTTPBasicCredentials = Depends(basic_auth)):
@@ -422,6 +499,11 @@ async def voice_portal(request: Request):
     """Serve the voice communication portal"""
     return templates.TemplateResponse("voice_portal.html", {"request": request})
 
+@app.get("/sign-cali", response_class=HTMLResponse)
+async def sign_cali():
+    """Serve the Cali_X_One MetaMask signing interface"""
+    return Path("sign_cali.html").read_text()
+
 @app.get("/api/status", response_model=SystemStatusResponse)
 async def get_system_status():
     """Get current system status"""
@@ -449,6 +531,11 @@ async def get_system_status():
     except Exception as e:
         logger.error(f"Failed to get system status: {e}")
         raise HTTPException(status_code=500, detail="Failed to get system status")
+
+@app.get("/health")
+async def root_health_check():
+    """Root health check endpoint for Docker health checks"""
+    return {"status": "healthy", "timestamp": format_timestamp(), "stardate": get_stardate()}
 
 @app.get("/api/health")
 async def health_check():
@@ -572,6 +659,93 @@ async def get_system_metrics():
         }
 
 
+# --- Cali_X_One Identity Endpoints ---
+
+@app.get("/api/cali/core-hash")
+async def get_cali_core_hash():
+    """Get Cali_X_One core hash for identity verification"""
+    try:
+        from pathlib import Path
+        import hashlib
+
+        # Read the Cali_X_One core file
+        cali_core_path = Path(__file__).parent.parent / "cali_x_one" / "cali_dals.py"
+        if not cali_core_path.exists():
+            raise HTTPException(status_code=404, detail="Cali_X_One core file not found")
+
+        core_content = cali_core_path.read_text()
+
+        # Generate hash
+        core_hash = hashlib.sha256(core_content.encode()).hexdigest()
+
+        return {
+            "hash": core_hash,
+            "stardate": get_stardate(),
+            "timestamp": format_timestamp()
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get Cali core hash: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate core hash")
+
+@app.post("/api/cali/verify-identity")
+async def verify_cali_identity(identity_data: Dict[str, Any]):
+    """Verify and save Cali_X_One identity signature"""
+    try:
+        from pathlib import Path
+        import hashlib
+        import json
+
+        # Extract data
+        address = identity_data.get("address")
+        signature = identity_data.get("signature")
+        core_hash = identity_data.get("coreHash")
+        stardate = identity_data.get("stardate")
+
+        if not all([address, signature, core_hash]):
+            raise HTTPException(status_code=400, detail="Missing required identity data")
+
+        # Verify the core hash matches
+        cali_core_path = Path(__file__).parent.parent / "cali_x_one" / "cali_dals.py"
+        if not cali_core_path.exists():
+            raise HTTPException(status_code=404, detail="Cali_X_One core file not found")
+
+        actual_core_content = cali_core_path.read_text()
+        actual_hash = hashlib.sha256(actual_core_content.encode()).hexdigest()
+
+        if actual_hash != core_hash:
+            raise HTTPException(status_code=400, detail="Core hash verification failed")
+
+        # Create the signature data
+        sig_data = {
+            "status": "signed",
+            "addr": address,
+            "sig": signature,
+            "hash": core_hash,
+            "stardate": stardate,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+
+        # Save to cali_sig.json
+        sig_file_path = Path(__file__).parent.parent / "cali_x_one" / "cali_sig.json"
+        sig_file_path.write_text(json.dumps(sig_data, indent=2))
+
+        logger.info(f"Cali_X_One identity signed by {address}")
+
+        return {
+            "success": True,
+            "message": "Cali_X_One identity successfully authenticated",
+            "address": address,
+            "stardate": get_stardate()
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to verify Cali identity: {e}")
+        raise HTTPException(status_code=500, detail="Identity verification failed")
+
+
 # --- Digital Asset Logistics (DALS) Endpoints ---
 
 @app.post("/api/dals/assign_asset_id", response_model=DigitalAssetAssignmentResponse, summary="Assign and Register a new Digital Asset ID")
@@ -647,7 +821,7 @@ async def deploy_asset(
 
 @app.put("/api/dals/update_asset/{asset_id}", response_model=AssetRecordResponse, summary="Update an Asset's Lifecycle Status")
 async def update_asset_status(
-    asset_id: str = Path(..., description="The Asset ID of the digital asset to update."),
+    asset_id: str = Path(description="The Asset ID of the digital asset to update."),
     update_data: AssetStatusUpdate = Body(...),
     current_user: str = Depends(get_current_user)
 ):
@@ -676,7 +850,7 @@ async def update_asset_status(
 
 @app.get("/api/dals/validate/{asset_id}", response_model=AssetRecordResponse, summary="Validate Asset Status and Lineage")
 async def validate_asset(
-    asset_id: str = Path(..., description="The Asset ID to validate."),
+    asset_id: str = Path(description="The Asset ID to validate."),
     current_user: str = Depends(get_current_user)
 ):
     """
@@ -719,7 +893,7 @@ async def get_tracked_assets(
 
 @app.get("/api/dals/print/label/{asset_id}", response_class=PlainTextResponse, summary="Print to Label (Text)")
 async def print_asset_label(
-    asset_id: str = Path(..., description="Asset ID to generate a small label for."),
+    asset_id: str = Path(description="Asset ID to generate a small label for."),
     current_user: str = Depends(get_current_user)
 ):
     """
@@ -754,7 +928,7 @@ async def print_asset_label(
 
 @app.get("/api/dals/print/form/{asset_id}", response_class=HTMLResponse, summary="Print to Form (HTML)")
 async def print_asset_form(
-    asset_id: str = Path(..., description="Asset ID to generate a full review form for."),
+    asset_id: str = Path(description="Asset ID to generate a full review form for."),
     current_user: str = Depends(get_current_user)
 ):
     """
@@ -845,7 +1019,7 @@ async def print_asset_form(
 
 @app.get("/api/dals/print/raw/{asset_id}", response_class=PlainTextResponse, summary="Print to Raw (JSON)")
 async def print_asset_raw(
-    asset_id: str = Path(..., description="Asset ID to dump raw data for review."),
+    asset_id: str = Path(description="Asset ID to dump raw data for review."),
     current_user: str = Depends(get_current_user)
 ):
     """
@@ -892,6 +1066,82 @@ async def get_iss_timestamp_endpoint():
     Epoch: January 1, 2000, 00:00:00 UTC
     """
     return get_iss_timestamp()
+
+@app.get("/api/iss/timecodes")
+async def get_iss_timecodes():
+    """
+    Get ISS timecodes for UCM integration
+    Returns stardate, ISO timestamp, Julian date, ISS timestamp, and anchor hash
+    """
+    from ..core.utils import get_stardate, current_timecodes
+    try:
+        timecodes = current_timecodes()
+        return timecodes
+    except Exception as e:
+        logger.error(f"Timecodes generation failed: {e}")
+        return {
+            "stardate": 0.0,
+            "iso_timestamp": "1970-01-01T00:00:00Z",
+            "julian_date": 0.0,
+            "iss_timestamp": "1970-01-01T00:00:00Z",
+            "anchor_hash": "error"
+        }
+
+@app.get("/api/iss/status")
+async def get_iss_status():
+    """
+    Get ISS module status for UCM integration
+    """
+    from ..core.utils import get_stardate
+    try:
+        stardate = get_stardate()
+        return {
+            "status": "active",
+            "stardate": stardate,
+            "message": "ISS Module operational",
+            "timecodes_available": True,
+            "captain_log_available": True
+        }
+    except Exception as e:
+        logger.error(f"ISS status check failed: {e}")
+        return {
+            "status": "error",
+            "message": str(e),
+            "stardate": 0.0,
+            "timecodes_available": False,
+            "captain_log_available": False
+        }
+
+@app.post("/api/iss/log")
+async def add_captain_log_entry(entry: Dict[str, Any]):
+    """
+    Add entry to Captain's Log for UCM integration
+    """
+    try:
+        from ..captain_mode import CaptainLog
+        captain_log = CaptainLog()
+        
+        operation = entry.get("operation", entry.get("message", "UCM operation"))
+        details = entry.get("details", {})
+        
+        # Add stardate if not provided
+        if "stardate" not in details:
+            from ..core.utils import get_stardate
+            details["stardate"] = get_stardate()
+        
+        captain_log.add_entry(f"{operation}: {str(details)[:100]}...")
+        
+        return {
+            "status": "logged",
+            "operation": operation,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Captain's Log entry failed: {e}")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 # --- Real Module Integration Endpoints ---
 
@@ -1269,16 +1519,31 @@ async def get_system_health():
         logger.error(f"System health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
+# ==========================================
+# CANS AUTONOMIC SYNC INTEGRATION
+# ==========================================
+
+# Import and include CANS compatibility router
+try:
+    from .cans_sync import router as cans_sync_router
+    app.include_router(cans_sync_router, prefix="/api/dals/sync", tags=["CANS Sync"])
+    logger.info("CANS autonomic sync endpoints enabled for DALS API")
+except ImportError as e:
+    logger.warning(f"CANS sync router not available: {e}")
+
 # Development helper
 def main():
     """Main entry point for running the server"""
+    from ..config import ISSSettings
     import uvicorn
+    
+    settings = ISSSettings()
     uvicorn.run(
         "iss_module.api.api:app",
-        host="0.0.0.0",
-        port=8000,
+        host=settings.host,
+        port=settings.port,
         reload=True,
-        log_level="info"
+        log_level=settings.log_level.lower()
     )
 
 if __name__ == "__main__":

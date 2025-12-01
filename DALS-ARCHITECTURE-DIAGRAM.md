@@ -31,11 +31,15 @@ graph TB
             ISS_INVENTORY[Asset Inventory<br/>inventory/]
             ISS_STATIC[Static Assets<br/>static/]
             ISS_TEMPLATES[HTML Templates<br/>templates/]
+            WORKER_VAULT[Worker Vault System<br/>vault/worker_*<br/>Personality Management]
+            HOST_BUBBLE[Cali_X_One Host Bubble<br/>templates/shared/_host_bubble.html<br/>Voice Interface]
         end
 
         UCM[Unified Cognition Module<br/>UCM<br/>Port 8080<br/>Cognitive Brain]
 
         CALEON[CALEON Security Layer<br/>caleon_security_layer.py<br/>Ethical Validation]
+
+        CALI_X_ONE[Cali_X_One Sovereign AI<br/>Supervisor & Orchestrator<br/>Voice-Activated System Control]
     end
 
     %% Knowledge Immortality Engine
@@ -92,9 +96,14 @@ graph TB
     ISS --> ISS_CORE
     ISS --> ISS_INTEGRATIONS
     ISS --> ISS_INVENTORY
+    ISS --> WORKER_VAULT
+    ISS --> HOST_BUBBLE
 
     ISS_INTEGRATIONS --> UCM
     ISS_CORE --> CALEON
+    ISS_CORE --> CALI_X_ONE
+    HOST_BUBBLE --> CALI_X_ONE
+    CALI_X_ONE --> UCM
 
     ISS --> KIE
     KIE --> INTERVIEW
@@ -142,7 +151,7 @@ graph TB
     classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px
     classDef userInterface fill:#fce4ec,stroke:#880e4f,stroke-width:2px
 
-    class ISS,UCM,CALEON,ISS_API,ISS_CORE,ISS_INTEGRATIONS,ISS_INVENTORY,ISS_STATIC,ISS_TEMPLATES coreSystem
+    class ISS,UCM,CALEON,CALI_X_ONE,ISS_API,ISS_CORE,ISS_INTEGRATIONS,ISS_INVENTORY,ISS_STATIC,ISS_TEMPLATES,WORKER_VAULT,HOST_BUBBLE coreSystem
     class KIE,INTERVIEW,STRUCTURER,IPFS_PACKAGER,NFT_BUILDER coreSystem
     class TASK_ORCHESTRATOR,TRUEMARK,ALPHA_CERTSIG,SERIAL_VAULT supportingSystem
     class DOCKER_COMPOSE,KUBERNETES,REDIS,CONSUL,DEPLOY_SH,DEPLOY_IONOS,DEPLOY_K8S infrastructure

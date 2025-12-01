@@ -1,0 +1,10 @@
+{
+    "worker_name": "TEMPLATE_WORKER",
+    "worker_type": "TEMPLATE_TYPE",
+    "class_code": "000.000.000",
+    "ledger_code": "000.000.000",
+    "model_number": "TEMPLATE-0000000000",
+    "serial_number": "TEMPLATE-WKR-00000000-0000",
+    "created_at": "TEMPLATE_DATE",
+    "updated_at": "TEMPLATE_DATE"
+}

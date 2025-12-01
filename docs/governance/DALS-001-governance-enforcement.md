@@ -29,10 +29,10 @@
 - ✅ Enforced: `"pending_mints": 0, "completed_today": 0` (real status)
 - ✅ Added: `"mint_engine": "disconnected"` when offline
 
-**`/api/modules/prometheus/integration`**
-- ❌ Removed: `"reasoning_cycles": 15678, "data_flow_rate": "2.3 GB/hour"` (fake metrics)
-- ✅ Enforced: `"reasoning_cycles": 0, "data_flow_rate": "—"` (real status)
-- ✅ Added: `"ecosystem_health": "disconnected"` when offline
+**`/api/harmonizer/status`**
+- ❌ Removed: Fake convergence metrics and verdict counts
+- ✅ Enforced: `"active_cycles": 0, "current_verdict_confidence": 0.0` (real status)
+- ✅ Added: `"status": "inactive"` when harmonizer offline
 
 **`/api/simulation/generate-activity`**
 - ❌ Removed: Fake activity generation with hardcoded events

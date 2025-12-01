@@ -72,16 +72,66 @@ CertSig blockchain module status (DALS-001 compliant).
 }
 ```
 
-#### GET `/api/v1/prometheus/status`
-Prometheus metrics module status (DALS-001 compliant).
+#### GET `/api/harmonizer/status`
+Gyro-Cortical Harmonizer status - Final verdict engine (DALS-001 compliant).
 
 **Response (when inactive):**
 ```json
 {
-  "active": false,
-  "metrics_collected": 0,
-  "scrape_targets": 0,
-  "status": "offline"
+  "status": "inactive",
+  "active_cycles": 0,
+  "last_convergence": null,
+  "current_verdict_confidence": 0.0,
+  "stability_threshold": 3.0,
+  "philosophical_guides_used": 0
+}
+```
+
+**Response (when active):**
+```json
+{
+  "status": "active",
+  "active_cycles": 5,
+  "last_convergence": "9445.123456",
+  "current_verdict_confidence": 0.87,
+  "stability_threshold": 3.0,
+  "philosophical_guides_used": 3
+}
+```
+
+#### POST `/api/harmonizer/reason`
+Process reasoning request through Gyro-Cortical Harmonizer.
+
+**Request:**
+```json
+{
+  "logic_packets": [
+    {
+      "packet_type": "helices",
+      "content": {"patterns": ["pattern1", "pattern2"]},
+      "confidence": 0.85,
+      "source_module": "pattern_analyzer"
+    }
+  ],
+  "context": {"request_id": "req_123"}
+}
+```
+
+**Response:**
+```json
+{
+  "verdict": {
+    "confidence": 0.87,
+    "risk_score": 0.23,
+    "ethical_alignment": 0.91,
+    "recommendations": []
+  },
+  "processing_time_ms": 245.67,
+  "convergence_cycles": 3,
+  "philosophical_guide": "categorical_imperative",
+  "stability_achieved": true,
+  "security_gate": {"block": false},
+  "timestamp": "9445.123456"
 }
 ```
 

@@ -16,6 +16,68 @@ import math
 import random
 
 
+class RiskHeuristicsAnalyzer:
+    """Analyzes risk patterns in evidence and analysis results."""
+
+    def __init__(self):
+        self.risk_patterns = {
+            "high_uncertainty": {
+                "condition": lambda score, band, evidence_count, evidence_types: score < 0.5 or band == "WIDE",
+                "severity": "HIGH",
+                "description": "High uncertainty detected - additional evidence recommended"
+            },
+            "insufficient_evidence": {
+                "condition": lambda score, band, evidence_count, evidence_types: evidence_count < 3,
+                "severity": "MEDIUM",
+                "description": "Insufficient evidence types - minimum 3 recommended"
+            },
+            "conflicting_signals": {
+                "condition": lambda score, band, evidence_count, evidence_types: score < 0.3,
+                "severity": "HIGH",
+                "description": "Conflicting evidence signals detected"
+            },
+            "weak_coherence": {
+                "condition": lambda score, band, evidence_count, evidence_types: score < 0.6 and band == "WIDE",
+                "severity": "MEDIUM",
+                "description": "Weak evidence coherence with high variance"
+            },
+            "regulatory_gaps": {
+                "condition": lambda score, band, evidence_count, evidence_types: not any(
+                    ev in ["kyc_compliant", "aml_screened", "regulatory_approved"] for ev in evidence_types
+                ),
+                "severity": "MEDIUM",
+                "description": "Potential regulatory compliance gaps detected"
+            }
+        }
+
+    def analyze_risks(self, shim_score: float, confidence_band: str,
+                      evidence_count: int, evidence_types: List[str]) -> List[Dict[str, Any]]:
+        """Analyze evidence for risk patterns."""
+        risks = []
+
+        for risk_name, pattern in self.risk_patterns.items():
+            if pattern["condition"](shim_score, confidence_band, evidence_count, evidence_types):
+                risks.append({
+                    "risk_type": risk_name,
+                    "severity": pattern["severity"],
+                    "description": pattern["description"],
+                    "recommendation": self._get_recommendation(risk_name)
+                })
+
+        return risks
+
+    def _get_recommendation(self, risk_type: str) -> str:
+        """Get recommendation for specific risk type."""
+        recommendations = {
+            "high_uncertainty": "Gather additional evidence types and verify sources",
+            "insufficient_evidence": "Collect at least 3 different evidence types",
+            "conflicting_signals": "Review evidence for inconsistencies and resolve conflicts",
+            "weak_coherence": "Strengthen evidence chain and reduce variance",
+            "regulatory_gaps": "Conduct regulatory compliance check and add required evidence"
+        }
+        return recommendations.get(risk_type, "Review analysis and consult human expert")
+
+
 class SphericalHarmonicAnalyzer:
     """Analyzes evidence using spherical harmonic resonance patterns."""
 
@@ -135,6 +197,7 @@ class DALSAdvisor:
 
     def __init__(self):
         self.analyzer = SphericalHarmonicAnalyzer()
+        self.risk_analyzer = RiskHeuristicsAnalyzer()
         self.version = "shim_v1.1_spherical"
 
     def _generate_asset_id(self) -> str:
@@ -184,6 +247,14 @@ class DALSAdvisor:
         confidence_band = self.analyzer.calculate_confidence_band(evidence_weighting)
         explanation = self.analyzer.generate_explanation(claim, evidence_weighting, shim_score, verdict)
 
+        # Perform risk analysis
+        risk_flags = self.risk_analyzer.analyze_risks(
+            shim_score=shim_score,
+            confidence_band=confidence_band,
+            evidence_count=len(evidence),
+            evidence_types=evidence
+        )
+
         # Generate metadata
         timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
         asset_id = self._generate_asset_id()
@@ -201,6 +272,7 @@ class DALSAdvisor:
             "confidence_band": confidence_band,
             "evidence_weighting": {k: round(v, 2) for k, v in evidence_weighting.items()},
             "explanation": explanation,
+            "risk_flags": risk_flags,
             "advisory_mode": True,
             "enforcement": "NONE",
             "recommended_action": recommended_action,
@@ -226,7 +298,7 @@ def validate_shim_output(output: Dict[str, Any]) -> bool:
         required_fields = [
             "version", "timestamp", "asset_id", "claim", "shim_score",
             "verdict", "confidence_band", "evidence_weighting",
-            "explanation", "advisory_mode", "enforcement",
+            "explanation", "risk_flags", "advisory_mode", "enforcement",
             "recommended_action", "audit_trace_id"
         ]
 

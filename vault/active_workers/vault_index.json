@@ -1,0 +1,101 @@
+{
+  "vault_type": "active_workers",
+  "description": "Live deployment vault for active worker instances",
+  "created_at": "2025-12-01T05:40:00Z",
+  "last_updated": "2025-12-01T05:40:00Z",
+  "total_deployments": 5,
+  "sites": {
+    "TrueMarkMint": {
+      "deployment_date": "2025-12-01T05:40:00Z",
+      "workers": [
+        "Nora_TrueMarkMint_2025",
+        "Victor_TrueMarkMint_2025",
+        "Lena_TrueMarkMint_2025",
+        "Miles_TrueMarkMint_2025",
+        "Cali_TrueMarkMint_2025"
+      ],
+      "status": "active",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0,
+        "avg_response_time": 0.0
+      }
+    }
+  },
+  "workers": {
+    "Nora_TrueMarkMint_2025": {
+      "worker_id": "nora_truemarkmint_2025",
+      "name": "Nora",
+      "status": "active",
+      "site": "TrueMarkMint",
+      "created_from": "blank_nora_v1",
+      "last_active": "2025-12-01T05:40:00Z",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0
+      }
+    },
+    "Victor_TrueMarkMint_2025": {
+      "worker_id": "victor_truemarkmint_2025",
+      "name": "Victor",
+      "status": "active",
+      "site": "TrueMarkMint",
+      "created_from": "blank_victor_v1",
+      "last_active": "2025-12-01T05:40:00Z",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0
+      }
+    },
+    "Lena_TrueMarkMint_2025": {
+      "worker_id": "lena_truemarkmint_2025",
+      "name": "Lena",
+      "status": "active",
+      "site": "TrueMarkMint",
+      "created_from": "blank_lena_v1",
+      "last_active": "2025-12-01T05:40:00Z",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0
+      }
+    },
+    "Miles_TrueMarkMint_2025": {
+      "worker_id": "miles_truemarkmint_2025",
+      "name": "Miles",
+      "status": "active",
+      "site": "TrueMarkMint",
+      "created_from": "blank_miles_v1",
+      "last_active": "2025-12-01T05:40:00Z",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0
+      }
+    },
+    "Cali_TrueMarkMint_2025": {
+      "worker_id": "cali_truemarkmint_2025",
+      "name": "Cali",
+      "status": "active",
+      "site": "TrueMarkMint",
+      "created_from": "blank_cali_v1",
+      "singleton": true,
+      "last_active": "2025-12-01T05:40:00Z",
+      "performance": {
+        "total_interactions": 0,
+        "success_rate": 100.0
+      }
+    }
+  },
+  "deployment_rules": {
+    "auto_backup_enabled": true,
+    "backup_interval_seconds": 21600,
+    "performance_monitoring": true,
+    "health_checks": true,
+    "emergency_shutdown": true
+  },
+  "maintenance": {
+    "last_backup": null,
+    "last_health_check": "2025-12-01T05:40:00Z",
+    "system_health": "excellent",
+    "alerts": []
+  }
+}

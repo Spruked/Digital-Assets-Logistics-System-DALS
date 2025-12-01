@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cali_X_One – MetaMask Signature</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#0d1117;color:#c9d1d9;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}
+    h1{color:#58a6ff;margin-bottom:.5rem}
+    button{background:#238636;color:#fff;border:none;padding:.75rem 1.5rem;border-radius:6px;font-size:1rem;cursor:pointer}
+    button:disabled{background:#21262d;cursor:not-allowed}
+    #status{margin-top:1rem;font-size:.9rem}
+    code{background:#161b22;padding:2px 6px;border-radius:4px}
+  </style>
+</head>
+<body>
+  <h1>Cali_X_One Identity Seal</h1>
+  <p>Connect MetaMask and sign Cali’s core hash to lock her identity.</p>
+  <button id="signBtn">Connect MetaMask</button>
+  <div id="status"></div>
+
+  <script type="module">
+    const CORE_URL = '/api/cali/core-hash';
+    const SIGN_URL = '/api/cali/sign';
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function connectAndSign() {
+      if (!window.ethereum) return alert('MetaMask not found');
+      try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const addr = accounts[0];
+        const { hash } = await (await fetch(CORE_URL)).json();
+        const sig = await ethereum.request({ method: 'personal_sign', params: [`Cali_X_One core hash: ${hash}`, addr] });
+
+        const payload = { status: "signed", addr, sig, hash, timestamp: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'cali_sig.json';
+        link.click();
+        document.getElementById('status').innerText = '✅ Signature downloaded. Move cali_sig.json to iss_module/cali_x_one/';
+      } catch (err) {
+        document.getElementById('status').innerText = '❌ ' + err.message;
+      }
+    }
+
+    document.getElementById('signBtn').addEventListener('click', connectAndSign);
+  </script>
+</body>
+</html>

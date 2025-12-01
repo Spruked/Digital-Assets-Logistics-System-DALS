@@ -1,219 +1,163 @@
-# ISS Module - Prometheus Prime Integration Complete! 🚀
+# ISS Module – Prometheus Prime Integration (DEPRECATED)
 
-# Reference: See /docs/governance/DALS_Phase_1_2_Integration_Plans_2025-10-05.pdf
+**Deprecation Date:** 2025-11-16
+**Replacement:** Unified Cognition Module (UCM) + Gyro-Cortical Harmonizer
 
 ## Overview
 
-The ISS Module has been successfully transformed into a **plug-and-play microservice** compatible with the Prometheus Prime cognitive architecture. It now provides seamless integration with your API Gateway, service discovery, and microservices ecosystem.
+The ISS Module originally included a complete integration layer for the **Prometheus Prime cognitive gateway**. As the architecture evolved, Prometheus Prime was **fully superseded by the Unified Cognition Module (UCM)** and the **Gyro-Cortical Harmonizer**, which now serve as the definitive reasoning, validation, and articulation chain.
 
-## ✅ What's Been Delivered
+Prometheus Prime integration has now been:
 
-### 1. **Prometheus Prime Integration Adapter** (`prometheus_integration.py`)
-- Compatible API contracts with your existing models
-- Service health checks matching Prometheus Prime format
-- Reasoning pipeline integration
-- Vault management and queries
-- Structured logging with correlation IDs
+* **Removed from the DALS codebase**
+* **Archived as historical documentation**
+* **Replaced by direct UCM communication routes**
+* **Retained only for backward security reference**
 
-### 2. **Microservice Configuration** (`config.py`)
-- Environment-based configuration with `.env` support
-- Service discovery settings (Consul compatibility)
-- Circuit breaker and rate limiting configuration
-- Security and CORS settings
-- Prometheus Prime specific settings
+## 🔥 Why It Was Deprecated
 
-### 3. **ISS Controller Service** (`service.py`)
-- Standalone microservice ready for deployment
-- FastAPI app with automatic OpenAPI documentation
-- Signal handling for graceful shutdown
-- Service registration capabilities
-- CLI interface for management
+1. **UCM absorbed all reasoning responsibilities**
+2. **Gyro-Cortical Harmonizer became the final verdict engine**
+3. **New modules (Helices, EchoStack, Drift, Vaults, Glyphs)** made Prometheus obsolete
+4. **Security features were updated** to use UCM/Harmonizer verdicts instead of Prometheus verdicts
+5. The Prometheus pipeline conflicted with:
 
-### 4. **Structured Logging** (`logging_config.py`)
-- JSON formatted logs for production environments
-- Console logs for development
-- Correlation ID support for request tracing
-- Performance metrics logging
-- Compatible with Prometheus Prime logging infrastructure
+   * UCM's 5+1 logic cycles
+   * Symbolic gyroscope stabilization
+   * ±3σ convergence validation
+   * Consent protocol constraints
+   * New articulation engine (POM)
 
-### 5. **Complete Deployment Stack**
-- **Dockerfile** with multi-stage build for production
-- **docker-compose.yml** with full stack (Redis, Consul, monitoring)
-- **deployment script** (`deploy.sh`) for automated deployment
-- **environment configuration** (`.env.example`)
-- **comprehensive documentation** (`DEPLOYMENT.md`)
-
-## 🔌 Integration Points
-
-### API Gateway Integration
-```python
-# In your API Gateway main.py:
-@app.post("/api/v1/reason", response_model=ReasoningResponse)
-async def process_reasoning(request: ReasoningRequest):
-    iss_service = await service_registry.get_service("iss-controller")
-    async with http_client as client:
-        response = await client.post(
-            f"{iss_service.url}/api/v1/process",
-            json=request.dict()
-        )
-        return response.json()
-```
-
-### Service Discovery
-```yaml
-# Automatic registration:
-service:
-  name: iss-controller
-  url: http://iss-controller:8003
-  health_check: /health
-  capabilities: [reasoning_processing, vault_queries, time_anchoring]
-```
-
-### Vault Integration
-```python
-# Query ISS vault from other services:
-vault_request = VaultQueryRequest(query={"category": "reasoning"})
-response = await iss_client.post("/api/v1/vault/query", json=vault_request.dict())
-```
-
-## 🚀 Quick Start
-
-### 1. Deploy Immediately
-```bash
-# Make deployment script executable
-chmod +x deploy.sh
-
-# Deploy full stack
-./deploy.sh deploy
-
-# Check status
-./deploy.sh status
-```
-
-### 2. Verify Integration
-```bash
-# Health check
-curl http://localhost:8003/health
-
-# API documentation
-open http://localhost:8003/docs
-
-# Test reasoning endpoint
-curl -X POST http://localhost:8003/api/v1/process \
-  -H "Content-Type: application/json" \
-  -d '{"input_data": {"query": "test"}, "timeout_ms": 1000}'
-```
-
-### 3. Integration Test
-```bash
-# Run comprehensive integration tests
-python test_integration.py
-```
-
-## 📋 API Endpoints Ready for Your Gateway
-
-| Endpoint | Method | Purpose | Called By |
-|----------|---------|---------|-----------|
-| `/health` | GET | Service health check | Load balancer, monitoring |
-| `/api/v1/process` | POST | Main reasoning pipeline | API Gateway |
-| `/api/v1/vault/query` | POST | Query vault entries | API Gateway, other services |
-| `/api/v1/log` | POST | Add captain's log entry | Any service |
-| `/api/v1/status` | GET | Detailed service status | Monitoring, debugging |
-
-## 🔧 Configuration for Your Environment
-
-### Basic Integration (`.env`)
-```bash
-# Service Configuration
-ISS_SERVICE_NAME=iss-controller
-ENVIRONMENT=production
-ISS_PORT=8003
-
-# Your Prometheus Prime Integration
-API_GATEWAY_URL=http://your-api-gateway:8000
-SERVICE_REGISTRY_URL=http://your-consul:8500
-
-# External Services (update with your URLs)
-COCHLEAR_PROCESSOR_URL=http://cochlear-processor:8001
-PHONATORY_OUTPUT_URL=http://phonatory-output:8002
-VAULT_MANAGER_URL=http://vault-manager:8004
-```
-
-## 📊 Logging & Monitoring Ready
-
-### Structured Logs (JSON Format)
-```json
-{
-  "timestamp": "2025-10-02T22:15:30.123Z",
-  "level": "info",
-  "service": "iss-controller",
-  "correlation_id": "abc-123-def",
-  "message": "Reasoning request completed",
-  "cycle_id": "iss_1696284930123",
-  "processing_time_ms": 450.2
-}
-```
-
-### Health Checks
-- Compatible with your load balancer health checks
-- Detailed dependency status
-- Performance metrics included
-
-## 🎯 Key Features for Prometheus Prime
-
-### ✅ **Time Anchoring**
-- Stardate calculations for all operations
-- Julian date timestamps
-- Market time awareness
-- Blockchain/NFT timestamping ready
-
-### ✅ **Reasoning Pipeline Integration**
-- Compatible request/response models
-- Correlation ID support
-- Performance tracking
-- Error handling with context
-
-### ✅ **Vault Management**
-- Captain's log entries as vault storage
-- Query capabilities with filtering
-- Export in multiple formats
-- Data integrity validation
-
-### ✅ **Service Discovery Ready**
-- Automatic registration
-- Health check endpoints
-- Capability advertising
-- Graceful shutdown
-
-### ✅ **Production Ready**
-- Docker containerized
-- Configuration management
-- Security features
-- Monitoring integration
-
-## 🔗 Next Steps for Integration
-
-1. **Update your API Gateway** to route reasoning requests to ISS Controller
-2. **Configure service discovery** to register ISS Controller
-3. **Update CORS settings** if needed for your frontend
-4. **Add monitoring** endpoints to your Prometheus configuration
-5. **Configure logging aggregation** to collect ISS Controller logs
-
-## 📞 Support
-
-The ISS Module is now **fully compatible** with your Prometheus Prime architecture. All endpoints follow your existing patterns, logging is structured for your infrastructure, and deployment is containerized for your DevOps pipeline.
-
-### Troubleshooting
-- Check logs: `./deploy.sh logs iss-controller`
-- Test health: `curl http://localhost:8003/health`
-- Validate config: `python -m iss_module.service --validate-config`
-- Run integration tests: `python test_integration.py`
-
-### Documentation
-- API docs: `http://localhost:8003/docs` (when running)
-- Full deployment guide: `DEPLOYMENT.md`
-- Architecture details: `FOLDER_TREE.md`
+Prometheus was not "broken" — it was **outgrown**.
 
 ---
 
-**🎉 The ISS Module is ready to enhance your Prometheus Prime cognitive architecture with time anchoring, vault management, and reasoning pipeline integration!**
+# 🧬 Replacement Architecture
+
+### Old Path
+
+```
+ISS → Prometheus Integration → Reasoning → Security → Output
+```
+
+### New Path
+
+```
+ISS → UCM Modules → Gyro-Cortical Harmonizer → Consent Protocol → Articulation → Output
+```
+
+**This is now the official cognitive pipeline.**
+
+---
+
+# 🧠 Gyro-Cortical Harmonizer (Final Verdict Layer)
+
+The Harmonizer is now the **final reasoning stage** before any output — text, voice, or API.
+
+Its core responsibilities:
+
+### 1. Run recursive cognitive cycles
+
+* **5 logic JSON packets** (from Helices, EchoStack, Drift, Vault, Security)
+* **1 philosophical guide** (Kant, Locke, Hume, Stoicism, etc.)
+
+This is your **5+1 combinatorial reasoning cycle**.
+
+### 2. Enforce non-reuse
+
+Each cycle uses a **new set** of logic packets and philosophical guides — prevents bias and cognitive echo.
+
+### 3. Stabilize verdict
+
+The symbolic gyroscope "spins" through as many cycles as needed until the reasoning converges within **±3 standard deviations** of stability.
+
+This ensures:
+
+* clarity
+* consistency
+* precision
+* ethical alignment
+
+### 4. Final articulation
+
+Only after convergence does the Harmonizer permit:
+
+* textual articulation
+* phonatory output (Coqui/POM)
+* external API response
+* memory vault updates
+
+Nothing leaves the system without Harmonizer approval.
+
+---
+
+# 🛡 Security Replacement (Prometheus → UCM + Harmonizer)
+
+Anywhere Prometheus previously provided a "verdict" or "risk score," it is now replaced by:
+
+```
+verdict = UCM → Harmonizer.final_verdict
+```
+
+Security checks now read:
+
+```
+if verdict.security_gate.block:
+    deny_request()
+```
+
+or
+
+```
+if verdict.risk_score > 0.8:
+    raise SecurityAlert
+```
+
+This keeps the entire security system intact.
+
+---
+
+# 📜 Historical Archive (for transparency)
+
+To preserve accuracy and trust, the original Prometheus integration notes remain archived in:
+
+```
+docs/archive/PROMETHEUS_INTEGRATION_v1.md
+vault/DEPRECATION_LOG.json
+```
+
+A deprecation record is included:
+
+```json
+{
+  "component": "Prometheus Prime Integration Layer",
+  "deprecated_on": "2025-11-16",
+  "replaced_by": "Unified Cognition Module (UCM) + Gyro-Cortical Harmonizer",
+  "reason": "Cognitive system evolution and new architecture layers",
+  "notes": "Security features migrated to UCM verdict system."
+}
+```
+
+---
+
+# 🎯 Summary
+
+Prometheus Prime is officially:
+
+* **Depreciated**
+* **Removed**
+* **Replaced**
+* **Documented**
+* **Archived**
+* **Superseded by UCM and Harmonizer**
+
+### And the Gyro-Cortical Harmonizer is now:
+
+✔ The final authority
+✔ The last cognitive checkpoint
+✔ The stability governor
+✔ The articulation gatekeeper
+✔ The ethical/spin-based truth resolver
+✔ The heart of the entire reasoning chain
+
+Exactly the way you envisioned it.

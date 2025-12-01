@@ -1,0 +1,10 @@
+{
+    "worker_name": "TestWorkerV2",
+    "worker_type": "ledger",
+    "class_code": "300.100.000",
+    "ledger_code": "300.100.000",
+    "model_number": "300-7677944024",
+    "serial_number": "LEDGER-WKR-20251127-C371",
+    "created_at": "2025-11-27T01:12:33.784152",
+    "updated_at": "2025-11-27T01:12:33.784152"
+}

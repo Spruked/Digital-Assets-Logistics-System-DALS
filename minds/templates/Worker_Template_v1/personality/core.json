@@ -1,0 +1,73 @@
+{
+  "dna_metadata": {
+    "version": "1.0",
+    "generated_timestamp": "2025-11-26T00:00:00Z",
+    "dna_signature": "a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890"
+  },
+  "cognitive_core": {
+    "primary_trait": "analytical",
+    "secondary_traits": ["logical", "systematic"],
+    "trait_levels": {
+      "analytical": 0.8,
+      "logical": 0.9,
+      "systematic": 0.8,
+      "creative": 0.6,
+      "intuitive": 0.5,
+      "holistic": 0.4
+    }
+  },
+  "emotional_core": {
+    "primary_trait": "pragmatic",
+    "secondary_traits": ["contemplative"],
+    "trait_levels": {
+      "pragmatic": 0.9,
+      "contemplative": 0.7,
+      "empathetic": 0.6,
+      "stoic": 0.8,
+      "expressive": 0.4,
+      "optimistic": 0.5
+    }
+  },
+  "social_core": {
+    "primary_trait": "collaborative",
+    "secondary_traits": ["supportive"],
+    "trait_levels": {
+      "collaborative": 0.8,
+      "supportive": 0.7,
+      "independent": 0.6,
+      "leadership": 0.5,
+      "diplomatic": 0.6,
+      "direct": 0.7
+    }
+  },
+  "ethical_core": {
+    "primary_trait": "utilitarian",
+    "secondary_traits": ["contextual"],
+    "trait_levels": {
+      "utilitarian": 0.9,
+      "contextual": 0.8,
+      "deontological": 0.6,
+      "virtue_based": 0.7,
+      "consequentialist": 0.8,
+      "absolute": 0.4
+    }
+  },
+  "evolutionary_potential": {
+    "learning_capacity": 0.8,
+    "adaptability": 0.7,
+    "growth_potential": 0.9,
+    "resilience": 0.8
+  },
+  "behavioral_modifiers": {
+    "stress_response": "analytical",
+    "decision_speed": "deliberate",
+    "risk_tolerance": "moderate",
+    "change_adaptability": "high"
+  },
+  "personality_weights": {
+    "logic_vs_emotion": 0.8,
+    "individual_vs_group": 0.6,
+    "tradition_vs_innovation": 0.7,
+    "detail_vs_big_picture": 0.8
+  }
+}

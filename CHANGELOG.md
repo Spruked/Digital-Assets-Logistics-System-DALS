@@ -5,6 +5,57 @@ All notable changes to the Digital Asset Logistics System (DALS) will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-12-01
+
+### Added
+- **🎤 Cali_X_One Host Bubble**: Sovereign AI supervisor with voice-activated interface
+  - Floating blue orb (bottom-right corner) on all pages
+  - Wake word "Cali" for voice activation
+  - WebSocket-based real-time communication
+  - ElevenLabs voice synthesis with custom personality
+  - System orchestration and monitoring capabilities
+  - Glassmorphic UI design with mobile responsiveness
+
+- **👥 Worker Vault System**: Scalable worker deployment and personality management
+  - **Worker Inventory Vault**: Master templates for blank worker instances
+  - **Active Workers Vault**: Live deployments with individual worker folders
+  - **Worker Cast**: Nora, Victor, Lena, Miles, Cali_X_One personalities
+  - **Performance Monitoring**: Real-time metrics and health tracking
+  - **Automated Backups**: 6-hour intervals with integrity verification
+  - **Deployment Tracking**: Complete audit trail and version control
+
+- **🏗️ Dual-Vault Architecture**: Secure worker management system
+  - Template-based deployment from inventory vault
+  - Individual worker isolation in active vault
+  - Personality preservation and memory retention
+  - Sovereign AI integration with CALEON security validation
+
+### Changed
+- **🔄 Universal Cali_X_One Integration**: Host bubble available across all DALS interfaces
+  - Dashboard, login, and voice portal pages
+  - Server-rendered HTML with client-side speech recognition
+  - WebSocket communication channels established
+  - Sovereign AI orchestration capabilities enabled
+
+- **🐳 Docker Environment Updates**: Worker vault and host bubble support
+  - New environment variables for vault management
+  - Volume mounts for persistent worker storage
+  - Directory creation during container build
+  - Production-ready configuration updates
+
+- **📚 Documentation Updates**: Comprehensive architecture documentation
+  - README.md updated with new features and capabilities
+  - Docker quickstart guide enhanced with Cali_X_One instructions
+  - Architecture diagram updated with worker vault and host bubble
+  - API documentation reflecting new endpoints
+
+### Technical Details
+- **Host Bubble Components**: HTML template, CSS styling, JavaScript speech recognition
+- **Worker Templates**: JSON manifests with personality traits and behavior rules
+- **Vault Management**: Automated deployment tracking and performance monitoring
+- **Voice Integration**: ElevenLabs API with fallback synthesis support
+- **WebSocket Communication**: Real-time sovereign AI interaction
+
 ## [1.0.0] - 2025-10-05
 
 ### Added
@@ -23,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/api/v1/iss/now` - Current canonical stardate and status
   - `/api/v1/caleon/status` - Caleon AI module status (DALS-001 compliant)
   - `/api/v1/certsig/status` - CertSig blockchain module status (DALS-001 compliant)
-  - `/api/v1/prometheus/status` - Prometheus metrics status (DALS-001 compliant)
+  - `/api/v1/ucm/status` - Unified Cognition Module status (DALS-001 compliant)
+  - `/api/v1/harmonizer/status` - Gyro-Cortical Harmonizer verdict status (DALS-001 compliant)
   - `/health` - Service health check
   - `/docs` - Interactive API documentation
 

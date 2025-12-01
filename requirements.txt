@@ -53,6 +53,7 @@ visidata>=2.11
 # Security
 passlib[bcrypt]>=1.7.4
 python-dotenv>=1.0.0
+pynacl>=1.5.0
 
 # Date and time handling
 python-dateutil>=2.8.2
@@ -77,3 +78,6 @@ plotly>=5.17.0
 # GOAT Module dependencies
 networkx>=3.2.1
 ipfshttpclient>=0.8.0a2  # Fixed: use alpha version that exists
+
+# OBS Bridge dependencies
+obs-websocket-py>=1.0.0

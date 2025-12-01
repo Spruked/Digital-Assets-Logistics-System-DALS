@@ -578,3 +578,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# External modules (not tracked by DALS repo)
+# ...existing code...

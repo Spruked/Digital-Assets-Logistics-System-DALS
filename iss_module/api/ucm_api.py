@@ -11,6 +11,7 @@ from fastapi import APIRouter, HTTPException, Depends, Body
 from typing import Dict, Any, Optional
 from pydantic import BaseModel
 import logging
+import os
 
 from ..integrations.ucm_connector import get_ucm_connector, UCMConnector
 from ..core.caleon_security_layer import CaleonSecurityLayer
@@ -23,6 +24,10 @@ ucm_router = APIRouter(prefix="/api/ucm", tags=["UCM Integration"])
 
 # Initialize security layer (shared with CALEON)
 security_layer = CaleonSecurityLayer()
+
+# Get UCM configuration from environment
+UCM_HOST = os.getenv("UCM_HOST", "localhost")
+UCM_PORT = int(os.getenv("UCM_PORT", "8081"))
 
 
 # ==========================================
@@ -46,7 +51,7 @@ class UCMCommandRequest(BaseModel):
 class UCMConnectionRequest(BaseModel):
     """UCM connection initialization"""
     ucm_host: str = "localhost"
-    ucm_port: int = 8080
+    ucm_port: int = 8081
 
 
 # ==========================================
@@ -104,7 +109,12 @@ async def get_ucm_status():
     Returns health, performance metrics, and connection state
     """
     try:
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
+        
+        # Ensure connection is established
+        if connector.state.value == "disconnected":
+            await connector.connect()
+        
         status = connector.get_status()
         
         # Add CALEON security metrics
@@ -130,7 +140,7 @@ async def get_ucm_status():
 async def disconnect_ucm():
     """Disconnect from UCM"""
     try:
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
         await connector.disconnect()
         
         logger.info("UCM disconnected")
@@ -162,7 +172,7 @@ async def submit_ucm_query(request: UCMQueryRequest):
     - GyroHarmonizer (ethical oversight)
     """
     try:
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
         
         # Submit to UCM
         result = await connector.submit_reasoning_request(
@@ -215,7 +225,7 @@ async def execute_ucm_command(request: UCMCommandRequest):
     4. Founder override can bypass at any point
     """
     try:
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
         
         # Submit to UCM for cognitive evaluation
         ucm_result = await connector.execute_dals_command(
@@ -313,7 +323,7 @@ async def sequential_reasoning(request: UCMReasoningRequest):
             )
 
         # Get UCM connector
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
 
         # Prepare reasoning context
         reasoning_context = {
@@ -403,7 +413,7 @@ async def sequential_reasoning(request: UCMReasoningRequest):
 async def ucm_integration_health():
     """UCM integration health check"""
     try:
-        connector = get_ucm_connector()
+        connector = get_ucm_connector(ucm_host=UCM_HOST, ucm_port=UCM_PORT)
         ucm_health = await connector.health_check()
         
         return {
@@ -421,3 +431,15 @@ async def ucm_integration_health():
             "ucm_service": "unavailable",
             "fallback_mode": "standalone"
         }
+
+# ==========================================
+# CANS AUTONOMIC SYNC INTEGRATION
+# ==========================================
+
+# Import and include CANS compatibility router
+try:
+    from .cans_sync import router as cans_sync_router
+    ucm_router.include_router(cans_sync_router, prefix="/sync", tags=["CANS Sync"])
+    logger.info("CANS autonomic sync endpoints enabled for UCM Integration")
+except ImportError as e:
+    logger.warning(f"CANS sync router not available: {e}")

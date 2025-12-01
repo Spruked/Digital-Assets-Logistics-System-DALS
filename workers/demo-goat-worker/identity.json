@@ -1,0 +1,11 @@
+{
+    "worker_name": "demo-goat-worker",
+    "worker_type": "goat",
+    "class_code": "A1",
+    "ledger_code": "A1",
+    "model_number": "A1-5981660308",
+    "serial_number": "GOAT-WKR-20251127-4E94",
+    "glyph_trace": "GOAT-GOAT-WKR-20251127-4E94-8c664315",
+    "created_at": "2025-11-27T08:05:16.413494",
+    "updated_at": "2025-11-27T08:05:16.413494"
+}

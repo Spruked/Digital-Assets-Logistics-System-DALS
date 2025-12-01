@@ -1,0 +1,11 @@
+{
+    "forge_version": "2.0",
+    "forged_at": "2025-11-27T01:12:33.789149",
+    "template_used": "Worker_Template",
+    "template_hash": "0e052bab3cacd2890dad4b82c7e938c286a9051b5afefca829b2109de94426df",
+    "worker_serial": "LEDGER-WKR-20251127-C371",
+    "worker_model": "300-7677944024",
+    "ledger_code": "300.100.000",
+    "class_code": "300.100.000",
+    "port": 6001
+}

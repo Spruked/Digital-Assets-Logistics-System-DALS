@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.seedvault.org/core/v1.1.0",
+  "vault_name": "SeedVault_Apriori",
+  "vault_id": "seed_apriori",
+  "version": "1.1.0",
+  "category": "Epistemology",
+  "type": "seed",
+  "license": "CC0-1.0",
+  "generated": "2025-10-23T12:00:00Z",
+  "compatibility": "backward-compatible",
+  "description": "Immanuel Kant's a priori knowledge and synthetic a priori judgments, establishing the conditions for possible experience",
+  "author": "Bryan A. Spruk",
+  "philosopher": "Immanuel Kant",
+  "reasoning_type": "a_priori",
+  "immutable": true,
+  "index": {
+    "synthetic_a_priori": "epi:synthetic_a_priori",
+    "categories_understanding": "epi:categories_understanding",
+    "transcendental_idealism": "epi:transcendental_idealism",
+    "moral_imperative": "epi:moral_imperative"
+  },
+  "entries": [
+    {
+      "id": "epi:synthetic_a_priori",
+      "term": "Synthetic A Priori",
+      "type": "concept",
+      "definition": "Judgments that are both informative about the world and known independently of experience, such as mathematical truths and causal necessity",
+      "source_id": "WD:Q51666",
+      "reference_urls": ["https://en.wikipedia.org/wiki/A_priori_and_a_posteriori"],
+      "examples": ["7 + 5 = 12", "Every event has a cause"],
+      "related_ids": ["epi:categories_understanding"]
+    },
+    {
+      "id": "epi:categories_understanding",
+      "term": "Categories of Understanding",
+      "type": "concept",
+      "definition": "The twelve fundamental concepts that the mind uses to organize sensory experience into coherent knowledge",
+      "source_id": "WD:Q51666",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Categories_(Kant)"],
+      "examples": ["Quantity: unity, plurality, totality", "Quality: reality, negation, limitation"],
+      "related_ids": ["epi:transcendental_idealism"]
+    },
+    {
+      "id": "epi:transcendental_idealism",
+      "term": "Transcendental Idealism",
+      "type": "theory",
+      "definition": "The view that space and time are forms of intuition, and the categories are conditions for the possibility of experience",
+      "source_id": "WD:Q51666",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Transcendental_idealism"],
+      "examples": ["Space and time are not things-in-themselves", "Objects conform to our knowledge"],
+      "related_ids": ["epi:synthetic_a_priori"]
+    },
+    {
+      "id": "epi:moral_imperative",
+      "term": "Categorical Imperative",
+      "type": "principle",
+      "definition": "Act only according to that maxim whereby you can at the same time will that it should become a universal law",
+      "source_id": "WD:Q51666",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Categorical_imperative"],
+      "examples": ["Do not lie", "Keep promises"],
+      "related_ids": ["epi:transcendental_idealism"]
+    }
+  ],
+  "learning_principles": [
+    "A priori knowledge provides the necessary structure for empirical knowledge",
+    "Synthetic judgments extend our knowledge beyond mere analysis",
+    "Transcendental arguments establish the conditions of possibility",
+    "Moral law is grounded in rational autonomy"
+  ],
+  "operational_context": {
+    "application_domains": ["mathematics", "science", "ethics", "metaphysics"],
+    "cognitive_level": "transcendental",
+    "integration_requirements": ["epistemic_filter", "recursive_logic"],
+    "validation_methods": ["transcendental_deduction", "moral_reasoning"]
+  }
+}

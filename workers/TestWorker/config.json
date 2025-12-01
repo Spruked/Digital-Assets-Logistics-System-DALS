@@ -1,0 +1,9 @@
+{
+    "worker_serial": "LEDGER-WKR-20251127-0001",
+    "model_number": "300-1466382896",
+    "ledger_code": "300.100.000",
+    "port": 6001,
+    "wedg_home": "LEDGER",
+    "dals_registry_endpoint": "http://dals.local:9000/api/v1/registry/heartbeat",
+    "ucm_host": "http://ucm.local:8000"
+}

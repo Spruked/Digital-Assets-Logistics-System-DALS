@@ -55,6 +55,8 @@ services:
       - ./iss_module/data:/app/data
       - ./vault:/app/vault
       - ./logs:/app/logs
+    ports:
+      - "8003:8003"
     depends_on:
       - redis
       - ollama-service
@@ -75,7 +77,7 @@ services:
     image: python:3.11-slim
     container_name: dals-dashboard
     working_dir: /app
-    command: python dashboard_server.py
+    command: sh -c "pip install uvicorn fastapi jinja2 python-multipart && python dashboard_server.py"
     ports:
       - "8008:8008"
     volumes:

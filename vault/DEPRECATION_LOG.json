@@ -1,0 +1,18 @@
+{
+  "component": "Prometheus Prime Integration Layer",
+  "deprecated_on": "2025-11-16",
+  "replaced_by": "Unified Cognition Module (UCM) + Gyro-Cortical Harmonizer",
+  "reason": "Cognitive system evolution and new architecture layers",
+  "notes": "Security features migrated to UCM verdict system.",
+  "archive_location": "docs/archive/PROMETHEUS_INTEGRATION_v1.md",
+  "replacement_documentation": "docs/integration/PROMETHEUS_INTEGRATION_COMPLETE.md",
+  "migration_guide": "See Gyro-Cortical Harmonizer documentation for new reasoning pipeline",
+  "breaking_changes": [
+    "All Prometheus endpoints removed",
+    "Security verdicts now come from UCM/Harmonizer",
+    "Reasoning pipeline uses 5+1 logic cycles",
+    "Final articulation requires Harmonizer convergence"
+  ],
+  "backward_compatibility": "None - complete architectural replacement",
+  "contact": "Founder override available for emergency compatibility"
+}

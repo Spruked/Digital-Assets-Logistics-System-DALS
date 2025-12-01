@@ -147,7 +147,7 @@ CSMM_CONFIG = {
         "ucm_connector": {
             "enabled": os.getenv("UCM_CONNECTOR_ENABLED", "true").lower() == "true",
             "host": os.getenv("UCM_HOST", "localhost"),
-            "port": int(os.getenv("UCM_PORT", "8080")),
+            "port": int(os.getenv("UCM_PORT", "8081")),
             "timeout": 30,
             "retry_attempts": 3,
         },

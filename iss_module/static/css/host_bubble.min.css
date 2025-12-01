@@ -1,0 +1,158 @@
+/* Host Bubble CSS - April 2026 Production Spec */
+/* Total size: < 2KB gzipped */
+
+.cali-orb {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cali-orb:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 30px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.cali-orb.muted {
+  opacity: 0.6;
+  filter: grayscale(100%);
+}
+
+.cali-orb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E") no-repeat center;
+  background-size: contain;
+  opacity: 0.7;
+}
+
+.cali-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 320px;
+  max-height: 400px;
+  background: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 9998;
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.cali-panel:not(.hidden) {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.cali-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #58a6ff 0%, #3b82f6 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cali-messages {
+  padding: 16px 20px;
+  max-height: 280px;
+  overflow-y: auto;
+  color: #c9d1d9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cali-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cali-messages::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.cali-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.cali-footer {
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #8b949e;
+  font-size: 12px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Lattice animation for orb */
+@keyframes lattice-pulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    box-shadow:
+      0 4px 25px rgba(88, 166, 255, 0.2),
+      0 0 0 1px rgba(88, 166, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+}
+
+.cali-orb.listening {
+  animation: lattice-pulse 2s ease-in-out infinite;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .cali-orb {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .cali-panel {
+    bottom: 80px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-height: 300px;
+  }
+}

@@ -1,5 +1,5 @@
 # Master Docker Compose for Complete DALS Ecosystem
-# Includes DALS Core + CertSig + TrueMark + UCM for Live Video Minting
+# Includes DALS Core + CertSig + TrueMark + Cali_X_One Voice AI Integration
 
 version: '3.8'
 
@@ -27,7 +27,7 @@ services:
       - DASHBOARD_PORT=8008
       - LOG_LEVEL=INFO
       - LOG_FORMAT=json
-      - UCM_INTEGRATION_READY=true
+      - CALI_X_ONE_INTEGRATION_READY=true
       - REDIS_URL=redis://redis:6379
       - REDIS_ENABLED=true
       - MODULE_STATUS_TRACKING=true
@@ -46,20 +46,36 @@ services:
       - PREDICTIVE_FAILURE_MODELING=true
       - HEALTH_TREND_ANALYSIS=true
       - PREVENTION_PROTOCOLS_ACTIVE=true
+      # Cali_X_One Voice AI Integration
+      - CALI_X_ONE_ENABLED=true
+      - HOST_BUBBLE_ENABLED=true
+      - SPEECH_RECOGNITION_ENABLED=true
+      - ELEVENLABS_VOICE_ENABLED=true
+      - WEBSOCKET_COMMUNICATION=true
+      # Worker Vault System
+      - WORKER_VAULT_ENABLED=true
+      - WORKER_INVENTORY_VAULT_PATH=/app/vault/worker_inventory
+      - ACTIVE_WORKERS_VAULT_PATH=/app/vault/active_workers
+      - WORKER_DEPLOYMENT_TRACKING=true
+      - WORKER_PERFORMANCE_MONITORING=true
+      - VAULT_AUTO_BACKUP_ENABLED=true
+      - VAULT_BACKUP_INTERVAL_SECONDS=21600
+      - CALI_VOICE_ENGINE=gtts
+      - CALI_SECURITY_LAYER=active
+      - CALI_METAMASK_INTEGRATION=true
       # Minting Service URLs
-      - CERTSIG_BACKEND_URL=http://alphacertsig-backend:8080
-      - TRUEMARK_BACKEND_URL=http://truemark-backend:5000
-      - UCM_BACKEND_URL=http://ucm-service:8081
+      - CERTSIG_BACKEND_URL=https://api.certsig.com
+      - TRUEMARK_BACKEND_URL=https://api.truemarkmint.com
     volumes:
       - ./iss_module/data:/app/data
       - ./vault:/app/vault
       - ./logs:/app/logs
       - ./config:/app/config:ro  # Mount config for cochlear monitor
+      - ./iss_module/cali_x_one:/app/cali_x_one  # Cali_X_One voice AI integration
     depends_on:
       - redis
       - alphacertsig-backend
       - truemark-backend
-      - ucm-service
     networks:
       - dals-network
     restart: unless-stopped
@@ -130,8 +146,8 @@ services:
       - "3001:80"  # Changed from 3000 to avoid conflict with Shiloh Ridge Farm
     environment:
       - NODE_ENV=production
-      - REACT_APP_BACKEND_URL=http://alphacertsig-backend:8080
-      - REACT_APP_DALS_API_URL=http://dals-controller:8003
+      - REACT_APP_BACKEND_URL=https://api.certsig.com
+      - REACT_APP_DALS_API_URL=https://spruked.com
     depends_on:
       - alphacertsig-backend
     networks:
@@ -181,8 +197,8 @@ services:
       - "8082:8080"  # Changed from 8081 to avoid conflict with UCM
     environment:
       - NODE_ENV=production
-      - REACT_APP_BACKEND_URL=http://truemark-backend:5000
-      - REACT_APP_DALS_API_URL=http://dals-controller:8003
+      - REACT_APP_BACKEND_URL=https://api.truemarkmint.com
+      - REACT_APP_DALS_API_URL=https://spruked.com
     depends_on:
       - truemark-backend
     networks:
@@ -193,35 +209,9 @@ services:
   # COGNITIVE SERVICES
   # ============================================================================
 
-  # UCM Service (Unified Cognition Module)
-  ucm-service:
-    build:
-      context: ./Unified-Cognition-Module-Caleon-Prime-full-System
-      dockerfile: Dockerfile
-    image: ucm-cognitive-engine:v1.0.0
-    container_name: dals-ucm
-    ports:
-      - "8081:8081"  # UCM cognitive brain (matches config.py default)
-    environment:
-      - ENVIRONMENT=production
-      - UCM_PORT=8081
-      - COGNITIVE_MODEL=enabled
-      - DALS_INTEGRATION=true
-      - REDIS_URL=redis://redis:6379
-      - HOST=0.0.0.0
-      - PORT=8081
-    volumes:
-      - ./Unified-Cognition-Module-Caleon-Prime-full-System:/app
-      - ./config:/app/config:ro  # Mount cochlear config
-    networks:
-      - dals-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
+  # Cali_X_One Voice AI Integration (No UCM - Sovereign AI Only)
+  # Cali_X_One provides voice commands and MetaMask-signed identity verification
+  # Integrated directly into DALS controller via volume mount
 
   # Service Discovery (Consul)
   consul:

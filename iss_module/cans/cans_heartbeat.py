@@ -5,10 +5,11 @@
 import time
 import requests
 import logging
+import os
 from iss_module.cans.cans_awareness_bridge import CANSBridge
 from iss_module.csmm.awareness.self_model import get_self_model, ModuleStatus
 
-UCM_HEALTH_URL = "http://localhost:8080/health"
+UCM_HEALTH_URL = f"http://localhost:{os.getenv('UCM_PORT', '8081')}/health"
 self_model = get_self_model()
 
 logger = logging.getLogger("DALS.CANS.Heartbeat")

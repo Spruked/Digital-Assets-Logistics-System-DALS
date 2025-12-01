@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.seedvault.org/core/v1.1.0",
+  "vault_name": "Abductive_Reasoning_SeedVault",
+  "vault_id": "seed_abductive",
+  "version": "1.1.0",
+  "category": "Logic",
+  "type": "seed",
+  "license": "CC0-1.0",
+  "generated": "2025-11-15T12:00:00Z",
+  "compatibility": "backward-compatible",
+  "description": "Abductive reasoning principles for inference to the best explanation, forming hypotheses from incomplete evidence",
+  "author": "Bryan A. Spruk",
+  "framework": "Abductive_Reasoning_Framework",
+  "reasoning_type": "abductive_logic",
+  "immutable": true,
+  "index": {
+    "inference_best_explanation": "logic:inference_best_explanation",
+    "hypothesis_generation": "logic:hypothesis_generation",
+    "plausibility_assessment": "logic:plausibility_assessment",
+    "explanatory_coherence": "logic:explanatory_coherence"
+  },
+  "entries": [
+    {
+      "id": "logic:inference_best_explanation",
+      "term": "Inference to the Best Explanation",
+      "type": "principle",
+      "definition": "Given a set of observations, infer the hypothesis that provides the best explanation for those observations",
+      "source_id": "WD:Q1055858",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Inference_to_the_best_explanation"],
+      "examples": ["Seeing wet grass, infer it rained rather than sprinkler malfunction", "Fossil record best explained by evolution"],
+      "related_ids": ["logic:hypothesis_generation"]
+    },
+    {
+      "id": "logic:hypothesis_generation",
+      "term": "Hypothesis Generation",
+      "type": "process",
+      "definition": "Creating plausible explanations for observed phenomena based on available evidence and background knowledge",
+      "source_id": "WD:Q1055858",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Abductive_reasoning"],
+      "examples": ["Medical diagnosis from symptoms", "Scientific theory formation"],
+      "related_ids": ["logic:plausibility_assessment"]
+    },
+    {
+      "id": "logic:plausibility_assessment",
+      "term": "Plausibility Assessment",
+      "type": "method",
+      "definition": "Evaluating how well a hypothesis explains the evidence and fits with existing knowledge",
+      "source_id": "WD:Q1055858",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Abductive_reasoning"],
+      "examples": ["Comparing competing diagnoses", "Evaluating scientific hypotheses"],
+      "related_ids": ["logic:explanatory_coherence"]
+    },
+    {
+      "id": "logic:explanatory_coherence",
+      "term": "Explanatory Coherence",
+      "type": "criterion",
+      "definition": "The degree to which a hypothesis provides a coherent and unified explanation of multiple observations",
+      "source_id": "WD:Q1055858",
+      "reference_urls": ["https://en.wikipedia.org/wiki/Explanatory_coherence"],
+      "examples": ["Unified theory explaining diverse phenomena", "Simple explanation preferred over complex"],
+      "related_ids": ["logic:inference_best_explanation"]
+    }
+  ],
+  "learning_principles": [
+    "Abduction generates hypotheses that deduction and induction cannot",
+    "Best explanation balances simplicity, scope, and fit with evidence",
+    "Multiple competing hypotheses should be considered",
+    "Background knowledge guides hypothesis generation and evaluation"
+  ],
+  "operational_context": {
+    "application_domains": ["scientific_discovery", "medical_diagnosis", "criminal_investigation", "everyday_reasoning"],
+    "cognitive_level": "hypothetical",
+    "integration_requirements": ["epistemic_filter", "vault_reasoning"],
+    "validation_methods": ["empirical_testing", "predictive_accuracy"]
+  }
+}

@@ -1,0 +1,60 @@
+# DALS Core Structure
+# Generated: November 29, 2025
+
+DALS_ROOT/
+├── alpha-certsig/           # NFT Minting
+├── cans/                    # Autonomic Nervous System
+├── config/                  # Configuration
+├── docs/                    # Documentation
+├── external_modules/        # External Integrations
+├── GOAT/                    # GOAT AI System
+├── iss_module/              # Core ISS Module
+│   ├── api/                 # FastAPI Endpoints
+│   ├── cali_x_one/          # Cali_X_One Voice AI Integration
+│   │   ├── adapter_dals.py  # DALS API Bridge
+│   │   ├── cali_config.json # Configuration
+│   │   ├── cali_dals.py     # Main Plugin Module
+│   │   ├── cali_sig.json    # MetaMask Signature
+│   │   ├── sentinel.py      # AI Security Monitor
+│   │   ├── voice_engine.py  # Voice Processing
+│   │   └── __init__.py      # Package Init
+│   ├── core/                # Core Logic
+│   ├── integrations/        # External Integrations
+│   ├── inventory/           # Asset Inventory
+│   ├── static/              # Static Assets
+│   └── templates/           # HTML Templates
+├── k8s/                     # Kubernetes
+├── knowledge/               # Knowledge Systems
+├── minds/                   # AI Mind Systems
+├── monitoring/              # Monitoring Tools
+├── nginx/                   # Web Server Config
+├── pricing/                 # Pricing Engine
+├── public/                  # Public Assets
+├── symbolic_reasoning/      # Symbolic Reasoning
+├── task-orchestrator/       # Task Orchestration
+├── tik tok-landing/         # Marketing Landing
+├── truemark/                # TrueMark System
+├── truemark-mint/           # Minting Platform
+├── vault/                   # Secure Vault System
+├── worker_forge/            # Worker Creation Engine
+├── workers/                 # Worker Instances
+├── Unified-Cognition-Module-Caleon-Prime-full-System/  # UCM Core
+└── Vault_System_1.0/        # Vault System
+
+# Key Files
+├── dashboard_server.py     # Dashboard Server (Port 8008)
+├── forge_worker_cli.py      # Worker Forge CLI
+├── docker-compose.yml       # Docker Orchestration
+├── Dockerfile               # Container Definition
+├── requirements.txt         # Python Dependencies
+└── setup.py                 # Package Setup
+
+# Service Ports
+├── Port 8003: API Server
+├── Port 8008: Dashboard
+├── Port 3000: Frontend
+└── Port 8080: UCM Brain
+
+# Worker Types (10)
+├── template, goat, mint, finance, ucm_relay
+└── obs, telemetry, ledger, archival, mechanist

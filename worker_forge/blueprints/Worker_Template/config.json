@@ -1,0 +1,9 @@
+{
+    "worker_serial": "TEMPLATE_SERIAL",
+    "model_number": "TEMPLATE_MODEL",
+    "ledger_code": "TEMPLATE_LEDGER",
+    "port": 6000,
+    "wedg_home": "TEMPLATE_TYPE",
+    "dals_registry_endpoint": "http://dals.local:9000/api/v1/registry/heartbeat",
+    "ucm_host": "http://ucm.local:8000"
+}

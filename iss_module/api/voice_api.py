@@ -16,7 +16,7 @@ logger = logging.getLogger("DALS.VoiceProxy")
 voice_router = APIRouter(prefix="/voice", tags=["Voice Communication Portal"])
 
 
-DEFAULT_UCM_VOICE_BASE = "http://localhost:8080/api/voice"
+DEFAULT_UCM_VOICE_BASE = f"http://localhost:{os.getenv('UCM_PORT', '8081')}/api/voice"
 VOICE_PROXY_TIMEOUT = float(os.getenv("UCM_VOICE_TIMEOUT", "15"))
 
 FORWARDED_HEADERS = {

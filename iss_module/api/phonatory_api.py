@@ -286,3 +286,14 @@ async def test_voice_profile(voice_name: str = "caleon_default") -> Dict[str, An
 
 
 logger.info("Phonatory Output Module API initialized")
+
+
+# ==========================================
+# CANS AUTONOMIC SYNC INTEGRATION
+# ==========================================
+try:
+    from .cans_sync import router as cans_sync_router
+    phonatory_router.include_router(cans_sync_router, prefix="/sync", tags=["CANS Sync"])  # exposed as /api/phonatory/sync/*
+    logger.info("CANS autonomic sync endpoints enabled for Phonatory Output")
+except ImportError as e:
+    logger.warning(f"CANS sync router not available for Phonatory Output: {e}")

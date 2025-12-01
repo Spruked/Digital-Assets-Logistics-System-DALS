@@ -52,7 +52,21 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     SELF_MODEL_ENABLED=true \
     AWARENESS_LAYER_ACTIVE=true \
     VOICE_AWARENESS_ENABLED=true \
-    CANS_AUTONOMOUS_MODE=aggressive
+    CANS_AUTONOMOUS_MODE=aggressive \
+    # Cali_X_One Host Bubble
+    CALI_X_ONE_ENABLED=true \
+    HOST_BUBBLE_ENABLED=true \
+    SPEECH_RECOGNITION_ENABLED=true \
+    ELEVENLABS_VOICE_ENABLED=true \
+    WEBSOCKET_COMMUNICATION=true \
+    # Worker Vault System
+    WORKER_VAULT_ENABLED=true \
+    WORKER_INVENTORY_VAULT_PATH=/app/vault/worker_inventory \
+    ACTIVE_WORKERS_VAULT_PATH=/app/vault/active_workers \
+    WORKER_DEPLOYMENT_TRACKING=true \
+    WORKER_PERFORMANCE_MONITORING=true \
+    VAULT_AUTO_BACKUP_ENABLED=true \
+    VAULT_BACKUP_INTERVAL_SECONDS=21600
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
@@ -70,7 +84,8 @@ COPY --from=builder /app /app
 WORKDIR /app
 
 # Create necessary directories
-RUN mkdir -p /app/data/logs /app/data/vault /app/exports && \
+RUN mkdir -p /app/data/logs /app/data/vault /app/exports \
+    /app/vault/worker_inventory /app/vault/active_workers && \
     chown -R iss:iss /app
 
 # Switch to non-root user

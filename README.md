@@ -18,6 +18,8 @@ A comprehensive data management and time anchoring system designed for microserv
 - 📝 **Asset Tracking** - Comprehensive digital asset lifecycle management
 - 🛡️ **DALS-001 Compliance** - Zero-or-empty protocol for ethical data representation
 - 🧠 **Phase 11-A2: Autonomous Predictive Prevention** - Living AI infrastructure with self-healing capabilities
+- 🎤 **Cali_X_One Host Bubble** - Sovereign AI supervisor with voice interface and system orchestration
+- 👥 **Worker Vault System** - Scalable worker deployment and personality management
 - 🔮 **Caleon Prime Integration** - Advanced cognitive AI with voice awareness and self-modeling
 - 🎤 **Voice Awareness System** - Professional AI communication and status reporting
 - 🛡️ **CANS Autonomic Nervous System** - Aggressive autonomous repair and prevention
@@ -183,6 +185,56 @@ kubectl get pods -l app=dals-11a2
 - **Prometheus**: http://localhost:9090
 - **Grafana**: http://localhost:3000
 
+## 🎤 Cali_X_One Host Bubble - Sovereign AI Supervisor
+
+**Cali_X_One** is the sovereign AI supervisor for the entire DALS ecosystem, providing voice-activated system orchestration and real-time assistance. Available across all DALS interfaces through the floating host bubble.
+
+### ✨ Key Capabilities
+- 🎯 **Voice Activation**: Wake word "Cali" triggers the interface
+- 🧠 **System Orchestration**: Supervises all workers and system components
+- 💬 **Real-time Communication**: WebSocket-based instant responses
+- 🎭 **Personality-Driven**: ElevenLabs voice synthesis with custom personality
+- 🔒 **Sovereign Security**: Cryptographic authentication and founder override
+- 📊 **Performance Monitoring**: Real-time system health and worker status
+- 🏗️ **Architecture Awareness**: Deep understanding of DALS components
+
+### 🎯 Host Bubble Interface
+- **Floating Orb**: Always-visible activation point (bottom-right corner)
+- **Collapsible Panel**: Expandable control interface with system overview
+- **Voice Commands**: Natural language interaction with AI supervisor
+- **Status Indicators**: Real-time connection and system health display
+- **Mobile Responsive**: Optimized for all device sizes
+
+### 🔮 Sovereign AI Features
+- **UCM Integration**: Direct connection to cognitive brain (port 8080)
+- **CALEON Security**: Ethical validation and consent gates
+- **Founder Override**: Emergency bypass for critical situations
+- **Self-Modeling**: Continuous learning and adaptation
+- **Predictive Assistance**: Proactive system optimization suggestions
+
+## 👥 Worker Vault System
+
+**Scalable worker deployment and personality management system** with dual-vault architecture for secure, versioned worker instances.
+
+### 🏗️ Architecture Overview
+- **Worker Inventory Vault**: Master templates for all worker types
+- **Active Workers Vault**: Live deployments with individual worker folders
+- **Personality Preservation**: Complete worker state and memory retention
+- **Performance Tracking**: Real-time metrics and health monitoring
+
+### 👷 Worker Cast (TrueMark Mint Deployment)
+- **Nora**: Customer service specialist with empathetic communication
+- **Victor**: Technical operations expert with system maintenance focus
+- **Lena**: Quality assurance specialist with compliance expertise
+- **Miles**: Business development lead with strategic planning skills
+- **Cali_X_One**: Sovereign AI supervisor (singleton instance)
+
+### 📊 Vault Management
+- **Automated Backups**: 6-hour intervals with integrity verification
+- **Health Monitoring**: Continuous performance and availability checks
+- **Deployment Tracking**: Complete audit trail of worker activations
+- **Version Control**: Template versioning for worker evolution
+
 ## 🚀 Quick Start
 
 ### Installation
@@ -280,6 +332,50 @@ async def process_reasoning(request: dict):
 # CALEON security layer validates all UCM operations
 # Thought Trace UI provides real-time reasoning visualization
 ```
+
+## 🔁 CANS Autonomic Sync Integration
+
+The CANS autonomic nervous system expects modules to expose a small, standardized set of endpoints so it can monitor and synchronize all cognitive components across the system. To ensure the brain (UCM/Harmonizer) responds to the autonomic nervous system, wire the `cans_sync` router into each module's API.
+
+1. Create a universal CANS router at `iss_module/api/cans_sync.py` (already provided). It exposes the three standard endpoints:
+    - `GET /heartbeat` — quick heartbeat acknowledgement
+    - `POST /sync` — receive master cycle and timestamp
+    - `GET /monitor` — current health & score
+
+2. Include the router into any module router. Example for UCM repository:
+
+```python
+from .cans_sync import router as cans_sync_router
+ucm_router.include_router(cans_sync_router, prefix="/sync", tags=["CANS Sync"])  # exposes /api/ucm/sync/*
+```
+
+3. The DALS core (API) now includes this router for multiple modules; we also wire into `cochlear` and `phonatory` for voice awareness.
+
+Standard CANS endpoints now available in DALS:
+
+ - `/api/ucm/sync/heartbeat`, `/api/ucm/sync/sync`, `/api/ucm/sync/monitor`
+ - `/api/harmonizer/sync/heartbeat`, `/api/harmonizer/sync/sync`, `/api/harmonizer/sync/monitor`
+ - `/api/dals/sync/heartbeat`, `/api/dals/sync/sync`, `/api/dals/sync/monitor`
+ - `/api/cochlear/sync/heartbeat`, `/api/cochlear/sync/sync`, `/api/cochlear/sync/monitor`
+ - `/api/phonatory/sync/heartbeat`, `/api/phonatory/sync/sync`, `/api/phonatory/sync/monitor`
+
+Quick sanity check:
+
+```bash
+# Start server
+python -m uvicorn iss_module.api.api:app --reload
+
+# Heartbeat
+curl http://localhost:8003/api/cochlear/sync/heartbeat
+
+# Sync pulse
+curl -X POST http://localhost:8003/api/phonatory/sync/sync -H 'Content-Type: application/json' -d '{"master_cycle": 42, "timestamp": 1234567890}'
+
+# Monitor
+curl http://localhost:8003/api/ucm/sync/monitor
+```
+
+If CANS is running, these endpoints allow it to (1) stop isolating modules, (2) synchronize cycle numbers across the cognitive triad, and (3) score each module's health.
 
 ## �️ Governance & Ethics
 
@@ -483,6 +579,37 @@ from iss_module.captain_mode.vd_wrapper import VisiDataWrapper
 vd_wrapper = VisiDataWrapper()
 await vd_wrapper.view_log_entries(entries, format_type='csv')
 ```
+
+## OBS Studio Integration
+
+DALS now includes OBS Bridge for external OBS Studio control:
+
+- **External Service**: OBS Studio runs separately from DALS (not in repo)
+- **WebSocket Control**: DALS controls OBS via WebSocket API (port 4455)
+- **On-Demand Management**: Start/stop OBS processes to save resources
+- **Dashboard Integration**: OBS Control tab with full service management
+- **API Endpoints**: 10 endpoints for OBS control (`/api/obs/*`)
+
+### Setup Instructions
+
+1. Install OBS Studio externally
+2. Enable WebSocket plugin in OBS (port 4455)
+3. Start DALS server: `python -m iss_module.api.api`
+4. Access dashboard at http://localhost:8008
+5. Use OBS Control tab to manage OBS service
+
+### API Endpoints
+
+- `POST /api/obs/connect` - Connect to OBS WebSocket
+- `POST /api/obs/start-service` - Start OBS process
+- `POST /api/obs/stop-service` - Stop OBS service gracefully
+- `POST /api/obs/kill-service` - Force kill OBS process
+- `POST /api/obs/start-stream` - Start streaming
+- `POST /api/obs/stop-stream` - Stop streaming
+- `POST /api/obs/start-recording` - Start recording
+- `POST /api/obs/stop-recording` - Stop recording
+- `POST /api/obs/switch-scene` - Switch to scene
+- `GET /api/obs/status` - Get OBS connection status
 
 ## 📄 License
 
