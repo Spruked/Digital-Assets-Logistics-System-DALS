@@ -246,15 +246,19 @@ async def broadcast_status_update(status_data: dict):
 async def periodic_status_broadcaster():
     """
     Background task to send periodic system status updates
+    DALS-001 compliant - real data or zeros
     """
     while True:
         try:
-            # Import here to avoid circular imports
-            from .telemetry_api import telemetry_cache
-            
-            # Calculate status from current telemetry cache
-            total_packets = sum(len(data_list) for data_list in telemetry_cache.values())
-            active_modules = sum(1 for data_list in telemetry_cache.values() if len(data_list) > 0)
+            # Try to import telemetry cache if available
+            try:
+                from .telemetry_api import telemetry_cache
+                total_packets = sum(len(data_list) for data_list in telemetry_cache.values())
+                active_modules = sum(1 for data_list in telemetry_cache.values() if len(data_list) > 0)
+            except ImportError:
+                # Telemetry not available - report zeros (DALS-001 compliant)
+                total_packets = 0
+                active_modules = 0
             
             status_data = {
                 "total_packets": total_packets,

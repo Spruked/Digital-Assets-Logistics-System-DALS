@@ -26,11 +26,18 @@ import hashlib
 # Import telemetry router for Phase 1 integration
 try:
     from .telemetry_api import telemetry_router
-    from .ws_stream import ws_router, periodic_status_broadcaster, websocket_heartbeat_monitor
     TELEMETRY_AVAILABLE = True
 except ImportError as e:
     logging.warning(f"Telemetry API not available: {e}")
     TELEMETRY_AVAILABLE = False
+
+# Import WebSocket router (independent of telemetry)
+try:
+    from .ws_stream import ws_router, periodic_status_broadcaster, websocket_heartbeat_monitor
+    WEBSOCKET_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"WebSocket API not available: {e}")
+    WEBSOCKET_AVAILABLE = False
 
 # Import CALEON Security Layer API
 try:
@@ -136,6 +143,14 @@ except ImportError as e:
     logging.warning(f"OBS Bridge API not available: {e}")
     OBS_BRIDGE_AVAILABLE = False
 
+# Import Predicate Update API (Caleon → Worker broadcasting)
+try:
+    from .predicate_update_api import predicate_router
+    PREDICATE_UPDATE_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Predicate Update API not available: {e}")
+    PREDICATE_UPDATE_AVAILABLE = False
+
 # Import Gyro-Cortical Harmonizer API
 try:
     from .harmonizer_api import harmonizer_router
@@ -151,6 +166,38 @@ try:
 except ImportError as e:
     logging.warning(f"Workers Management API not available: {e}")
     WORKERS_AVAILABLE = False
+
+# Import Cali_X_One Monitoring API
+try:
+    from .monitor_api import monitor_router
+    MONITOR_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Cali_X_One Monitoring API not available: {e}")
+    MONITOR_AVAILABLE = False
+
+# Import Unanswered Query Vault API
+try:
+    from .uqv_api import uqv_router
+    UQV_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Unanswered Query Vault API not available: {e}")
+    UQV_AVAILABLE = False
+
+# Import Worker Registry API
+try:
+    from .worker_registry_api import router as worker_registry_router
+    WORKER_REGISTRY_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Worker Registry API not available: {e}")
+    WORKER_REGISTRY_AVAILABLE = False
+
+# Import Caleon Fusion Engine API
+try:
+    from .caleon_fusion_api import router as caleon_fusion_router
+    CALEON_FUSION_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Caleon Fusion Engine API not available: {e}")
+    CALEON_FUSION_AVAILABLE = False
 
 import asyncio
 from pathlib import Path as PathLib
@@ -224,7 +271,7 @@ async def lifespan(app: FastAPI):
         
         # Start background tasks for WebSocket if available
         background_tasks = []
-        if TELEMETRY_AVAILABLE:
+        if WEBSOCKET_AVAILABLE:
             background_tasks.append(asyncio.create_task(periodic_status_broadcaster()))
             background_tasks.append(asyncio.create_task(websocket_heartbeat_monitor()))
         
@@ -305,10 +352,16 @@ async def sign_cali():
 # Include Phase 1 Telemetry Router
 if TELEMETRY_AVAILABLE:
     app.include_router(telemetry_router, tags=["Phase 1 Telemetry"])
-    app.include_router(ws_router, tags=["Phase 1 WebSocket"])
-    logger.info("Phase 1 Telemetry API and WebSocket enabled")
+    logger.info("Phase 1 Telemetry API enabled")
 else:
     logger.warning("Phase 1 Telemetry API not available")
+
+# Include WebSocket Router
+if WEBSOCKET_AVAILABLE:
+    app.include_router(ws_router, tags=["Phase 1 WebSocket"])
+    logger.info("Phase 1 WebSocket API enabled")
+else:
+    logger.warning("Phase 1 WebSocket API not available")
 
 # Include CALEON Security Layer Router
 if CALEON_AVAILABLE:
@@ -412,6 +465,20 @@ if WORKERS_AVAILABLE:
 else:
     logger.warning("Workers Management API not available")
 
+# Include Cali_X_One Monitoring Router
+if MONITOR_AVAILABLE:
+    app.include_router(monitor_router, tags=["Cali_X_One Monitoring"])
+    logger.info("Cali_X_One Monitoring API enabled - Real-time sovereign AI supervision active")
+else:
+    logger.warning("Cali_X_One Monitoring API not available")
+
+# Include Unanswered Query Vault Router
+if UQV_AVAILABLE:
+    app.include_router(uqv_router, tags=["Unanswered Query Vault"])
+    logger.info("UQV API enabled - Continuous learning from unanswered queries active")
+else:
+    logger.warning("Unanswered Query Vault API not available")
+
 # Include Market Intelligence Router
 try:
     from .market_intel_api import market_router
@@ -432,6 +499,27 @@ if OBS_BRIDGE_AVAILABLE:
     logger.info("OBS Bridge API enabled - OBS Studio control active")
 else:
     logger.warning("OBS Bridge API not available")
+
+# Include Predicate Update Router (Cognitive Flywheel)
+if PREDICATE_UPDATE_AVAILABLE:
+    app.include_router(predicate_router, prefix="/api", tags=["Predicate Broadcasting"])
+    logger.info("Predicate Update API enabled - Caleon→Worker cognitive flywheel active")
+else:
+    logger.warning("Predicate Update API not available")
+
+# Include Worker Registry Router
+if WORKER_REGISTRY_AVAILABLE:
+    app.include_router(worker_registry_router, prefix="/api", tags=["Worker Registry"])
+    logger.info("Worker Registry API enabled - DMN model numbers and DSN serial tracking active")
+else:
+    logger.warning("Worker Registry API not available")
+
+# Include Caleon Fusion Engine Router
+if CALEON_FUSION_AVAILABLE:
+    app.include_router(caleon_fusion_router, prefix="/api", tags=["Caleon Fusion"])
+    logger.info("Caleon Fusion Engine API enabled - Cross-worker predicate invention active")
+else:
+    logger.warning("Caleon Fusion Engine API not available")
 
 # --- Authentication Dependency ---
 async def get_current_user(credentials: HTTPBasicCredentials = Depends(basic_auth)):
@@ -498,6 +586,11 @@ async def root(request: Request):
 async def voice_portal(request: Request):
     """Serve the voice communication portal"""
     return templates.TemplateResponse("voice_portal.html", {"request": request})
+
+@app.get("/live", response_class=HTMLResponse)
+async def live_streaming_control(request: Request):
+    """Serve the live streaming control panel"""
+    return templates.TemplateResponse("live_streaming.html", {"request": request})
 
 @app.get("/sign-cali", response_class=HTMLResponse)
 async def sign_cali():
@@ -1530,6 +1623,18 @@ try:
     logger.info("CANS autonomic sync endpoints enabled for DALS API")
 except ImportError as e:
     logger.warning(f"CANS sync router not available: {e}")
+
+@app.post("/mint-genesis")
+async def mint_genesis(request: Request):
+    body = await request.json()
+    # TODO: real minting logic (contract call + IPFS pin)
+    # For now we fake it but return the same shape
+    return {
+        "tokenId": 0,
+        "tx": "0x9f8e7abcd1234567890abcdef",   # placeholder
+        "ipfs": "bafybeigxMonument0Genesis",
+        "status": "mined"
+    }
 
 # Development helper
 def main():

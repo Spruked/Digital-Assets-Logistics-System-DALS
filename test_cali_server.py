@@ -68,6 +68,18 @@ async def verify_identity(request: Request):
 
     return {"success": True, "message": "Identity verified and saved"}
 
+@app.post("/mint-genesis")
+async def mint_genesis(request: Request):
+    body = await request.json()
+    # TODO: real minting logic (contract call + IPFS pin)
+    # For now we fake it but return the same shape
+    return {
+        "tokenId": 0,
+        "tx": "0x9f8e7abcd1234567890abcdef",   # placeholder
+        "ipfs": "bafybeigxMonument0Genesis",
+        "status": "mined"
+    }
+
 if __name__ == "__main__":
     print("🚀 Starting Cali_X_One test server on http://localhost:8004")
     uvicorn.run(app, host="0.0.0.0", port=8004)

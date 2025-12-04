@@ -5,6 +5,72 @@ All notable changes to the Digital Asset Logistics System (DALS) will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-12-01
+
+### Added
+- **🎤 Cali Ethics Gate**: Sovereign AI token-level ethics filtering microservice
+  - Real-time token scoring with configurable ethics threshold (default: 0.80)
+  - Automatic redaction of unethical tokens below threshold
+  - Token injection system for voice overrides and approvals
+  - RESTful API endpoints for ethics scoring and injection
+  - Fallback heuristic scoring when ML model unavailable
+
+- **🧠 Phi-3-mini Articulation Bridge**: Token streaming with ethics integration
+  - Real-time token-by-token streaming from Phi-3-mini model
+  - Ethics filtering applied to each token before output
+  - Automatic neutralization of flagged tokens
+  - WebSocket-compatible streaming interface
+  - Backward compatibility with existing articulation systems
+
+- **🎤 Caleon Consent Manager**: Voice-activated consent system
+  - Multiple consent modes: manual, voice, always_yes, random, consensus
+  - Voice keyword detection ("approve", "yes", "caleon approve")
+  - Integration with Cali ethics gate for voice overrides
+  - Token injection for high-ethics approvals
+  - Configurable timeouts and risk assessment
+
+- **🐳 Cali Ethics Side-car Container**: Docker containerization
+  - Lightweight Python service with FastAPI
+  - Health checks and monitoring endpoints
+  - Model loading support for ethics classification
+  - Network isolation and security hardening
+  - Resource limits and health monitoring
+
+- **🧠 Phi-3-mini Side-car Container**: ML model containerization
+  - Microsoft Phi-3-mini model with 4-bit quantization
+  - Streaming token generation with logits output
+  - Optimized for real-time ethics filtering
+  - Memory and CPU resource constraints
+  - Health monitoring and automatic restarts
+
+### Changed
+- **🔄 Enhanced Cali_X_One Integration**: Ethics-filtered articulation
+  - All voice outputs now pass through ethics gate
+  - Token-level filtering prevents toxic outputs
+  - Voice overrides inject high-ethics tokens
+  - Real-time streaming with ethics validation
+  - Zero-downtime deployment with fallback modes
+
+- **🐳 Docker Architecture**: Side-car container pattern
+  - Cali ethics gate runs as side-car to main DALS controller
+  - Phi-3-mini runs as separate ML container
+  - Inter-service communication via HTTP APIs
+  - Health checks and dependency management
+  - Rolling update support for zero downtime
+
+- **🔧 Environment Configuration**: Ethics and streaming parameters
+  - New environment variables for ethics thresholds
+  - Streaming timeouts and model endpoints
+  - Backward compatibility with existing configurations
+  - Feature flags for gradual rollout
+
+### Technical Details
+- **Ethics Scoring**: MLP-based token classification (512->1) with sigmoid output
+- **Token Streaming**: Async token generation with real-time ethics filtering
+- **Voice Integration**: Web Speech API compatibility with keyword detection
+- **Container Networking**: Internal Docker network for side-car communication
+- **Fallback Systems**: Graceful degradation when ethics services unavailable
+
 ## [1.1.0] - 2025-12-01
 
 ### Added

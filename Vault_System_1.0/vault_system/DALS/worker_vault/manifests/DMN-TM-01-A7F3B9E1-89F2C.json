@@ -1,0 +1,11 @@
+{
+  "subsystem": "DALS",
+  "worker_dsn": "DMN-TM-01-A7F3B9E1-89F2C",
+  "stored_at": "2025-12-04T20:06:49.688734Z",
+  "manifest": {
+    "worker_name": "test-worker-01",
+    "model_number": "DMN-TM-01",
+    "serial_number": "DMN-TM-01-A7F3B9E1-89F2C",
+    "deployed_at": "2022-01-01T00:00:00Z"
+  }
+}

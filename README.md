@@ -13,27 +13,69 @@ A comprehensive data management and time anchoring system designed for microserv
 
 ## ✨ Key Features
 
+### Core Infrastructure
 - 🌟 **Canonical Stardate System** - Y2K epoch-based time anchoring with positive decimal values
 - ⏰ **Time Anchoring** - Precise timestamp calculations with multiple formats
 - 📝 **Asset Tracking** - Comprehensive digital asset lifecycle management
 - 🛡️ **DALS-001 Compliance** - Zero-or-empty protocol for ethical data representation
 - 🧠 **Phase 11-A2: Autonomous Predictive Prevention** - Living AI infrastructure with self-healing capabilities
+
+### AI & Cognitive Systems
 - 🎤 **Cali_X_One Host Bubble** - Sovereign AI supervisor with voice interface and system orchestration
-- 👥 **Worker Vault System** - Scalable worker deployment and personality management
-- 🔮 **Caleon Prime Integration** - Advanced cognitive AI with voice awareness and self-modeling
+- 🔮 **Caleon Fusion Engine** - Cross-worker learning with predicate invention and swarm broadcasting
+- 🤖 **Worker Registry (DMN/DSN)** - Production-grade worker fleet management with model taxonomy
+- 🏦 **Enterprise Vault System** - Subsystem-isolated worker lifecycle tracking with forensic capabilities (DALS, GOAT, TrueMark, CertSig)
+- 💎 **Autonomous Workers** - Self-evolving AI agents (Josephine, Regent, Nora, Mark)
+- 🧠 **Micro-SKG** - Embedded knowledge graphs with <40ms cluster generation
+- 📚 **UQV (Unanswered Query Vault)** - Continuous learning from failed queries
+- 🔄 **Cognitive Flywheel** - Self-improving swarm intelligence with hot-reload predicates
+
+### Voice & Communication
 - 🎤 **Voice Awareness System** - Professional AI communication and status reporting
+- 🗣️ **TTS/Chat Duplex** - Dual-channel communication (voice + text)
+
+### Security & Governance
+- 🔒 **CALEON Security Layer** - Ethical validation gates with drift monitoring
 - 🛡️ **CANS Autonomic Nervous System** - Aggressive autonomous repair and prevention
-- 🗄️ **Data Export** - CSV, JSON, and Markdown export capabilities
-- 🔍 **Data Analysis** - Integration with analysis tools
-- 🌐 **FastAPI Web Interface** - RESTful API with automatic documentation
+- 👤 **Founder Override** - Emergency control for critical situations
+- 🚫 **Mock-Free Operation** - No placeholder data, honest module status reporting
+
+### Integration & Deployment
+- 🌐 **FastAPI Web Interface** - RESTful API with automatic documentation (24 modules)
 - 🐳 **Docker Ready** - Complete containerization for easy deployment
 - ☸️ **Kubernetes Ready** - Production-grade orchestration support
 - 🔗 **Microservice Compatible** - Plug-and-play integration with service meshes
 - 📊 **Structured Logging** - JSON formatted logs with correlation IDs
-- 🚫 **Mock-Free Operation** - No placeholder data, honest module status reporting
 - 🧠 **UCM Integration Ready** - Native cognitive architecture compatibility
 
 # Reference: See /docs/governance/DALS_Phase_1_2_Integration_Plans_2025-10-05.pdf
+
+## 🔥 NEW: Self-Evolving AI Worker Fleet (December 2025)
+
+DALS now features a **production-grade autonomous worker system** with collective intelligence:
+
+### Worker Registry (DMN/DSN System)
+- **DMN Model Taxonomy**: `DMN-TM-01`, `DMN-RG-01`, `DMN-GT-01`, `DMN-SK-01`, `DMN-BB-01`
+- **Collision-Proof Serials**: `DMN-TM-01-A7F3B9E1-89F2C` (UUID4 + timestamp sharding)
+- **Self-Registration**: Workers auto-register on startup
+- **Heartbeat Monitoring**: 30-second health checks
+- **Fleet Management**: 6 API endpoints for worker lifecycle
+
+### Josephine - TrueMark NFT Mint Specialist (DMN-TM-01)
+- **Wallet Guidance**: MetaMask, WalletConnect, Coinbase integration
+- **Minting Workflows**: Complete NFT creation pipeline
+- **Blockchain Expertise**: IPFS, certificates, transaction troubleshooting
+- **Micro-SKG Intelligence**: Embedded knowledge graphs for contextual understanding
+- **Continuous Learning**: UQV integration + Caleon predicate fusion
+
+### Caleon Fusion Engine - Cognitive Flywheel
+- **Cross-Worker Learning**: Fuses clusters from all workers using Jaccard similarity
+- **Predicate Invention**: Creates predicates from high-confidence patterns (≥0.75)
+- **Swarm Broadcasting**: Hot-reload predicates to ALL workers without restart
+- **Performance**: <50ms fusion time for 10-20 clusters
+- **Self-Improving**: Workers learn from collective experience
+
+**The species is now self-evolving.** Every worker query feeds Caleon, inventing new predicates that upgrade the entire swarm.
 
 ## ✨ Overview
 
@@ -211,6 +253,22 @@ kubectl get pods -l app=dals-11a2
 - **Founder Override**: Emergency bypass for critical situations
 - **Self-Modeling**: Continuous learning and adaptation
 - **Predictive Assistance**: Proactive system optimization suggestions
+
+### 🛡️ Cali Ethics Gate - Token-Level Ethics Filtering
+
+**Real-time ethics filtering** ensures all AI outputs meet ethical standards through token-by-token validation.
+
+#### Ethics Scoring Engine
+- **MLP Classification**: 512-dimension token embeddings → ethics score (0.0-1.0)
+- **Configurable Threshold**: Default 0.80 for approval/redaction decisions
+- **Automatic Redaction**: Unethical tokens replaced with safe alternatives
+- **Voice Override**: "Caleon approve" injects high-ethics tokens
+
+#### Phi-3-mini Articulation Bridge
+- **Token Streaming**: Real-time generation with ethics filtering
+- **No Toxic Outputs**: Every token validated before speech synthesis
+- **Fallback Mode**: Graceful degradation when ethics services unavailable
+- **Performance Optimized**: Sub-millisecond ethics scoring per token
 
 ## 👥 Worker Vault System
 

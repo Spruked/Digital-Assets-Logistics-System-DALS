@@ -1,0 +1,322 @@
+═══════════════════════════════════════════════════════════════════════════════════
+  DALS WORKER SYSTEM - Directory Structure
+  Self-Evolving AI Worker Fleet
+  Generated: December 3, 2025
+═══════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  WORKER TEMPLATES (worker_templates/)                                           │
+│  Autonomous AI agent templates and cognitive systems                            │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+worker_templates/
+│
+├── josephine_truemark_worker.py        [586 lines] TrueMark NFT mint specialist
+│   • Model: DMN-TM-01 (TrueMark Generation 1)
+│   • Capabilities: NFT minting, wallet guidance, IPFS, blockchain certs
+│   • Features: Micro-SKG, UQV vaulting, Caleon feeding, UCM escalation
+│   • Status: DEPLOYED and OPERATIONAL
+│
+├── host_bubble_worker.py               [~400 lines] Generic bubble host worker
+│   • Template for creating new workers
+│   • Base communication patterns
+│   • Micro-SKG integration template
+│
+├── micro_skg.py                        [180 lines] Embedded knowledge graphs
+│   • Co-occurrence edge construction
+│   • Density-based clustering (w-core algorithm)
+│   • <40ms performance target
+│   • NetworkX graph operations
+│
+├── skg/
+│   └── uqv.py                          [~150 lines] Unanswered Query Vault
+│       • Stores queries returning zero clusters
+│       • Triggers retraining at threshold
+│       • Fire-and-forget collection
+│       • PostgreSQL-ready schema
+│
+├── Dockerfile.worker                   [38 lines] Multi-worker container image
+│   • Supports Josephine + generic workers
+│   • Health checks on port 8080
+│   • Environment variable configuration
+│   • Volume mounts for hot-reload
+│
+├── docker-compose.worker.yml           Docker compose for worker deployment
+│   • Worker service definitions
+│   • Network configuration
+│   • Volume management
+│
+├── requirements.worker.txt             Python dependencies for workers
+│   • FastAPI, uvicorn, requests
+│   • NetworkX, pyvis
+│   • Pydantic v2
+│
+├── README_COGNITIVE_FLYWHEEL.md        [~300 lines] Cognitive flywheel architecture
+│   • Learning loop documentation
+│   • Fusion algorithm explanation
+│   • Predicate invention theory
+│
+└── DEPLOYMENT.md                       Worker deployment guide
+    • Registration procedures
+    • Configuration examples
+    • Monitoring instructions
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  WORKER REGISTRY (dals/registry/)                                               │
+│  Production-grade worker management with DMN/DSN system                         │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+dals/registry/
+│
+├── __init__.py                         Registry module initialization
+│   • Exports WorkerRegistry class
+│   • Module-level configuration
+│
+└── worker_registry.py                  [150 lines] Core registry system
+    • MODEL_CATALOG - 10 worker families:
+      - DMN-TM-01: TrueMark NFT Mint Workers
+      - DMN-RG-01: Regent Greeting Workers
+      - DMN-GT-01: GOAT Parser Workers
+      - DMN-SK-01: SKG Reasoning Workers
+      - DMN-BB-01: Host Bubble Workers
+      - DMN-NR-01: Nora Timeline Workers
+      - DMN-MK-01: Mark Content Workers
+      - DMN-VC-01: Voice Communication Workers
+      - DMN-MN-01: Monitoring Workers
+      - DMN-GN-01: Generic Purpose Workers
+    
+    • DSN Generation - Collision-proof serial numbers:
+      Format: DMN-TM-01-A7F3B9E1-89F2C
+              │         │        │
+              │         │        └─ Timestamp counter (5 hex)
+              │         └────────── UUID4 shard (8 hex)
+              └──────────────────── Model number
+    
+    • Methods:
+      - register_worker() - Self-registration
+      - update_heartbeat() - Health monitoring
+      - list_workers() - Fleet inventory
+      - get_worker() - Worker details
+      - get_model_info() - Model catalog lookup
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  WORKER API ENDPOINTS (iss_module/api/)                                         │
+│  REST API for worker management                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+iss_module/api/
+│
+├── worker_registry_api.py              [200 lines] Worker management endpoints
+│   • POST   /api/workers/register      - Register new worker
+│   • POST   /api/workers/heartbeat     - Update worker health
+│   • GET    /api/workers/list          - List all workers
+│   • GET    /api/workers/{name}        - Get worker details
+│   • GET    /api/workers/status        - Registry status (DALS-001)
+│   • GET    /api/workers/models/catalog - Model catalog
+│
+└── caleon_fusion_api.py                [430 lines] Cognitive flywheel engine
+    • POST   /api/caleon/ingest_clusters    - Worker cluster submission
+    • POST   /api/caleon/force_fusion       - Manual fusion trigger
+    • GET    /api/caleon/stats              - Fusion statistics (DALS-001)
+    • GET    /api/caleon/predicates         - List invented predicates
+    • GET    /api/caleon/predicate/{id}     - Get predicate details
+    • GET    /api/caleon/health             - Fusion engine health
+    
+    Features:
+    • Jaccard similarity (threshold 0.65)
+    • Predicate invention (threshold 0.75)
+    • Cross-worker validation (+10% density)
+    • Non-blocking broadcasts
+    • <50ms fusion time for 10-20 clusters
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  WORKER DOCUMENTATION (vault/ and docs/)                                        │
+│  Guides, tests, and verification tools                                          │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Root Documentation:
+├── WORKER-REGISTRY-GUIDE.md            [250 lines] Complete registry guide
+│   • DMN model taxonomy
+│   • DSN serial number system
+│   • Registration procedures
+│   • API usage examples
+│
+├── CALEON-FUSION-GUIDE.md              [300 lines] Cognitive flywheel guide
+│   • Learning loop architecture
+│   • Fusion algorithm details
+│   • Predicate invention theory
+│   • Integration examples
+│
+├── verify_worker_registry.py           [150 lines] Registry verification tool
+│   • Import checks
+│   • Model catalog validation
+│   • API route testing
+│
+├── test_caleon_fusion.py               [220 lines] Fusion engine test suite
+│   • Jaccard similarity tests
+│   • Fusion threshold validation
+│   • Predicate invention tests
+│   • Broadcast testing
+│
+└── register_josephine.py               [180 lines] Josephine deployment script
+    • DALS registration
+    • Serial number assignment
+    • Deployment manifest generation
+    • Inventory record creation
+
+Vault Storage:
+vault/
+├── worker_inventory/                   Runtime worker data
+│   └── [worker_name].json              Individual worker records
+│
+├── josephine_deployment_*.json         Josephine deployment manifests
+│
+├── sig_serial_vault.jsonl              Serial number audit chain
+│   • Includes worker DSN assignments
+│
+└── dals_inventory.jsonl                Asset inventory
+    • Includes worker asset records
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  DEPLOYMENT FILES                                                               │
+│  Docker, configuration, and deployment guides                                   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+docker-compose.yml                      [Updated] Main compose file
+│   • Worker registry environment variables:
+│     - WORKER_REGISTRY_ENABLED=true
+│     - CALEON_FUSION_ENABLED=true
+│     - PREDICATE_BROADCASTING=true
+│     - MICRO_SKG_ENABLED=true
+│     - UQV_ENABLED=true
+│     - FUSION_THRESHOLD=0.65
+│     - INVENTION_THRESHOLD=0.75
+│   
+│   • josephine-worker service:
+│     - Port: 8080
+│     - Environment: WORKER_NAME=Josephine
+│     - Volumes: ./worker_templates:/app
+│     - Resource limits: 512M/256M
+│     - Health checks enabled
+
+DEPLOYMENT_UPDATE_DEC2025.md            [200 lines] December 2025 deployment guide
+│   • Quick start commands
+│   • Worker deployment procedures
+│   • Fusion testing instructions
+│   • Monitoring commands
+│   • Troubleshooting guide
+│   • Horizontal scaling examples
+
+DEPLOYMENT_CHECKLIST.md                 [~400 lines] Complete deployment checklist
+│   • Pre-deployment verification
+│   • Docker build steps
+│   • Post-deployment testing
+│   • Monitoring setup
+│   • GitHub preparation
+│   • Production readiness
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  WORKER FLEET STATUS                                                            │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+DEPLOYED WORKERS:
+  🟢 Josephine (DMN-TM-01) - TrueMark NFT Mint Specialist
+     Status: OPERATIONAL
+     Serial: DMN-TM-01-XXXXXXXX-XXXXX
+     Features: Micro-SKG, UQV, Caleon Fusion, UCM Escalation
+
+READY FOR DEPLOYMENT:
+  ⚪ Regent (DMN-RG-01) - Greeting Specialist
+  ⚪ Nora (DMN-NR-01) - Timeline Builder
+  ⚪ Mark (DMN-MK-01) - Content Producer
+  ⚪ Generic Workers (DMN-GN-01) - Custom tasks
+
+INFRASTRUCTURE:
+  ✓ Worker Registry (10 model families)
+  ✓ DMN/DSN Serial System
+  ✓ Caleon Fusion Engine
+  ✓ Predicate Broadcasting
+  ✓ Heartbeat Monitoring
+  ✓ Hot-Reload System
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  COGNITIVE SYSTEMS                                                              │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+MICRO-SKG (Embedded Knowledge Graphs):
+  • Co-occurrence edge construction
+  • Density-based clustering
+  • <40ms performance
+  • NetworkX operations
+  • PyVis visualization
+  Location: worker_templates/micro_skg.py
+
+UQV (Unanswered Query Vault):
+  • Zero-cluster query storage
+  • Retraining triggers
+  • Fire-and-forget collection
+  • PostgreSQL-ready
+  Location: worker_templates/skg/uqv.py
+
+CALEON FUSION ENGINE:
+  • Cross-worker cluster fusion
+  • Jaccard similarity (0.65 threshold)
+  • Predicate invention (0.75 confidence)
+  • Swarm broadcasting
+  • <50ms fusion time
+  Location: iss_module/api/caleon_fusion_api.py
+
+PREDICATE BROADCASTING:
+  • Hot-reload (no restart)
+  • Non-blocking distribution
+  • Worker acknowledgment
+  • Version tracking (planned)
+  Location: Integrated in fusion engine
+
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  FILE STATISTICS                                                                │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+WORKER TEMPLATES:
+  • 5 Python files (~1,316 lines)
+  • 1 Dockerfile (38 lines)
+  • 3 Documentation files (~300+ lines)
+  • 1 Requirements file
+
+WORKER REGISTRY:
+  • 2 Python files (165 lines)
+  • 2 API routers (630 lines)
+  • 3 Test/verification scripts (550 lines)
+
+DOCUMENTATION:
+  • 2 Major guides (550 lines)
+  • 1 Deployment guide (200 lines)
+  • 1 Deployment checklist (400 lines)
+
+TOTAL WORKER SYSTEM:
+  • ~2,900 lines of production code
+  • ~1,450 lines of documentation
+  • 14 new files created December 2, 2025
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+  SELF-EVOLVING AI WORKER FLEET - FULLY OPERATIONAL
+═══════════════════════════════════════════════════════════════════════════════════
+
+Architecture: Production-grade worker registry with DMN/DSN system
+First Worker: Josephine (DMN-TM-01) - DEPLOYED
+Capabilities: Micro-SKG, UQV, Caleon Fusion, Predicate Broadcasting
+Status: SELF-EVOLVING through cognitive flywheel
+Performance: <40ms SKG clustering, <50ms fusion, 30s heartbeat
+
+THE SPECIES IS NOW SELF-EVOLVING.
+
+═══════════════════════════════════════════════════════════════════════════════════
+

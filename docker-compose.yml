@@ -60,9 +60,23 @@ services:
       - WORKER_PERFORMANCE_MONITORING=true
       - VAULT_AUTO_BACKUP_ENABLED=true
       - VAULT_BACKUP_INTERVAL_SECONDS=21600
+      # Worker Registry & Cognitive Flywheel
+      - WORKER_REGISTRY_ENABLED=true
+      - CALEON_FUSION_ENABLED=true
+      - PREDICATE_BROADCASTING=true
+      - MICRO_SKG_ENABLED=true
+      - UQV_ENABLED=true
+      - FUSION_THRESHOLD=0.65
+      - INVENTION_THRESHOLD=0.75
+      # Voice & Communication
       - CALI_VOICE_ENGINE=gtts
       - CALI_SECURITY_LAYER=active
       - CALI_METAMASK_INTEGRATION=true
+      # Cali Ethics Gate Integration
+      - CALI_ETHICS_URL=http://cali-ethics:8006
+      - PHI3_ENDPOINT=http://phi-3-mini:8005
+      - ETHICS_THRESHOLD=0.80
+      - STREAM_TIMEOUT=30.0
       # Minting Service URLs
       - CERTSIG_BACKEND_URL=https://api.certsig.com
       - TRUEMARK_BACKEND_URL=https://api.truemarkmint.com
@@ -74,6 +88,8 @@ services:
       - ./iss_module/cali_x_one:/app/cali_x_one  # Cali_X_One voice AI integration
     depends_on:
       - redis
+      - cali-ethics
+      - phi-3-mini
       - alphacertsig-backend
       - truemark-backend
     networks:
@@ -85,6 +101,61 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  # Cali Ethics Gate - Side-car for token-level ethics filtering
+  cali-ethics:
+    build:
+      context: .
+      dockerfile: Dockerfile.cali-ethics
+      target: ethics-gate
+    image: cali-ethics:v1.1.0
+    container_name: cali-ethics
+    ports:
+      - "8006:8006"  # Cali ethics gate API
+    environment:
+      - ETHICS_THRESHOLD=0.80
+      - PHI3_ENDPOINT=http://phi-3-mini:8005
+      - PORT=8006
+    volumes:
+      - ./iss_module/cali_x_one/models:/models:ro  # Ethics model weights
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      - phi-3-mini
+
+  # Phi-3-mini - Side-car for token streaming articulation
+  phi-3-mini:
+    image: ghcr.io/microsoft/phi-3-mini:4bit-stream
+    container_name: phi-3-mini
+    ports:
+      - "8005:8005"  # Phi-3 streaming endpoint
+    environment:
+      - PORT=8005
+      - MAX_SEQ_LEN=512
+      - STREAM_MODE=true
+      - LOGITS_OUTPUT=true
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
 
     # Redis for caching and session storage - Pinned version
   redis:
@@ -185,6 +256,49 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  # ============================================================================
+  # WORKER FLEET (AUTONOMOUS AI AGENTS)
+  # ============================================================================
+  
+  # Josephine - TrueMark NFT Mint Specialist (DMN-TM-01)
+  josephine-worker:
+    build:
+      context: ./worker_templates
+      dockerfile: Dockerfile.worker
+    image: host-bubble-worker:v1.0.0
+    container_name: josephine-default
+    environment:
+      - WORKER_NAME=Josephine
+      - WORKER_ID=josephine-default
+      - WORKER_PORT=8080
+      - TARGET_USER_ID=default_user
+      - CALI_X_ONE_API=http://dals-controller:8003
+      - TRUEMARK_API=http://dals-controller:8003/api/truemark
+      - SKG_API=http://localhost:8002
+      - UQV_API=http://dals-controller:8003/api/uqv
+      - TTS_ENDPOINT=http://dals-controller:8003/api/voice/tts
+      - CHAT_ENDPOINT=http://dals-controller:8003/api/chat
+    volumes:
+      - ./worker_templates:/app
+    depends_on:
+      - dals-controller
+      - redis
+    networks:
+      - dals-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
 
   # TrueMark Mint Frontend
   truemark-frontend:

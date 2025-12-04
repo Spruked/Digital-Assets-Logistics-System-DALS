@@ -1,0 +1,14 @@
+{
+  "subsystem": "DALS",
+  "worker_dsn": "DMN-TM-01-EF483719-1FF6C",
+  "stored_at": "2025-12-04T20:07:43.241832Z",
+  "manifest": {
+    "worker_name": "josephine-test",
+    "model_number": "DMN-TM-01",
+    "serial_number": "DMN-TM-01-EF483719-1FF6C",
+    "deployed_at": "2025-12-04T20:07:43Z",
+    "worker_type": "truemark",
+    "api_url": "http://localhost:8001",
+    "user_id": "test-user"
+  }
+}

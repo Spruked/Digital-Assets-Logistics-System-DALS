@@ -2483,8 +2483,8 @@
             <button class="tab-button" data-tab="ops">
                 <span>Operations</span>
             </button>
-            <button class="tab-button" data-tab="obs-control">
-                <span>OBS Control</span>
+            <button class="tab-button" onclick="window.open('/live', '_blank')" style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%); color: white; border: 2px solid #FFD700;">
+                <span>🎬 Live Streaming</span>
             </button>
         </div>
     </nav>
@@ -4077,514 +4077,7 @@
             </div>
         </div>
 
-        <!-- OBS Control TAB -->
-        <div class="tab-content" id="tab-obs-control">
-            <h2 style="color: #6366f1; margin-bottom: 2rem; text-align: center;">🎥 OBS Studio Control Panel</h2>
-
-            <!-- OBS Service Control -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3>⚙️ OBS Service Control</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="status-label">Service Status:</span>
-                        <span class="status-value" id="obs-service-status">Stopped</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">Process Status:</span>
-                        <span class="status-value" id="obs-process-status">Not Running</span>
-                    </div>
-                </div>
-                <div class="button-group" style="margin-top: 1rem;">
-                    <button class="action-btn success" onclick="startOBSService()">🚀 Start OBS Service</button>
-                    <button class="action-btn danger" onclick="stopOBSService()">🛑 Stop OBS Service</button>
-                    <button class="action-btn danger" onclick="killOBSProcess()">💀 Kill OBS Process</button>
-                </div>
-                <div style="margin-top: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; font-size: 0.9em;">
-                    <strong>💡 Tip:</strong> If automatic start fails, manually start OBS Studio with WebSocket enabled, then use the Connect button below.
-                </div>
-            </div>
-                <h3>🔗 OBS Connection</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="status-label">Connection Status:</span>
-                        <span class="status-value" id="obs-connection-status">Disconnected</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">WebSocket:</span>
-                        <span class="status-value" id="obs-websocket-status">ws://localhost:4455</span>
-                    </div>
-                </div>
-                <div class="button-group" style="margin-top: 1rem;">
-                    <button class="action-btn" onclick="connectToOBS()">🔗 Connect to OBS</button>
-                    <button class="action-btn danger" onclick="disconnectFromOBS()">🔌 Disconnect</button>
-                </div>
-            </div>
-
-            <!-- Live Platform Control -->
-            <div class="card" style="margin-bottom: 2rem; border: 2px solid #FF6B35;">
-                <h3>🌐 Live Platform Control</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="status-label">Select Platform:</span>
-                        <select id="platform-selector" style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
-                            <option value="">Choose Platform...</option>
-                            <option value="tiktok">🎵 TikTok</option>
-                            <option value="youtube">📺 YouTube</option>
-                            <option value="facebook">👥 Facebook</option>
-                            <option value="twitch">🎮 Twitch</option>
-                            <option value="custom">🔧 Custom RTMP</option>
-                        </select>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">Stream Key:</span>
-                        <input type="password" id="stream-key-input" placeholder="Enter stream key (optional)" style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">Status:</span>
-                        <span class="status-value" id="platform-status">No platform loaded</span>
-                    </div>
-                </div>
-                <div class="button-group" style="margin-top: 1rem;">
-                    <button class="action-btn success" onclick="loadPlatformProfile()">📡 Load Platform</button>
-                    <button class="action-btn" onclick="refreshPlatformStatus()">🔄 Refresh Status</button>
-                </div>
-                <div style="margin-top: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; font-size: 0.9em;">
-                    <strong>💡 Tip:</strong> Select a platform and click "Load Platform" to configure OBS with the correct RTMP settings.
-                </div>
-            </div>
-
-            <!-- Streaming Controls -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3>📺 Streaming Control</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="status-label">Streaming Status:</span>
-                        <span class="status-value" id="obs-streaming-status">Stopped</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">Recording Status:</span>
-                        <span class="status-value" id="obs-recording-status">Stopped</span>
-                    </div>
-                </div>
-                <div class="button-group" style="margin-top: 1rem;">
-                    <button class="action-btn success" onclick="startOBSStream()">▶️ Start Stream</button>
-                    <button class="action-btn danger" onclick="stopOBSStream()">⏹️ Stop Stream</button>
-                    <button class="action-btn warning" onclick="startOBSRecording()">⏺️ Start Recording</button>
-                    <button class="action-btn danger" onclick="stopOBSRecording()">⏹️ Stop Recording</button>
-                </div>
-            </div>
-
-            <!-- Scene Control -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3>🎬 Scene Control</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="status-label">Current Scene:</span>
-                        <span class="status-value" id="obs-current-scene">None</span>
-                    </div>
-                </div>
-                <div style="margin-top: 1rem;">
-                    <select id="scene-selector" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-                        <option value="">Select Scene...</option>
-                    </select>
-                    <button class="action-btn" onclick="switchOBSScene()">🔄 Switch Scene</button>
-                </div>
-            </div>
-
-            <!-- Status Refresh -->
-            <div class="card">
-                <h3>🔄 Status & Refresh</h3>
-                <button class="refresh-btn" onclick="refreshOBSStatus()">↻ Refresh OBS Status</button>
-                <div class="status-grid" style="margin-top: 1rem;">
-                    <div class="status-item">
-                        <span class="status-label">Last Update:</span>
-                        <span class="status-value" id="obs-last-update">Never</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Worker Management Section -->
-            <div class="card" style="margin-top: 2rem; border: 2px solid var(--primary-color);">
-                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">⚙️ DALS Worker Management - Cloning Engine v2.0</h3>
-
-                <!-- Worker Status Header -->
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 2rem; border-radius: 8px; padding: 1rem;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: center;">
-                        <div>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Active Workers</div>
-                            <div id="active-workers-count" style="font-size: 1.3rem; font-weight: bold;">0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Total Workers</div>
-                            <div id="total-workers-count" style="font-size: 1.3rem; font-weight: bold;">0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Forge Engine</div>
-                            <div id="forge-engine-status" style="font-size: 1.3rem; font-weight: bold;">● Ready</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Last Forge</div>
-                            <div id="last-forge-time" style="font-size: 1.3rem; font-weight: bold;">Never</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Worker Sub-tabs Navigation -->
-                <div class="worker-sub-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem;">
-                    <button class="worker-sub-tab active" onclick="switchWorkerSubTab('registry')" style="padding: 0.75rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                        📋 Registry
-                    </button>
-                    <button class="worker-sub-tab" onclick="switchWorkerSubTab('forge')" style="padding: 0.75rem 1.5rem; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-weight: 500;">
-                        ⚒️ Forge
-                    </button>
-                    <button class="worker-sub-tab" onclick="switchWorkerSubTab('templates')" style="padding: 0.75rem 1.5rem; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-weight: 500;">
-                        📄 Templates
-                    </button>
-                    <button class="worker-sub-tab" onclick="switchWorkerSubTab('inspector')" style="padding: 0.75rem 1.5rem; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-weight: 500;">
-                        🔍 Inspector
-                    </button>
-                </div>
-
-                <!-- Worker Registry Sub-tab -->
-                <div class="worker-sub-content active" id="worker-registry">
-                    <div class="card">
-                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">📋 Worker Registry</h4>
-                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                            View and manage all forged workers in the DALS ecosystem.
-                        </p>
-
-                        <!-- Registry Controls -->
-                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                            <button onclick="refreshWorkerRegistry()" style="padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer;">
-                                🔄 Refresh
-                            </button>
-                            <button onclick="exportWorkerRegistry()" style="padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                                💾 Export
-                            </button>
-                        </div>
-
-                        <!-- Worker List -->
-                        <div id="worker-registry-list" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; max-height: 400px; overflow-y: auto;">
-                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
-                                <div style="font-size: 2rem; margin-bottom: 1rem;">📋</div>
-                                <div>Loading worker registry...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Worker Forge Sub-tab -->
-                <div class="worker-sub-content" id="worker-forge">
-                    <div class="card">
-                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">⚒️ Worker Forge v2.0</h4>
-                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                            Create new workers using the industrial-grade cloning engine with staging, atomic operations, and manifest hashing.
-                        </p>
-
-                        <!-- Forge Configuration -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <div class="form-group">
-                                <label style="font-weight: bold;">Worker Name:</label>
-                                <input type="text" id="forge-worker-name" placeholder="e.g., Alice-Prime" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-color);">
-                            </div>
-                            <div class="form-group">
-                                <label style="font-weight: bold;">Template:</label>
-                                <select id="forge-template-select" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-color);">
-                                    <option value="standard">Standard Worker</option>
-                                    <option value="specialized">Specialized Worker</option>
-                                    <option value="custom">Custom Template</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label style="font-weight: bold;">Digital Soul:</label>
-                                <select id="forge-personality-select" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-color);">
-                                    <option value="">No Personality</option>
-                                    <option value="Ledger_Mind_v1">🧠 Ledger Mind (Nora)</option>
-                                    <option value="Archival_Mind_v1">📚 Archival Mind (Elara)</option>
-                                    <option value="Mechanist_Mind_v1">⚙️ Mechanist Mind (Vektor)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Forge Options -->
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="font-weight: bold; display: block; margin-bottom: 0.5rem;">Forge Options:</label>
-                            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                                <label style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <input type="checkbox" id="forge-dry-run" checked>
-                                    <span>Dry Run (Validate Only)</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <input type="checkbox" id="forge-atomic" checked>
-                                    <span>Atomic Operations</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <input type="checkbox" id="forge-manifest" checked>
-                                    <span>Generate Manifest</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Forge Actions -->
-                        <div style="display: flex; gap: 1rem;">
-                            <button onclick="validateForgeConfig()" style="padding: 0.75rem 1.5rem; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                                ✅ Validate
-                            </button>
-                            <button onclick="forgeWorker()" style="padding: 0.75rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                                ⚒️ Forge Worker
-                            </button>
-                            <button onclick="clearForgeForm()" style="padding: 0.75rem 1.5rem; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                                🗑️ Clear
-                            </button>
-                        </div>
-
-                        <!-- Forge Progress -->
-                        <div id="forge-progress" style="margin-top: 1.5rem; display: none;">
-                            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-                                <div style="font-weight: bold; margin-bottom: 0.5rem;">Forge Progress:</div>
-                                <div id="forge-progress-text" style="color: var(--text-secondary);">Initializing...</div>
-                                <div style="margin-top: 0.5rem; height: 4px; background: var(--bg-color); border-radius: 2px;">
-                                    <div id="forge-progress-bar" style="height: 100%; background: var(--primary-color); border-radius: 2px; width: 0%; transition: width 0.3s;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Worker Templates Sub-tab -->
-                <div class="worker-sub-content" id="worker-templates">
-                    <div class="card">
-                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">📄 Worker Templates</h4>
-                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                            Manage and customize worker templates for different use cases and configurations.
-                        </p>
-
-                        <!-- Template List -->
-                        <div id="worker-templates-list" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; max-height: 400px; overflow-y: auto;">
-                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
-                                <div style="font-size: 2rem; margin-bottom: 1rem;">📄</div>
-                                <div>Loading worker templates...</div>
-                            </div>
-                        </div>
-
-                        <!-- Template Actions -->
-                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button onclick="createNewTemplate()" style="padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer;">
-                                ➕ New Template
-                            </button>
-                            <button onclick="importTemplate()" style="padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                                📥 Import
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Worker Inspector Sub-tab -->
-                <div class="worker-sub-content" id="worker-inspector">
-                    <div class="card">
-                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">🔍 Worker Inspector</h4>
-                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                            Deep inspection of worker configurations, manifests, operational status, and personality systems.
-                        </p>
-
-                        <!-- Inspector Controls -->
-                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                            <div class="form-group" style="flex: 1;">
-                                <label style="font-weight: bold;">Worker Serial:</label>
-                                <input type="text" id="inspector-worker-serial" placeholder="Enter worker serial number" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-color); color: var(--text-color);">
-                            </div>
-                            <button onclick="inspectWorker()" style="padding: 0.75rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; align-self: flex-end;">
-                                🔍 Inspect
-                            </button>
-                        </div>
-
-                        <!-- Inspection Results -->
-                        <div id="worker-inspection-results">
-                            <!-- Worker Overview -->
-                            <div id="worker-overview" style="display: none;">
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                                    <!-- Basic Information -->
-                                    <div class="card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
-                                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <span>📊</span> Basic Information
-                                        </h5>
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Name:</label>
-                                                <div id="worker-name" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Serial:</label>
-                                                <div id="worker-serial" style="font-family: monospace; color: var(--accent-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Status:</label>
-                                                <div id="worker-status" style="font-weight: bold;">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Created:</label>
-                                                <div id="worker-created" style="font-family: monospace; color: var(--text-color);">-</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- System Information -->
-                                    <div class="card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
-                                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <span>⚙️</span> System Information
-                                        </h5>
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Environment:</label>
-                                                <div id="worker-environment" style="font-family: monospace; color: var(--text-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Version:</label>
-                                                <div id="worker-version" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Template:</label>
-                                                <div id="worker-template" style="color: var(--text-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Capabilities:</label>
-                                                <div id="worker-capabilities" style="font-size: 0.9rem; color: var(--text-color);">-</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Personality System Panel -->
-                            <div id="worker-personality-panel" style="display: none;">
-                                <div class="card" style="background: linear-gradient(135deg, var(--surface-color), rgba(99, 102, 241, 0.1)); border: 2px solid var(--primary-color); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; position: relative; overflow: hidden;">
-                                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary-color), var(--accent-color));"></div>
-
-                                    <h5 style="color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.3rem;">
-                                        <span>🧠</span> Digital Soul & Personality System
-                                    </h5>
-
-                                    <!-- Soul Status -->
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                                        <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary-color); border-radius: 8px; padding: 1rem;">
-                                            <h6 style="color: var(--primary-color); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span>👁️</span> Soul Status
-                                            </h6>
-                                            <div id="soul-status" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            <div id="soul-type" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">-</div>
-                                        </div>
-
-                                        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid var(--accent-color); border-radius: 8px; padding: 1rem;">
-                                            <h6 style="color: var(--accent-color); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span>🧭</span> Moral Alignment
-                                            </h6>
-                                            <div id="moral-compass" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            <div id="ethical-framework" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">-</div>
-                                        </div>
-
-                                        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning-color); border-radius: 8px; padding: 1rem;">
-                                            <h6 style="color: var(--warning-color); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span>🎭</span> Voice Vector
-                                            </h6>
-                                            <div id="communication-style" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            <div id="tone-pattern" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">-</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Personality DNA -->
-                                    <div style="margin-bottom: 2rem;">
-                                        <h6 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <span>🧬</span> Personality DNA Matrix
-                                        </h6>
-                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                                            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem;">
-                                                <div style="font-weight: bold; color: var(--text-color); margin-bottom: 0.5rem;">Cognitive Traits</div>
-                                                <div id="cognitive-traits" style="font-size: 0.9rem; color: var(--text-secondary);">-</div>
-                                            </div>
-                                            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem;">
-                                                <div style="font-weight: bold; color: var(--text-color); margin-bottom: 0.5rem;">Emotional Traits</div>
-                                                <div id="emotional-traits" style="font-size: 0.9rem; color: var(--text-secondary);">-</div>
-                                            </div>
-                                            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem;">
-                                                <div style="font-weight: bold; color: var(--text-color); margin-bottom: 0.5rem;">Social Traits</div>
-                                                <div id="social-traits" style="font-size: 0.9rem; color: var(--text-secondary);">-</div>
-                                            </div>
-                                            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem;">
-                                                <div style="font-weight: bold; color: var(--text-color); margin-bottom: 0.5rem;">Behavioral Traits</div>
-                                                <div id="behavioral-traits" style="font-size: 0.9rem; color: var(--text-secondary);">-</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Memory & Directives -->
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                                        <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-                                            <h6 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span>🧠</span> Memory Anchors
-                                            </h6>
-                                            <div id="memory-anchors" style="font-size: 0.9rem; color: var(--text-secondary); max-height: 150px; overflow-y: auto;">-</div>
-                                        </div>
-
-                                        <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-                                            <h6 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span>⚡</span> Prime Directives
-                                            </h6>
-                                            <div id="prime-directives" style="font-size: 0.9rem; color: var(--text-secondary); max-height: 150px; overflow-y: auto;">-</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Configuration and Logs Row -->
-                            <div id="worker-config-logs" style="display: none;">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                                    <!-- Configuration -->
-                                    <div class="card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
-                                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <span>⚙️</span> Configuration
-                                        </h5>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                                            <div id="worker-capabilities-badges"></div>
-                                        </div>
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Environment:</label>
-                                                <div id="worker-env-detail" style="font-family: monospace; color: var(--text-color);">-</div>
-                                            </div>
-                                            <div>
-                                                <label style="font-size: 0.9rem; color: var(--text-secondary);">Version:</label>
-                                                <div id="worker-version-detail" style="font-weight: bold; color: var(--text-color);">-</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Logs -->
-                                    <div class="card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
-                                        <h5 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <span>📋</span> Recent Activity
-                                        </h5>
-                                        <div id="worker-activity-log" style="max-height: 300px; overflow-y: auto; font-size: 0.9rem;">
-                                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
-                                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📋</div>
-                                                <div>No recent activity</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Placeholder for no worker selected -->
-                            <div id="worker-inspector-placeholder" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
-                                <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Worker Inspector</div>
-                                <div>Enter a worker serial number above to inspect</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- TrueMark Mint TAB -->
         <!-- TrueMark Mint TAB -->
         <div class="tab-content" id="tab-truemark">
             <h2 style="color: #0A1F3D; margin-bottom: 2rem; text-align: center; font-family: 'Georgia', serif;">TrueMark Mint Enterprise</h2>
@@ -5461,7 +4954,192 @@
                 width: 100%;
             }
         }
+
+        /* Live Streaming Popout Control */
+        .live-popout {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 10000;
+            border: 3px solid #FFD700;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .live-popout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 9px 9px 0 0;
+        }
+
+        .live-indicator {
+            font-weight: bold;
+            color: #FFD700;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .popout-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .popout-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .live-popout-content {
+            padding: 1rem;
+        }
+
+        .live-status {
+            margin-bottom: 1rem;
+        }
+
+        .live-status .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .live-status .status-label {
+            font-weight: bold;
+            color: white;
+        }
+
+        .live-status .status-value {
+            color: #FFD700;
+        }
+
+        .live-popout-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .popout-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .popout-btn.primary {
+            background: #FFD700;
+            color: #0A1F3D;
+        }
+
+        .popout-btn.primary:hover {
+            background: #FFE55C;
+            transform: translateY(-1px);
+        }
+
+        .popout-btn.secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .popout-btn.secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .live-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            border: 3px solid #FFD700;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        .live-toggle-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
+
+    <!-- Live Streaming Popout Control -->
+    <div id="live-streaming-popout" class="live-popout" style="display: none;">
+        <div class="live-popout-header">
+            <span class="live-indicator">🔴 LIVE</span>
+            <button class="popout-close" onclick="toggleLivePopout()">×</button>
+        </div>
+        <div class="live-popout-content">
+            <div class="live-status">
+                <div class="status-item">
+                    <span class="status-label">Status:</span>
+                    <span class="status-value" id="popout-stream-status">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Platform:</span>
+                    <span class="status-value" id="popout-platform-status">None</span>
+                </div>
+            </div>
+            <div class="live-popout-controls">
+                <button class="popout-btn primary" onclick="window.open('/live', '_blank')">
+                    🎬 Full Controls
+                </button>
+                <button class="popout-btn secondary" onclick="refreshLiveStatus()">
+                    🔄 Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Streaming Toggle Button -->
+    <div id="live-toggle-btn" class="live-toggle-button" onclick="toggleLivePopout()" style="display: none;">
+        🎬 LIVE
+    </div>
 
     <script>
         // Canonical API endpoints (DALS API on port 8003 by default)
@@ -5491,6 +5169,79 @@
         }
 
         console.log('🔧 DALS dashboard using API base:', API_BASE);
+        
+        // ============================================================
+        // TAB NAVIGATION SYSTEM (defined before use)
+        // ============================================================
+        
+        function initializeTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                // Skip the Live Streaming button (has inline onclick)
+                if (button.onclick) {
+                    return;
+                }
+                
+                button.addEventListener('click', () => {
+                    const tabName = button.getAttribute('data-tab');
+                    
+                    if (!tabName) {
+                        console.warn('Button has no data-tab attribute:', button);
+                        return;
+                    }
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    const targetContent = document.getElementById(`tab-${tabName}`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    } else {
+                        console.warn(`No tab content found for: tab-${tabName}`);
+                    }
+                    
+                    // Store active tab in localStorage
+                    localStorage.setItem('activeTab', tabName);
+                    
+                    // Tab-specific initialization
+                    if (tabName === 'voice-io') {
+                        if (typeof checkVoiceStatus === 'function') checkVoiceStatus();
+                    } else if (tabName === 'system') {
+                        if (typeof checkSystemMetrics === 'function') checkSystemMetrics();
+                    } else if (tabName === 'market-intel') {
+                        if (typeof checkMarketIntel === 'function') checkMarketIntel();
+                    } else if (tabName === 'shim-advisory') {
+                        if (typeof initializeSHiM === 'function') initializeSHiM();
+                    }
+                    
+                    console.log(`✅ Switched to tab: ${tabName}`);
+                });
+            });
+            
+            // Restore last active tab from localStorage
+            const savedTab = localStorage.getItem('activeTab');
+            if (savedTab) {
+                const savedButton = document.querySelector(`[data-tab="${savedTab}"]`);
+                if (savedButton) {
+                    savedButton.click();
+                    console.log(`✅ Restored saved tab: ${savedTab}`);
+                } else {
+                    console.warn(`Saved tab not found: ${savedTab}`);
+                }
+            } else {
+                // Set default tab (overview) if no saved tab exists
+                const defaultButton = document.querySelector('[data-tab="overview"]');
+                if (defaultButton) {
+                    defaultButton.click();
+                    console.log('✅ Initialized default tab: overview');
+                }
+            }
+        }
         
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
@@ -6157,9 +5908,8 @@
             }
         }
 
-        // Load Infrastructure Health Data - DALS-001 compliant
+        // Infrastructure Health Data Loading - NOW WITH REAL API INTEGRATION
         async function loadInfrastructureHealth() {
-            try {
                 // Fetch real telemetry metrics
                 const response = await apiFetch('/telemetry/metrics');
                 const data = await response.json();
@@ -6409,7 +6159,7 @@
                 const dbStatus = ucmData.status === 'operational' ? 'Connected' : 'Degraded';
                 
                 // Network latency from telemetry API - DALS-001 compliant (real or zero)
-                const networkLatency = telemetryData.network?.latency_ms || 0;
+                const networkLatency = data.network?.latency_ms || 0;
 
                 // Update progress bars with real data
                 document.getElementById('cpu-usage').style.width = `${cpuUsage}%`;
@@ -7666,63 +7416,6 @@
             setTimeout(initializeCaleonSecurity, 3000); // Start after 3 seconds
         });
 
-        // ============================================================
-        // TAB NAVIGATION SYSTEM
-        // ============================================================
-        
-        function initializeTabs() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabName = button.getAttribute('data-tab');
-                    
-                    // Remove active class from all buttons and contents
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked button and corresponding content
-                    button.classList.add('active');
-                    const targetContent = document.getElementById(`tab-${tabName}`);
-                    if (targetContent) {
-                        targetContent.classList.add('active');
-                    }
-                    
-                    // Store active tab in localStorage
-                    localStorage.setItem('activeTab', tabName);
-                    
-                    // Tab-specific initialization
-                    if (tabName === 'voice-io') {
-                        checkVoiceStatus();
-                    } else if (tabName === 'system') {
-                        checkSystemMetrics();
-                    } else if (tabName === 'market-intel') {
-                        checkMarketIntel();
-                    } else if (tabName === 'shim-advisory') {
-                        initializeSHiM();
-                    }
-                    
-                    console.log(`Switched to tab: ${tabName}`);
-                });
-            });
-            
-            // Restore last active tab from localStorage
-            const savedTab = localStorage.getItem('activeTab');
-            if (savedTab) {
-                const savedButton = document.querySelector(`[data-tab="${savedTab}"]`);
-                if (savedButton) {
-                    savedButton.click();
-                }
-            } else {
-                // Set default tab (overview) if no saved tab exists
-                const defaultButton = document.querySelector('[data-tab="overview"]');
-                if (defaultButton) {
-                    defaultButton.click();
-                }
-            }
-        }
-
         // ==========================================
         // THOUGHT TRACE - SEQUENTIAL THINKING UI
         // ==========================================
@@ -8947,7 +8640,7 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initializeTabs();
+            // Tab navigation already initialized by main DOMContentLoaded handler
             initializeThoughtTrace();
             voiceInterface = new VoiceInterface();
             
@@ -9297,356 +8990,6 @@
         };
 
         // ==========================================
-        // OBS CONTROL FUNCTIONS
-        // ==========================================
-
-        // OBS Control state
-        let obsStatus = {
-            connected: false,
-            streaming: false,
-            recording: false,
-            currentScene: null,
-            availableScenes: [],
-            lastUpdate: null
-        };
-
-        // Connect to OBS
-        async function connectToOBS() {
-            try {
-                const response = await apiFetch('/obs/connect', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ host: 'localhost', port: 4455 })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Connected', 'success');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to connect to OBS', 'error');
-                }
-            } catch (error) {
-                showNotification('Error connecting to OBS: ' + error.message, 'error');
-            }
-        }
-
-        // Disconnect from OBS
-        async function disconnectFromOBS() {
-            try {
-                const response = await apiFetch('/obs/disconnect', { method: 'POST' });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Disconnected', 'info');
-                    obsStatus.connected = false;
-                    updateOBSUI();
-                } else {
-                    showNotification('Failed to disconnect from OBS', 'error');
-                }
-            } catch (error) {
-                showNotification('Error disconnecting from OBS: ' + error.message, 'error');
-            }
-        }
-
-        // Start OBS Stream
-        async function startOBSStream() {
-            try {
-                const response = await apiFetch('/obs/start-stream', { method: 'POST' });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Stream Started', 'success');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to start stream', 'error');
-                }
-            } catch (error) {
-                showNotification('Error starting stream: ' + error.message, 'error');
-            }
-        }
-
-        // Stop OBS Stream
-        async function stopOBSStream() {
-            try {
-                const response = await apiFetch('/obs/stop-stream', { method: 'POST' });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Stream Stopped', 'info');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to stop stream', 'error');
-                }
-            } catch (error) {
-                showNotification('Error stopping stream: ' + error.message, 'error');
-            }
-        }
-
-        // Start OBS Recording
-        async function startOBSRecording() {
-            try {
-                const response = await apiFetch('/obs/start-recording', { method: 'POST' });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Recording Started', 'success');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to start recording', 'error');
-                }
-            } catch (error) {
-                showNotification('Error starting recording: ' + error.message, 'error');
-            }
-        }
-
-        // Stop OBS Recording
-        async function stopOBSRecording() {
-            try {
-                const response = await apiFetch('/obs/stop-recording', { method: 'POST' });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification('OBS Recording Stopped', 'info');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to stop recording', 'error');
-                }
-            } catch (error) {
-                showNotification('Error stopping recording: ' + error.message, 'error');
-            }
-        }
-
-        // Switch OBS Scene
-        async function switchOBSScene() {
-            const sceneSelector = document.getElementById('scene-selector');
-            const sceneName = sceneSelector.value;
-            if (!sceneName) {
-                showNotification('Please select a scene', 'warning');
-                return;
-            }
-
-            try {
-                const response = await apiFetch('/obs/switch-scene', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ params: { scene_name: sceneName } })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    showNotification(`Switched to scene: ${sceneName}`, 'success');
-                    refreshOBSStatus();
-                } else {
-                    showNotification('Failed to switch scene', 'error');
-                }
-            } catch (error) {
-                showNotification('Error switching scene: ' + error.message, 'error');
-            }
-        }
-
-        // Refresh OBS Status
-        async function refreshOBSStatus() {
-            try {
-                const response = await apiFetch('/obs/status');
-                const status = await response.json();
-
-                obsStatus = status;
-                obsStatus.lastUpdate = new Date().toLocaleString();
-
-                updateOBSUI();
-            } catch (error) {
-                showNotification('Error refreshing OBS status: ' + error.message, 'error');
-            }
-        }
-
-        // OBS Service Control Functions
-        async function startOBSService() {
-            try {
-                showNotification('Starting OBS Service...', 'info');
-                const response = await apiFetch('/obs/start-service', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    showNotification(result.message || 'OBS Service started successfully', 'success');
-                    await refreshOBSStatus();
-                } else {
-                    const errorData = await response.json();
-                    let errorMessage = errorData.detail || 'Failed to start OBS Service';
-                    
-                    // Provide helpful suggestions based on error
-                    if (errorMessage.includes('locale')) {
-                        errorMessage += '\n\nSuggestion: Try starting OBS Studio manually first, then use the Connect button.';
-                    } else if (errorMessage.includes('WebSocket')) {
-                        errorMessage += '\n\nSuggestion: In OBS Studio, go to Tools → WebSocket Server Settings, enable the server on port 4455.';
-                    } else if (errorMessage.includes('process')) {
-                        errorMessage += '\n\nSuggestion: Ensure OBS Studio is properly installed and not already running.';
-                    }
-                    
-                    showNotification(errorMessage, 'error');
-                }
-            } catch (error) {
-                showNotification('Error starting OBS Service: ' + error.message, 'error');
-            }
-        }
-
-        async function stopOBSService() {
-            try {
-                showNotification('Stopping OBS Service...', 'info');
-                const response = await apiFetch('/obs/stop-service', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const result = await response.json();
-                
-                if (result.success) {
-                    showNotification('OBS Service stopped successfully', 'success');
-                    await refreshOBSStatus();
-                } else {
-                    showNotification('Failed to stop OBS Service: ' + result.message, 'error');
-                }
-            } catch (error) {
-                showNotification('Error stopping OBS Service: ' + error.message, 'error');
-            }
-        }
-
-        async function killOBSProcess() {
-            if (!confirm('Are you sure you want to force kill all OBS processes? This may cause data loss.')) {
-                return;
-            }
-            
-            try {
-                showNotification('Killing OBS processes...', 'warning');
-                const response = await apiFetch('/obs/kill-process', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const result = await response.json();
-                
-                if (result.success) {
-                    showNotification('OBS processes killed successfully', 'success');
-                    await refreshOBSStatus();
-                } else {
-                    showNotification('Failed to kill OBS processes: ' + result.message, 'error');
-                }
-            } catch (error) {
-                showNotification('Error killing OBS processes: ' + error.message, 'error');
-            }
-        }
-
-        // Update OBS UI to include service status
-        function updateOBSUI() {
-            document.getElementById('obs-connection-status').textContent = obsStatus.connected ? 'Connected' : 'Disconnected';
-            document.getElementById('obs-connection-status').className = obsStatus.connected ? 'status-value success' : 'status-value error';
-
-            document.getElementById('obs-service-status').textContent = obsStatus.connected ? 'Running' : 'Stopped';
-            document.getElementById('obs-service-status').className = obsStatus.connected ? 'status-value success' : 'status-value error';
-
-            document.getElementById('obs-process-status').textContent = obsStatus.process_running ? 'Running' : 'Not Running';
-            document.getElementById('obs-process-status').className = obsStatus.process_running ? 'status-value success' : 'status-value error';
-
-            document.getElementById('obs-streaming-status').textContent = obsStatus.streaming ? 'Active' : 'Stopped';
-            document.getElementById('obs-streaming-status').className = obsStatus.streaming ? 'status-value success' : 'status-value';
-
-            document.getElementById('obs-recording-status').textContent = obsStatus.recording ? 'Active' : 'Stopped';
-            document.getElementById('obs-recording-status').className = obsStatus.recording ? 'status-value warning' : 'status-value';
-
-            document.getElementById('obs-current-scene').textContent = obsStatus.current_scene || 'None';
-
-            document.getElementById('obs-last-update').textContent = obsStatus.lastUpdate || 'Never';
-
-            // Update scene selector
-            const sceneSelector = document.getElementById('scene-selector');
-            sceneSelector.innerHTML = '<option value="">Select Scene...</option>';
-            if (obsStatus.available_scenes) {
-                obsStatus.available_scenes.forEach(scene => {
-                    const option = document.createElement('option');
-                    option.value = scene;
-                    option.textContent = scene;
-                    if (scene === obsStatus.current_scene) {
-                        option.selected = true;
-                    }
-                    sceneSelector.appendChild(option);
-                });
-            }
-        }
-
-        // Auto-refresh OBS status every 30 seconds if connected
-        setInterval(() => {
-            if (obsStatus.connected) {
-                refreshOBSStatus();
-            }
-        }, 30000);
-
-        // Platform profile management functions
-        async function loadPlatformProfile() {
-            const platform = document.getElementById('platform-selector').value;
-            const streamKey = document.getElementById('stream-key-input').value;
-
-            if (!platform) {
-                showNotification('Please select a platform first', 'warning');
-                return;
-            }
-
-            try {
-                const response = await apiFetch('/obs/set-platform', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        platform: platform,
-                        stream_key: streamKey || null
-                    })
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    showNotification(`Platform "${platform}" loaded successfully!`, 'success');
-                    document.getElementById('platform-status').textContent = `Loaded: ${platform}`;
-                    document.getElementById('platform-status').className = 'status-value success';
-                    // Refresh OBS status to show updated streaming settings
-                    await refreshOBSStatus();
-                } else {
-                    showNotification(`Failed to load platform: ${result.detail || 'Unknown error'}`, 'error');
-                    document.getElementById('platform-status').textContent = 'Load failed';
-                    document.getElementById('platform-status').className = 'status-value error';
-                }
-            } catch (error) {
-                showNotification('Error loading platform: ' + error.message, 'error');
-                document.getElementById('platform-status').textContent = 'Load error';
-                document.getElementById('platform-status').className = 'status-value error';
-            }
-        }
-
-        async function refreshPlatformStatus() {
-            try {
-                const response = await apiFetch('/obs/platforms');
-                const result = await response.json();
-
-                if (response.ok) {
-                    const platformSelector = document.getElementById('platform-selector');
-                    const currentPlatform = platformSelector.value;
-
-                    // Update status if we have a current platform
-                    if (currentPlatform && result.current_platform === currentPlatform) {
-                        document.getElementById('platform-status').textContent = `Loaded: ${currentPlatform}`;
-                        document.getElementById('platform-status').className = 'status-value success';
-                    } else if (result.current_platform) {
-                        document.getElementById('platform-status').textContent = `Active: ${result.current_platform}`;
-                        document.getElementById('platform-status').className = 'status-value success';
-                    } else {
-                        document.getElementById('platform-status').textContent = 'No platform loaded';
-                        document.getElementById('platform-status').className = 'status-value';
-                    }
-                } else {
-                    document.getElementById('platform-status').textContent = 'Status unavailable';
-                    document.getElementById('platform-status').className = 'status-value warning';
-                }
-            } catch (error) {
-                document.getElementById('platform-status').textContent = 'Status error';
-                document.getElementById('platform-status').className = 'status-value error';
-            }
-        }
-
-        // ===== WORKER MANAGEMENT FUNCTIONS =====
 
         // Initialize Worker Management
         function initializeWorkerManagement() {
@@ -10103,7 +9446,94 @@
         document.addEventListener('DOMContentLoaded', function() {
             // ... existing initialization ...
             initializeWorkerManagement();
+            initializeLivePopout();
         });
+
+        // ==========================================
+        // LIVE STREAMING POPOUT FUNCTIONS
+        // ==========================================
+
+        let livePopoutVisible = false;
+        let liveStatusCheckInterval = null;
+
+        function initializeLivePopout() {
+            // Check for live streaming status every 30 seconds
+            liveStatusCheckInterval = setInterval(checkLiveStatus, 30000);
+            // Initial check
+            checkLiveStatus();
+        }
+
+        async function checkLiveStatus() {
+            try {
+                // Check if live streaming page is accessible (indicates streaming is active)
+                const response = await fetch('/live', { method: 'HEAD' });
+                if (response.ok) {
+                    showLiveToggleButton();
+                } else {
+                    hideLiveToggleButton();
+                    hideLivePopout();
+                }
+            } catch (error) {
+                // If we can't reach the live page, assume no streaming
+                hideLiveToggleButton();
+                hideLivePopout();
+            }
+        }
+
+        function showLiveToggleButton() {
+            const toggleBtn = document.getElementById('live-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.style.display = 'block';
+            }
+        }
+
+        function hideLiveToggleButton() {
+            const toggleBtn = document.getElementById('live-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.style.display = 'none';
+            }
+        }
+
+        function toggleLivePopout() {
+            const popout = document.getElementById('live-streaming-popout');
+            if (!popout) return;
+
+            if (livePopoutVisible) {
+                hideLivePopout();
+            } else {
+                showLivePopout();
+            }
+        }
+
+        function showLivePopout() {
+            const popout = document.getElementById('live-streaming-popout');
+            if (popout) {
+                popout.style.display = 'block';
+                livePopoutVisible = true;
+                refreshLiveStatus();
+            }
+        }
+
+        function hideLivePopout() {
+            const popout = document.getElementById('live-streaming-popout');
+            if (popout) {
+                popout.style.display = 'none';
+                livePopoutVisible = false;
+            }
+        }
+
+        async function refreshLiveStatus() {
+            try {
+                // This would ideally fetch real status from the live streaming API
+                // For now, we'll show placeholder status
+                document.getElementById('popout-stream-status').textContent = 'Active';
+                document.getElementById('popout-platform-status').textContent = 'Multiple';
+
+                showNotification('Live status refreshed', 'info');
+            } catch (error) {
+                showNotification('Failed to refresh live status', 'error');
+            }
+        }
 
     </script>
 

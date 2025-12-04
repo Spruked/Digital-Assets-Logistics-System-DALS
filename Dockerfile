@@ -59,6 +59,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     SPEECH_RECOGNITION_ENABLED=true \
     ELEVENLABS_VOICE_ENABLED=true \
     WEBSOCKET_COMMUNICATION=true \
+    # Cali Ethics Gate Integration
+    CALI_ETHICS_URL=http://localhost:8006 \
+    PHI3_ENDPOINT=http://localhost:8005 \
+    ETHICS_THRESHOLD=0.80 \
+    STREAM_TIMEOUT=30.0 \
     # Worker Vault System
     WORKER_VAULT_ENABLED=true \
     WORKER_INVENTORY_VAULT_PATH=/app/vault/worker_inventory \
@@ -68,9 +73,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     VAULT_AUTO_BACKUP_ENABLED=true \
     VAULT_BACKUP_INTERVAL_SECONDS=21600
 
-# Install runtime dependencies
+# Install runtime dependencies (before switching to non-root user)
 RUN apt-get update && apt-get install -y \
     curl \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
@@ -91,12 +97,38 @@ RUN mkdir -p /app/data/logs /app/data/vault /app/exports \
 # Switch to non-root user
 USER iss
 
+# Create supervisor configuration
+RUN mkdir -p /var/log/supervisor
+COPY <<EOF /etc/supervisor/conf.d/dals.conf
+[supervisord]
+nodaemon=true
+user=root
+
+[program:dals-api]
+command=python -m iss_module.service
+directory=/app
+user=root
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/dals-api.log
+stderr_logfile=/var/log/supervisor/dals-api-error.log
+
+[program:dals-dashboard]
+command=python dashboard_server.py
+directory=/app
+user=root
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/dals-dashboard.log
+stderr_logfile=/var/log/supervisor/dals-dashboard-error.log
+EOF
+
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${ISS_PORT}/health || exit 1
+    CMD curl -f http://localhost:8003/health || exit 1
 
-# Expose port
-EXPOSE 8003
+# Expose ports
+EXPOSE 8003 8008
 
-# Run the service
-CMD ["python", "-m", "iss_module.service"]
+# Run both services with supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/dals.conf"]

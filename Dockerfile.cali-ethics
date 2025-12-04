@@ -1,0 +1,52 @@
+# Cali Ethics Gate Dockerfile
+# Builds the ethics filtering microservice
+
+FROM python:3.11-slim AS ethics-gate
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+# Copy application code
+COPY iss_module/cali_x_one/ethics_gate.py /app/ethics_gate.py
+COPY iss_module/cali_x_one/ /app/cali_x_one/
+
+# Create models directory
+RUN mkdir -p /models
+
+# Create non-root user
+RUN groupadd -r cali && useradd -r -g cali cali
+
+# Set permissions
+RUN chown -R cali:cali /app /models
+
+# Switch to non-root user
+USER cali
+
+WORKDIR /app
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8006/health || exit 1
+
+# Expose port
+EXPOSE 8006
+
+# Run the ethics gate service
+CMD ["python", "ethics_gate.py"]

@@ -19,7 +19,17 @@ This Docker stack includes:
    - Voice communication endpoints
    - **Cali_X_One Host Bubble** - Sovereign AI supervisor
 
-4. **Consul** (port 8500)
+4. **Cali Ethics Gate** (port 8006)
+   - Token-level ethics filtering
+   - Real-time token scoring and redaction
+   - Voice override injection system
+
+5. **Phi-3-mini** (port 8005)
+   - ML model for token streaming articulation
+   - Ethics-filtered text generation
+   - Optimized for real-time processing
+
+6. **Consul** (port 8500)
    - Service discovery
    - Health monitoring dashboard
 
@@ -57,7 +67,13 @@ This Docker stack includes:
 - Worker status and performance tracking
 - Voice-activated assistance and commands
 - Real-time system orchestration
-- Sovereign AI decision support
+- **Ethics-filtered responses** - all outputs pass through Cali ethics gate
+
+**Ethics Protection:**
+- **Token-level filtering** prevents toxic or unethical outputs
+- **Voice override** - say "Caleon approve" to inject high-ethics tokens
+- **Automatic redaction** of flagged content
+- **Real-time validation** of all AI-generated text
 
 ---
 

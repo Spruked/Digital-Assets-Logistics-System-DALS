@@ -1,0 +1,41 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.worker.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.worker.txt
+
+# Copy worker code (supports multiple workers)
+COPY josephine_truemark_worker.py .
+COPY host_bubble_worker.py .
+COPY micro_skg.py .
+COPY skg/ ./skg/
+
+# Create necessary directories
+RUN mkdir -p /app/data /app/logs
+
+# Expose worker port
+EXPOSE 8080
+
+# Environment defaults (override at runtime)
+ENV WORKER_NAME=Josephine
+ENV TARGET_USER_ID=
+ENV WORKER_PORT=8080
+ENV CALI_X_ONE_API=http://localhost:8003
+ENV SKG_API=http://localhost:8002
+ENV UQV_API=http://localhost:8003/api/uqv
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:${WORKER_PORT}/health || exit 1
+
+# Default to Josephine worker (can override CMD in docker-compose)
+CMD ["python", "josephine_truemark_worker.py"]

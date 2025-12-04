@@ -148,6 +148,36 @@ logs/
 vault/secrets/
 config/local/
 *.log
+
+# Worker System
+worker_templates/__pycache__/
+worker_templates/*.pyc
+dals/registry/__pycache__/
+vault/worker_inventory/*.json
+vault/active_workers/*.json
+vault/josephine_deployment_*.json
+
+# Runtime Data
+vault/sig_serial_vault.jsonl
+vault/dals_inventory.jsonl
+*.jsonl.bak
+
+# Test Output
+test_output/
+*.coverage
+.pytest_cache/
+endpoint_test_results_*.json
+DALS-001-COMPLIANCE-REPORT-*.json
+
+# IDE & Editor
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+
+# Temporary Files
+TODAY_SUMMARY.txt
+STEP_*.py
 *.out
 temp/
 tmp/
@@ -168,6 +198,12 @@ yarn-error.log*
 # Database
 *.db
 *.sqlite
+
+# Vault System Runtime Data
+Vault_System_1.0/vault_system/*/worker_vault/*.jsonl
+Vault_System_1.0/vault_system/*/worker_vault/heartbeats/*.jsonl
+Vault_System_1.0/vault_system/*/worker_vault/telemetry/*.jsonl
+Vault_System_1.0/vault_system/*/worker_vault/cognition/*.jsonl
 *.sqlite3
 
 # Certificates and Keys
